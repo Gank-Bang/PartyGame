@@ -1,6 +1,5 @@
 [build]
 builder = "nixpacks"
-buildCommand = "pip3 install -r server/requirements.txt"
 
 [deploy]
 startCommand = "python3 server/main.py"
