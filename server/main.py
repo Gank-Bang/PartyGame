@@ -68,6 +68,7 @@ async def handler(ws: WebSocketServerProtocol) -> None:
                     "type": "error",
                     "msg": "lobby_full"
                 }))
+                await ws.close()
                 return
             
             peer_id = lobby["next_id"]
