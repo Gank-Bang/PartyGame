@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dpolumee7tq7e"]
+
+[ext_resource type="Script" uid="uid://sttyce1pidl8" path="res://Scripts/RafGames/Components/FlatButtonScript.gd" id="1_fbscript"]
+
+[sub_resource type="StyleBoxFlat" id="1_shadow_style"]
+bg_color = Color(0.176471, 0.211765, 0.333333, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="2_face_style"]
+bg_color = Color(0.294118, 0.352941, 0.541176, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[node name="FlatButton" type="Control" unique_id=1884313135]
+custom_minimum_size = Vector2(240, 80)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 240.0
+offset_bottom = 80.0
+script = ExtResource("1_fbscript")
+
+[node name="Shadow" type="Panel" parent="." unique_id=1047863702]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("1_shadow_style")
+
+[node name="Face" type="Panel" parent="." unique_id=389437520]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("2_face_style")
+
+[node name="Label" type="Label" parent="Face" unique_id=1013326855]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.960784, 0.901961, 0.784314, 1)
+theme_override_font_sizes/font_size = 28
+text = "BTN"
+horizontal_alignment = 1
+vertical_alignment = 1

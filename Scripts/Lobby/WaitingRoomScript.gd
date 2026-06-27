@@ -2,6 +2,7 @@ extends Control
 
 @onready var code_lbl:     Label         = $Panel/Margin/VBox/CodeLabel
 @onready var player_list:  VBoxContainer = $Panel/Margin/VBox/PlayerList
+@onready var players_number: Label        = $Panel/Margin/VBox/PlayersTitle
 @onready var start_btn:    Button        = $Panel/Margin/VBox/StartBtn
 @onready var quit_btn:     Button        = $Panel/Margin/VBox/QuitBtn
 
@@ -36,6 +37,7 @@ func _refresh_list() -> void:
 		lbl.text = "• " + data.get("name", "Joueur")
 		lbl.add_theme_font_size_override("font_size", 22)
 		player_list.add_child(lbl)
+	players_number.text = "Joueurs : %d/4" % NetworkManager.players.size()
 
 # ── Boutons ───────────────────────────────────────────────────────────────────
 
@@ -49,4 +51,4 @@ func _on_quit_pressed() -> void:
 # ── Démarrage de la partie ────────────────────────────────────────────────────
 
 func _on_game_started() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Lobby/BaseGame.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Lobby/SelectGames.tscn")
