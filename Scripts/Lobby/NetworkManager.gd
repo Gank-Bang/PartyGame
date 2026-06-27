@@ -10,7 +10,7 @@ const _RelayClientClass := preload("res://Scripts/Lobby/RelayMultiplayerPeer.gd"
 ## Après déploiement sur Railway/Render, remplacez cette valeur.
 ## Exemple Railway : "wss://partygame-relay-production.up.railway.app"
 ## Test local     : "ws://localhost:8765"
-const RELAY_URL := "ws://localhost:8765"
+const RELAY_URL := "wss://partygame-production-c66e.up.railway.app"
 
 # ── État ──────────────────────────────────────────────────────────────────────
 
