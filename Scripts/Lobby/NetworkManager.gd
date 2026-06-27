@@ -37,6 +37,9 @@ signal game_message(from_id: int, data: Dictionary)
 
 # ── API publique ──────────────────────────────────────────────────────────────
 
+func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 ## ID du pair local (0 si non connecté)
 func local_peer_id() -> int:
 	if _relay == null:

@@ -1,23 +1,16 @@
-[gd_scene format=3 uid="uid://t0xtls0x2koq"]
+[gd_scene format=3 uid="uid://ddmhgxfao21yj"]
 
-[ext_resource type="PackedScene" uid="uid://b7jkj6huwikk4" path="res://Scenes/Yanis/Player.tscn" id="1_qt8wp"]
 [ext_resource type="Script" uid="uid://c0pgb0ofby5ni" path="res://Scripts/Yanis/main.gd" id="1_xsaol"]
 [ext_resource type="PackedScene" uid="uid://dg3fjaufvoqal" path="res://Scenes/Yanis/Map.tscn" id="2_mraao"]
-[ext_resource type="PackedScene" uid="uid://ccuuk8d31khvd" path="res://Scenes/Yanis/Dummy.tscn" id="2_u37lb"]
 [ext_resource type="Script" uid="uid://dmkxut6o5g1yd" path="res://Scripts/Yanis/cooldown_bar.gd" id="3_2dkj4"]
 [ext_resource type="Script" uid="uid://bse5en2l7s3ut" path="res://Scripts/Yanis/game_manager.gd" id="6_2a7i5"]
 [ext_resource type="Script" uid="uid://dlg2gduwvqlqs" path="res://Scripts/Yanis/game_over.gd" id="6_lc0oe"]
 
 [node name="Main" type="Node2D" unique_id=1989171372]
+process_mode = 3
 script = ExtResource("1_xsaol")
 
 [node name="Map" parent="." unique_id=431227343 instance=ExtResource("2_mraao")]
-
-[node name="Player" parent="." unique_id=1425471335 instance=ExtResource("1_qt8wp")]
-texture_filter = 1
-
-[node name="Player2" parent="." unique_id=1505935047 instance=ExtResource("2_u37lb")]
-position = Vector2(336, 279)
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1760216750]
 
@@ -42,7 +35,7 @@ grow_vertical = 0
 script = ExtResource("3_2dkj4")
 
 [node name="GameOver" type="Control" parent="UI" unique_id=632046383]
-process_mode = 2
+process_mode = 3
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -97,6 +90,11 @@ custom_minimum_size = Vector2(250, 60)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "QUIT"
+
+[node name="WaitingLabel" type="Label" parent="UI/GameOver/CenterContainer/VBoxContainer" unique_id=1489282453]
+visible = false
+layout_mode = 2
+text = "Waiting for host..."
 
 [node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=697024189]
 color = Color(0.1254902, 0.1254902, 0.1254902, 1)
