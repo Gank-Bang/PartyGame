@@ -7473,6 +7473,15 @@ texture = ExtResource("1_36mds")
 [sub_resource type="TileSet" id="TileSet_rkydp"]
 sources/0 = SubResource("TileSetAtlasSource_h0lva")
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_36mds"]
+polygon = PackedVector2Array(-8.847218, -32, 9.139961, -32, 9.139961, 32, -8.7673645, 32)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_h0lva"]
+polygon = PackedVector2Array(-32, -8.969772, -32, 8.640053, 32, 8.876106, 32, -8.921062)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_ubj2n"]
+polygon = PackedVector2Array(-30.045532, -30.086334, -29.805851, 29.454004, 30.127117, 28.928759, 28.250547, -29.994537)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_36mds"]
 texture = ExtResource("1_36mds")
 texture_region_size = Vector2i(64, 64)
@@ -7865,6 +7874,7 @@ texture_region_size = Vector2i(64, 64)
 18:4/0 = 0
 19:4/0 = 0
 20:4/0 = 0
+20:4/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_ubj2n")
 20:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-25.501556, -25.708885, 26.12355, -25.501556, 26.33088, 25.916218, -25.294228, 26.123547)
 21:4/0 = 0
 22:4/0 = 0
@@ -9107,6 +9117,7 @@ texture_region_size = Vector2i(64, 64)
 10:16/0 = 0
 11:16/0 = 0
 12:16/0 = 0
+12:16/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_36mds")
 12:16/0/physics_layer_0/polygon_0/points = PackedVector2Array(-7.7615128, -32, 8.071976, -32, 8.071976, 32, -8.071972, 32)
 13:16/0 = 0
 14:16/0 = 0
@@ -9204,6 +9215,7 @@ texture_region_size = Vector2i(64, 64)
 10:17/0 = 0
 11:17/0 = 0
 12:17/0 = 0
+12:17/0/occlusion_layer_0/polygon_0/polygon = SubResource("OccluderPolygon2D_h0lva")
 12:17/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -8.071976, -32, 8.382439, 32, 8.692902, 32, -9.003357)
 13:17/0 = 0
 14:17/0 = 0
@@ -14948,6 +14960,8 @@ texture_region_size = Vector2i(64, 64)
 
 [sub_resource type="TileSet" id="TileSet_h8t8s"]
 tile_size = Vector2i(64, 64)
+occlusion_layer_0/light_mask = 1
+occlusion_layer_0/sdf_collision = true
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_36mds")
 
@@ -14960,3 +14974,13 @@ tile_set = SubResource("TileSet_rkydp")
 [node name="Walls" type="TileMapLayer" parent="." unique_id=913692388]
 tile_map_data = PackedByteArray("AAAGAAcAAAAUAAQAAAAWAAcAAAAUAAQAAAADAAMAAAAMABAAAAADAAQAAAAMABAAAAADAAUAAAAMABAAAAADAAgAAAAMABAAAAADAAkAAAAMABAAAAADAAoAAAAMABAAAAADAAsAAAAMABAAAAADAAwAAAAMABAAAAADAA0AAAAMABAAAAADAA4AAAAMABAAAAAIAAkAAAAMABAAAAAIAAsAAAAMABAAAAAIAAwAAAAMABAAAAAMAAMAAAAMABAAAAAMAAQAAAAMABAAAAAMAAUAAAAMABAAAAAPAAoAAAAMABAAAAAPAAsAAAAMABAAAAAPAAwAAAAMABAAAAAPAA0AAAAMABAAAAAPAA4AAAAMABAAAAATAAIAAAAMABAAAAATAAMAAAAMABAAAAATAAQAAAAMABAAAAATAAUAAAAMABAAAAATAAYAAAAMABAAAAATAAcAAAAMABAAAAATAAgAAAAMABAAAAAWAAoAAAAMABAAAAAWAAsAAAAMABAAAAAWAAwAAAAMABAAAAAWAA0AAAAMABAAAAAWAA4AAAAMABAAAAAWAA8AAAAMABAAAAAIAAoAAAAMABAAAAAEAAIAAAAMABEAAAAFAAIAAAAMABEAAAAGAAIAAAAMABEAAAAHAAIAAAAMABEAAAAJAAIAAAAMABEAAAAIAAIAAAAMABEAAAAKAAIAAAAMABEAAAALAAIAAAAMABEAAAAEAA8AAAAMABEAAAAFAA8AAAAMABEAAAAGAA8AAAAMABEAAAAHAA8AAAAMABEAAAAIAA8AAAAMABEAAAAJAA8AAAAMABEAAAAKAA8AAAAMABEAAAALAA8AAAAMABEAAAAMAA8AAAAMABEAAAANAA8AAAAMABEAAAAOAA8AAAAMABEAAAAQAAoAAAAMABEAAAARAAoAAAAMABEAAAASAAoAAAAMABEAAAATAAoAAAAMABEAAAAUAAoAAAAMABEAAAAVAAoAAAAMABEAAAASAAIAAAAMABEAAAARAAIAAAAMABEAAAAQAAIAAAAMABEAAAAPAAIAAAAMABEAAAAOAAIAAAAMABEAAAANAAIAAAAMABEAAAAMAAYAAAAMABAAAAAMAAcAAAAMABAAAAAMAAgAAAAMABAAAAAIAAgAAAAMABAAAAAIAAcAAAAMABAAAAAIAAYAAAAMABAAAAAIAAUAAAAMABAAAAAIAAQAAAAMABAAAAALAA0AAAAUAAQAADAOAAsAAAAUAAQAADAKAAgAAAAUAAQAADAQAAYAAAAUAAQAADAOAAQAAAAUAAQAADAOAAcAAAAUAAQAADAFAA0AAAAUAAQAADA=")
 tile_set = SubResource("TileSet_h8t8s")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1230463154]
+
+[node name="Spawn1" type="Marker2D" parent="SpawnPoints" unique_id=1266760810]
+
+[node name="Spawn2" type="Marker2D" parent="SpawnPoints" unique_id=458210734]
+
+[node name="Spawn3" type="Marker2D" parent="SpawnPoints" unique_id=964853328]
+
+[node name="Spawn4" type="Marker2D" parent="SpawnPoints" unique_id=322230682]

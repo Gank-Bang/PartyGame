@@ -2,11 +2,13 @@
 
 [ext_resource type="Script" uid="uid://ddjdhp4vi3kwr" path="res://Scripts/Yanis/player.gd" id="1_18x6b"]
 [ext_resource type="Texture2D" uid="uid://bo4h1kvdtic5c" path="res://Ressources/Yanis/kenney_top-down-shooter/PNG/Man Blue/manBlue_gun.png" id="2_dbyls"]
+[ext_resource type="Texture2D" uid="uid://djm804xqwmrdf" path="res://Ressources/Yanis/flashlight_beam.png" id="3_8tjlk"]
+[ext_resource type="Script" uid="uid://bku00wbhthete" path="res://Scripts/Yanis/vision.gd" id="4_8tjlk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e2a4o"]
 size = Vector2(52, 47)
 
-[node name="Player" type="CharacterBody2D" unique_id=1505935047]
+[node name="Player" type="CharacterBody2D" unique_id=1505935047 groups=["players"]]
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_18x6b")
@@ -19,3 +21,17 @@ shape = SubResource("RectangleShape2D_e2a4o")
 texture = ExtResource("2_dbyls")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1054311796]
+
+[node name="PointLight2D" type="PointLight2D" parent="." unique_id=819202101]
+position = Vector2(-10, 1)
+rotation = 1.5707964
+scale = Vector2(0.51723284, 0.50742775)
+color = Color(1, 0.8509804, 0.3529412, 1)
+energy = 2.0
+range_layer_max = 1
+shadow_enabled = true
+texture = ExtResource("3_8tjlk")
+height = 16.0
+
+[node name="Vision" type="Node2D" parent="." unique_id=1130358247]
+script = ExtResource("4_8tjlk")
