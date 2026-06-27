@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://t0xtls0x2koq"]
+
+[ext_resource type="PackedScene" uid="uid://b7jkj6huwikk4" path="res://Scenes/Yanis/Player.tscn" id="1_qt8wp"]
+[ext_resource type="PackedScene" uid="uid://dg3fjaufvoqal" path="res://Scenes/Yanis/Map.tscn" id="2_mraao"]
+
+[node name="Main" type="Node2D" unique_id=1989171372]
+
+[node name="Map" parent="." unique_id=431227343 instance=ExtResource("2_mraao")]
+
+[node name="Player" parent="." unique_id=1505935047 instance=ExtResource("1_qt8wp")]

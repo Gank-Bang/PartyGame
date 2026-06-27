@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b7jkj6huwikk4"]
+
+[ext_resource type="Script" uid="uid://ddjdhp4vi3kwr" path="res://Scripts/Yanis/player.gd" id="1_18x6b"]
+[ext_resource type="Texture2D" uid="uid://bo4h1kvdtic5c" path="res://Ressources/Yanis/kenney_top-down-shooter/PNG/Man Blue/manBlue_gun.png" id="2_dbyls"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e2a4o"]
+size = Vector2(52, 47)
+
+[node name="Player" type="CharacterBody2D" unique_id=1505935047]
+script = ExtResource("1_18x6b")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2015388811]
+position = Vector2(-1, 0.5)
+shape = SubResource("RectangleShape2D_e2a4o")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2097031376]
+texture = ExtResource("2_dbyls")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1054311796]
