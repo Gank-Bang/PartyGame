@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PartyGame"
-run/main_scene="uid://ddmhgxfao21yj"
+run/main_scene="uid://ywmyd4tgj54"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

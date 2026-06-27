@@ -25,16 +25,13 @@ offset_right = 1210.0
 offset_bottom = 389.0
 text = "Pile Ou Face Full Random"
 
-<<<<<<< HEAD
-[node name="HotlineMiami" parent="." unique_id=1232540705 instance=ExtResource("1_wdffp")]
-offset_left = 664.0
-offset_top = 427.0
-offset_right = 1206.0
-offset_bottom = 507.0
+[node name="HotlineMiami" parent="." unique_id=1662627380 instance=ExtResource("1_wdffp")]
+offset_left = 668.0
+offset_top = 435.0
+offset_right = 1210.0
+offset_bottom = 515.0
 text = "Hotline Miami"
 
-=======
->>>>>>> c6338c9 (cooking de l'aprem (#2))
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=238303122]
 offset_left = 136.0
 offset_top = 340.0
