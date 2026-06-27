@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c0pgb0ofby5ni" path="res://Scripts/Yanis/main.gd" id="1_xsaol"]
 [ext_resource type="PackedScene" uid="uid://dg3fjaufvoqal" path="res://Scenes/Yanis/Map.tscn" id="2_mraao"]
-[ext_resource type="PackedScene" uid="uid://ccuuk8d31khvd" path="res://Scenes/Yanis/Dummy.tscn" id="2_u37lb"]
 [ext_resource type="Script" uid="uid://dmkxut6o5g1yd" path="res://Scripts/Yanis/cooldown_bar.gd" id="3_2dkj4"]
 [ext_resource type="Script" uid="uid://bse5en2l7s3ut" path="res://Scripts/Yanis/game_manager.gd" id="6_2a7i5"]
 [ext_resource type="Script" uid="uid://dlg2gduwvqlqs" path="res://Scripts/Yanis/game_over.gd" id="6_lc0oe"]
