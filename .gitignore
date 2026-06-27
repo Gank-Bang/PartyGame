@@ -2,3 +2,7 @@
 .godot/
 /android/
 project.godot
+
+# macOS
+.DS_Store
+**/.DS_Store
