@@ -35,6 +35,7 @@ from websockets.server import WebSocketServerProtocol
 
 # code -> {"clients": {peer_id: ws}, "next_id": int}
 lobbies: dict = {}
+MAX_PLAYERS = 4
 
 
 async def handler(ws: WebSocketServerProtocol) -> None:
@@ -61,6 +62,14 @@ async def handler(ws: WebSocketServerProtocol) -> None:
                 await ws.send(json.dumps({"type": "error", "msg": "lobby_not_found"}))
                 return
             lobby = lobbies[code]
+
+            if len(lobby["clients"]) >= MAX_PLAYERS:
+                await ws.send(json.dumps({
+                    "type": "error",
+                    "msg": "lobby_full"
+                }))
+                return
+            
             peer_id = lobby["next_id"]
             lobby["next_id"] += 1
             lobby["clients"][peer_id] = ws
