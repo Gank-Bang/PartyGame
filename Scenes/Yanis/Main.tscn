@@ -1,10 +1,37 @@
 [gd_scene format=3 uid="uid://t0xtls0x2koq"]
 
 [ext_resource type="PackedScene" uid="uid://b7jkj6huwikk4" path="res://Scenes/Yanis/Player.tscn" id="1_qt8wp"]
+[ext_resource type="Script" uid="uid://c0pgb0ofby5ni" path="res://Scripts/Yanis/main.gd" id="1_xsaol"]
 [ext_resource type="PackedScene" uid="uid://dg3fjaufvoqal" path="res://Scenes/Yanis/Map.tscn" id="2_mraao"]
+[ext_resource type="Script" uid="uid://dmkxut6o5g1yd" path="res://Scripts/Yanis/cooldown_bar.gd" id="3_2dkj4"]
 
 [node name="Main" type="Node2D" unique_id=1989171372]
+script = ExtResource("1_xsaol")
 
 [node name="Map" parent="." unique_id=431227343 instance=ExtResource("2_mraao")]
 
 [node name="Player" parent="." unique_id=1505935047 instance=ExtResource("1_qt8wp")]
+texture_filter = 1
+shoot_cooldown = 2.0
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1760216750]
+
+[node name="HUD" type="Control" parent="UI" unique_id=1365505785]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
+
+[node name="CooldownBar" type="ProgressBar" parent="UI/HUD" unique_id=512987803]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 255.0
+offset_bottom = -2.0
+grow_vertical = 0
+script = ExtResource("3_2dkj4")

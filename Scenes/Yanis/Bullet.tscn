@@ -1,7 +1,16 @@
 [gd_scene format=3 uid="uid://b4pv87chfx76q"]
 
+[ext_resource type="Script" uid="uid://xxmlpajy7rph" path="res://Scripts/Yanis/bullet.gd" id="1_s2l3c"]
+[ext_resource type="Texture2D" uid="uid://ds1xc76lix568" path="res://Ressources/Yanis/sprite_bullet.png" id="2_10pch"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_utlwl"]
+radius = 12.0
+
 [node name="Bullet" type="Area2D" unique_id=1885051334]
+script = ExtResource("1_s2l3c")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=815550692]
+texture = ExtResource("2_10pch")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=209062538]
+shape = SubResource("CircleShape2D_utlwl")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c7tb3xtxxx5h6"
-path="res://.godot/imported/sprite_player.png-3623194fe09a9f6df6a42e0b37e6595b.ctex"
+uid="uid://b0erkci24q2ml"
+path="res://.godot/imported/Tileset_Interior Wood_Gnomenlied.png-1676b57b4ccf134eb44f909462202535.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Ressources/Yanis/sprite_player.png"
-dest_files=["res://.godot/imported/sprite_player.png-3623194fe09a9f6df6a42e0b37e6595b.ctex"]
+source_file="res://Scripts/Yanis/Tileset_Interior Wood_Gnomenlied.png"
+dest_files=["res://.godot/imported/Tileset_Interior Wood_Gnomenlied.png-1676b57b4ccf134eb44f909462202535.ctex"]
 
 [params]
 
