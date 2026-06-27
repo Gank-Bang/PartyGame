@@ -2,19 +2,27 @@ extends CharacterBody2D
 
 @export var speed = 300
 @export var shoot_cooldown := 2.5
+@export var is_local_player := true
+@export var max_health := 1
 
 const BULLET_SCENE = preload("res://Scenes/Yanis/Bullet.tscn")
 var cooldown := 0.0
+var health := 1
 
 signal cooldown_changed(progress: float)
 
 func _physics_process(delta):
-	cooldown = max(cooldown - delta, 0.0)
-	var progress = 1.0 - (cooldown / shoot_cooldown)
-	cooldown_changed.emit(progress)
-	handle_movement()
-	handle_rotation()
-	handle_shooting()
+
+	if is_local_player:
+		cooldown = max(cooldown - delta, 0.0)
+		var progress = 1.0 - (cooldown / shoot_cooldown)
+		cooldown_changed.emit(progress)
+
+		handle_movement()
+		handle_rotation()
+		handle_shooting()
+
+	move_and_slide()
 
 
 func handle_movement():
@@ -27,8 +35,6 @@ func handle_movement():
 	)
 
 	velocity = direction * speed
-
-	move_and_slide()
 
 
 func handle_rotation():
@@ -56,3 +62,17 @@ func shoot():
 
 func get_mouse_direction() -> Vector2:
 	return (get_global_mouse_position() - global_position).normalized()
+
+func _ready():
+	health = max_health
+	
+func take_damage(amount: int):
+
+	health -= amount
+
+	if health <= 0:
+		die()
+
+func die():
+
+	queue_free()
