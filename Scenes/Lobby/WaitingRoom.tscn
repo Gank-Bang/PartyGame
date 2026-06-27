@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://waiting_room_scene"]
+
+[ext_resource type="Script" path="res://Scripts/Lobby/WaitingRoomScript.gd" id="1_wrscript"]
+
+[node name="WaitingRoom" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_wrscript")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.388235, 0.564706, 0.462745, 1)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -300.0
+offset_right = 320.0
+offset_bottom = 300.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Salle d'attente"
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+
+[node name="CodeLabel" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Code : ----"
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="Sep1" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="PlayersTitle" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Joueurs connectés :"
+theme_override_font_sizes/font_size = 20
+
+[node name="PlayerList" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Sep2" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="StartBtn" type="Button" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Démarrer la partie"
+theme_override_font_sizes/font_size = 22
+custom_minimum_size = Vector2(0, 56)
+visible = false
+
+[node name="QuitBtn" type="Button" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Quitter le lobby"
+theme_override_font_sizes/font_size = 20
+custom_minimum_size = Vector2(0, 48)

@@ -11,8 +11,19 @@ config_version=5
 [application]
 
 config/name="PartyGame"
+run/main_scene="uid://t0xtls0x2koq"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[autoload]
+
+NetworkManager="*res://Scripts/Lobby/NetworkManager.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/resizable=false
 
 [physics]
 

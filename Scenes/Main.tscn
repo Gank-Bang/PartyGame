@@ -1,9 +1,39 @@
 [gd_scene format=3 uid="uid://t0xtls0x2koq"]
 
-[ext_resource type="Texture2D" uid="uid://d27ktvteb2d1l" path="res://icon.svg" id="1_r150o"]
+[ext_resource type="Texture2D" uid="uid://m87bsav873tk" path="res://Ressources/Menu/Jouer.png" id="2_idj7w"]
+[ext_resource type="Texture2D" uid="uid://h2r6ak5a7lln" path="res://Ressources/Menu/Quit.png" id="2_kln2b"]
+[ext_resource type="Script" path="res://Scripts/Lobby/MenuButtonScript.gd" id="2_rgh2o"]
+[ext_resource type="Texture2D" uid="uid://dc1rsl51jooo4" path="res://Ressources/Menu/JouerSelected.png" id="3_jouersel"]
+[ext_resource type="Texture2D" uid="uid://d0cy0l85udcqc" path="res://Ressources/Menu/QuitSelected.png" id="3_quitsel"]
+[ext_resource type="PackedScene" path="res://Scenes/Lobby/LobbyMenu.tscn" id="6_v1gob"]
 
 [node name="Node2D" type="Node2D" unique_id=1989171372]
 
-[node name="Icon" type="Sprite2D" parent="." unique_id=1571221597]
-position = Vector2(587, 312)
-texture = ExtResource("1_r150o")
+[node name="ColorRect" type="ColorRect" parent="." unique_id=124639713]
+offset_right = 1916.0
+offset_bottom = 1084.0
+color = Color(0.3882353, 0.5647059, 0.4627451, 1)
+
+[node name="Control" type="Control" parent="." unique_id=1991124744]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 962.66406
+offset_top = 837.73834
+offset_right = 1002.66406
+offset_bottom = 877.73834
+
+[node name="Quit" type="Sprite2D" parent="." unique_id=1943737413]
+position = Vector2(972.00006, 825)
+scale = Vector2(1.2794583, 1.0540541)
+texture = ExtResource("2_kln2b")
+script = ExtResource("2_rgh2o")
+hover_texture = ExtResource("3_quitsel")
+quit_on_click = true
+
+[node name="Jouer" type="Sprite2D" parent="." unique_id=824944755]
+position = Vector2(967, 654)
+scale = Vector2(1.3021613, 1.3457206)
+texture = ExtResource("2_idj7w")
+script = ExtResource("2_rgh2o")
+hover_texture = ExtResource("3_jouersel")
+scene_to_load = ExtResource("6_v1gob")

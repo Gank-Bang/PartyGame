@@ -1,0 +1,108 @@
+[gd_scene format=3 uid="uid://lobby_menu_scene"]
+
+[ext_resource type="Script" path="res://Scripts/Lobby/LobbyMenuScript.gd" id="1_lbscript"]
+
+[node name="LobbyMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_lbscript")
+
+[node name="BG" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.388235, 0.564706, 0.462745, 1)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -340.0
+offset_right = 320.0
+offset_bottom = 340.0
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "MULTIJOUEUR"
+theme_override_font_sizes/font_size = 36
+horizontal_alignment = 1
+
+[node name="SubTitle" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = "Choisissez votre pseudo puis une option"
+horizontal_alignment = 1
+
+[node name="NameInput" type="LineEdit" parent="Panel/Margin/VBox"]
+layout_mode = 2
+placeholder_text = "Votre pseudo…"
+theme_override_font_sizes/font_size = 20
+custom_minimum_size = Vector2(0, 48)
+
+[node name="Sep1" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="BtnRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HostBtn" type="Button" parent="Panel/Margin/VBox/BtnRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Héberger"
+theme_override_font_sizes/font_size = 22
+custom_minimum_size = Vector2(0, 56)
+
+[node name="JoinBtn" type="Button" parent="Panel/Margin/VBox/BtnRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rejoindre"
+theme_override_font_sizes/font_size = 22
+custom_minimum_size = Vector2(0, 56)
+
+[node name="JoinPanel" type="VBoxContainer" parent="Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+visible = false
+
+[node name="CodeLabel" type="Label" parent="Panel/Margin/VBox/JoinPanel"]
+layout_mode = 2
+text = "Entrez le code du lobby (4 chiffres) :"
+
+[node name="CodeInput" type="LineEdit" parent="Panel/Margin/VBox/JoinPanel"]
+layout_mode = 2
+placeholder_text = "1234"
+max_length = 4
+theme_override_font_sizes/font_size = 28
+custom_minimum_size = Vector2(0, 48)
+
+[node name="ConfirmBtn" type="Button" parent="Panel/Margin/VBox/JoinPanel"]
+layout_mode = 2
+text = "Confirmer"
+theme_override_font_sizes/font_size = 20
+custom_minimum_size = Vector2(0, 48)
+
+[node name="Sep2" type="HSeparator" parent="Panel/Margin/VBox"]
+layout_mode = 2
+
+[node name="StatusLabel" type="Label" parent="Panel/Margin/VBox"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+autowrap_mode = 3
