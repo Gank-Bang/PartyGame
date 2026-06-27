@@ -49,7 +49,13 @@ func _on_lobby_joined() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Lobby/WaitingRoom.tscn")
 
 func _on_connection_failed(reason: String) -> void:
-	status_lbl.text = "Erreur : " + reason
+	match reason:
+		"lobby_full":
+			status_lbl.text = "Le lobby est déjà complet (4 joueurs maximum)."
+		"lobby_not_found":
+			status_lbl.text = "Ce lobby n'existe pas."
+		_:
+			status_lbl.text = "Erreur : " + reason
 	_set_ui_loading("", false)
 
 # ── Utilitaires ───────────────────────────────────────────────────────────────
