@@ -1,39 +1,49 @@
 [gd_scene format=3 uid="uid://t0xtls0x2koq"]
 
-[ext_resource type="Texture2D" uid="uid://m87bsav873tk" path="res://Ressources/Menu/Jouer.png" id="2_idj7w"]
-[ext_resource type="Texture2D" uid="uid://h2r6ak5a7lln" path="res://Ressources/Menu/Quit.png" id="2_kln2b"]
-[ext_resource type="Script" path="res://Scripts/Lobby/MenuButtonScript.gd" id="2_rgh2o"]
-[ext_resource type="Texture2D" uid="uid://dc1rsl51jooo4" path="res://Ressources/Menu/JouerSelected.png" id="3_jouersel"]
-[ext_resource type="Texture2D" uid="uid://d0cy0l85udcqc" path="res://Ressources/Menu/QuitSelected.png" id="3_quitsel"]
-[ext_resource type="PackedScene" path="res://Scenes/Lobby/LobbyMenu.tscn" id="6_v1gob"]
+[ext_resource type="Script" uid="uid://c3main5script1" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
 
 [node name="Node2D" type="Node2D" unique_id=1989171372]
+script = ExtResource("1_main")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=124639713]
 offset_right = 1916.0
 offset_bottom = 1084.0
 color = Color(0.3882353, 0.5647059, 0.4627451, 1)
 
-[node name="Control" type="Control" parent="." unique_id=1991124744]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 962.66406
-offset_top = 837.73834
-offset_right = 1002.66406
-offset_bottom = 877.73834
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Quit" type="Sprite2D" parent="." unique_id=1943737413]
-position = Vector2(972.00006, 825)
-scale = Vector2(1.2794583, 1.0540541)
-texture = ExtResource("2_kln2b")
-script = ExtResource("2_rgh2o")
-hover_texture = ExtResource("3_quitsel")
-quit_on_click = true
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -120.0
+offset_right = 200.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
 
-[node name="Jouer" type="Sprite2D" parent="." unique_id=824944755]
-position = Vector2(967, 654)
-scale = Vector2(1.3021613, 1.3457206)
-texture = ExtResource("2_idj7w")
-script = ExtResource("2_rgh2o")
-hover_texture = ExtResource("3_jouersel")
-scene_to_load = ExtResource("6_v1gob")
+[node name="BtnJouer" parent="CanvasLayer/UI/VBox" instance=ExtResource("2_flat")]
+layout_mode = 2
+custom_minimum_size = Vector2(400, 80)
+text = "Jouer"
+
+[node name="BtnQuitter" parent="CanvasLayer/UI/VBox" instance=ExtResource("2_flat")]
+layout_mode = 2
+custom_minimum_size = Vector2(400, 80)
+text = "Quitter"
+face_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
+shadow_color = Color(0.60784316, 0.13333334, 0.14901961, 1)

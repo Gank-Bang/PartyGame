@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ddjewrny5066"]
+
+[ext_resource type="Script" uid="uid://dxgcqk1wvwsa1" path="res://Scripts/RafGames/PileOuFaceMiniGameScript.gd" id="1_d4klv"]
+
+[node name="PileOuFaceMiniGame" type="Node2D" unique_id=1556599342]
+script = ExtResource("1_d4klv")

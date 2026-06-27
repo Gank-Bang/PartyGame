@@ -58,6 +58,7 @@ func _process(_delta: float) -> void:
 				my_id = 0
 
 func _route(msg: Dictionary) -> void:
+	print(msg)
 	match msg.get("type", ""):
 		"id":
 			my_id = int(msg["id"])
