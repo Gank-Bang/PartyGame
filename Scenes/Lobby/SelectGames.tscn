@@ -126,6 +126,14 @@ text = "Hotline Miami"
 face_color = Color(0.8, 0.18, 0.1, 1)
 shadow_color = Color(0.45, 0.08, 0.05, 1)
 
+[node name="RunesMiniGame" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1835792100 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Runes Mystiques"
+face_color = Color(0.45, 0.15, 0.65, 1)
+shadow_color = Color(0.22, 0.06, 0.35, 1)
+
 [node name="Spacer2" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1955445689]
 layout_mode = 2
 size_flags_vertical = 3

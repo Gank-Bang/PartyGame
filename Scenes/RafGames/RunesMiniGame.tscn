@@ -1,0 +1,118 @@
+[gd_scene format=3 uid="uid://b5b6nxgivfhnk"]
+
+[ext_resource type="Script" uid="uid://bd4lye0k4yjcv" path="res://Scripts/RafGames/RunesMiniGameScript.gd" id="1_8i0go"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_seq"]
+bg_color = Color(0.08, 0.1, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.2, 0.6, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="RunesMiniGame" type="Node2D" unique_id=717440697]
+script = ExtResource("1_8i0go")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=200000001]
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=200000002]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=200000003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07, 0.08, 0.15, 1)
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=200000004]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 24.0
+offset_right = -32.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox" unique_id=200000005]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RoundLabel" type="Label" parent="CanvasLayer/UI/MainVBox/Header" unique_id=200000006]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 30
+text = "Séquence : 0"
+
+[node name="Spacer1" type="Control" parent="CanvasLayer/UI/MainVBox/Header" unique_id=200000007]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PhaseLabel" type="Label" parent="CanvasLayer/UI/MainVBox/Header" unique_id=200000008]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.75, 0.88, 1.0, 1)
+theme_override_font_sizes/font_size = 28
+text = "En attente..."
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="CanvasLayer/UI/MainVBox/Header" unique_id=200000009]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimerBar" type="ProgressBar" parent="CanvasLayer/UI/MainVBox/Header" unique_id=200000010]
+custom_minimum_size = Vector2(280, 28)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="SequencePanel" type="PanelContainer" parent="CanvasLayer/UI/MainVBox" unique_id=200000011]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_seq")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/UI/MainVBox/SequencePanel" unique_id=200000012]
+layout_mode = 2
+
+[node name="SequenceHBox" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/SequencePanel/CenterContainer" unique_id=200000013]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatusArea" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox" unique_id=200000014]
+custom_minimum_size = Vector2(0, 54)
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox" unique_id=200000015]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.95, 0.82, 1)
+theme_override_font_sizes/font_size = 24
+text = ""
+horizontal_alignment = 1
+
+[node name="RuneGrid" type="GridContainer" parent="CanvasLayer/UI/MainVBox" unique_id=200000016]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 5
+
