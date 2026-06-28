@@ -242,14 +242,14 @@ func _start_next_round() -> void:
 
 func _setup_round(data: Dictionary) -> void:
 	_equation = {
-		"a": data["a"], "op": data["op"], "b": data["b"],
-		"result": data["result"], "hidden": data["hidden"], "answer": data["answer"],
+		"a": int(data["a"]), "op": str(data["op"]), "b": int(data["b"]),
+		"result": int(data["result"]), "hidden": str(data["hidden"]), "answer": int(data["answer"]),
 	}
 	_current_round = int(data.get("round", _current_round))
 	_round_active = true
 	_cooldowns.clear()
 	_input_buffer = ""
-	_answer_digits = str(data.get("answer", 1)).length()
+	_answer_digits = str(int(data.get("answer", 1))).length()
 	_time_left = ROUND_DURATION
 	_set_numpad_disabled(false)
 	if _round_label:
