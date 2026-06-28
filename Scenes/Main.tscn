@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://t0xtls0x2koq"]
+[gd_scene format=3 uid="uid://ywmyd4tgj54"]
 
-[ext_resource type="Script" uid="uid://c3main5script1" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://duhmisqa7npno" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
 
 [node name="Node2D" type="Node2D" unique_id=1989171372]
@@ -11,9 +11,9 @@ offset_right = 1916.0
 offset_bottom = 1084.0
 color = Color(0.3882353, 0.5647059, 0.4627451, 1)
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1186504109]
 
-[node name="UI" type="Control" parent="CanvasLayer"]
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=381671731]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI"]
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1823906629]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -36,14 +36,14 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 32
 
-[node name="BtnJouer" parent="CanvasLayer/UI/VBox" instance=ExtResource("2_flat")]
-layout_mode = 2
+[node name="BtnJouer" parent="CanvasLayer/UI/VBox" unique_id=333452258 instance=ExtResource("2_flat")]
 custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
 text = "Jouer"
 
-[node name="BtnQuitter" parent="CanvasLayer/UI/VBox" instance=ExtResource("2_flat")]
-layout_mode = 2
+[node name="BtnQuitter" parent="CanvasLayer/UI/VBox" unique_id=1749992697 instance=ExtResource("2_flat")]
 custom_minimum_size = Vector2(400, 80)
+layout_mode = 2
 text = "Quitter"
 face_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
 shadow_color = Color(0.60784316, 0.13333334, 0.14901961, 1)
