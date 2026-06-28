@@ -3,8 +3,8 @@ extends Control
 @onready var code_lbl:     Label         = $Panel/Margin/VBox/CodeLabel
 @onready var player_list:  VBoxContainer = $Panel/Margin/VBox/PlayerList
 @onready var players_number: Label        = $Panel/Margin/VBox/PlayersTitle
-@onready var start_btn:    Button        = $Panel/Margin/VBox/StartBtn
-@onready var quit_btn:     Button        = $Panel/Margin/VBox/QuitBtn
+@onready var start_btn:    Control       = $Panel/Margin/VBox/StartBtn
+@onready var quit_btn:     Control       = $Panel/Margin/VBox/QuitBtn
 
 func _ready() -> void:
 	var is_host: bool = NetworkManager.is_host
@@ -36,6 +36,7 @@ func _refresh_list() -> void:
 		var data: Dictionary = NetworkManager.players[id]
 		lbl.text = "• " + data.get("name", "Joueur")
 		lbl.add_theme_font_size_override("font_size", 22)
+		lbl.add_theme_color_override("font_color", Color("f5e6c8"))
 		player_list.add_child(lbl)
 	players_number.text = "Joueurs : %d/4" % NetworkManager.players.size()
 

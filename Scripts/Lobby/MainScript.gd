@@ -1,8 +1,8 @@
 ## Menu principal — Jouer et Quitter.
 extends Node2D
 
-@onready var _btn_jouer:   Control = $CanvasLayer/UI/VBox/BtnJouer
-@onready var _btn_quitter: Control = $CanvasLayer/UI/VBox/BtnQuitter
+@onready var _btn_jouer:   Control = $CanvasLayer/UI/Panel/Margin/VBox/BtnJouer
+@onready var _btn_quitter: Control = $CanvasLayer/UI/Panel/Margin/VBox/BtnQuitter
 
 func _ready() -> void:
 	_btn_jouer.connect("pressed", _on_jouer_pressed)

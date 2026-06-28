@@ -86,10 +86,8 @@ func _apply_hover(game: String) -> void:
 # ── Liste des joueurs ─────────────────────────────────────────────────────────
 
 func _refresh_player_list() -> void:
-	# Supprimer les entrées joueurs existantes (conserver le RichTextLabel titre)
 	for child in _player_vbox.get_children():
-		if not (child is RichTextLabel):
-			child.queue_free()
+		child.queue_free()
 	await get_tree().process_frame
 	var is_local := NetworkManager.local_peer_id()
 	for pid in NetworkManager.players:
