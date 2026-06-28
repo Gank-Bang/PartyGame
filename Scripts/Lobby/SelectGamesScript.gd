@@ -131,6 +131,6 @@ func _launch(scene: String) -> void:
 		"equation":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/EquationMiniGame.tscn")
 		"pileface":
-			get_tree().change_scene_to_file("res://Scenes/RafGames/PileFaceMiniGame.tscn")
+			get_tree().change_scene_to_file("res://Scenes/RafGames/PileOuFaceMiniGame.tscn")
 		"miami":
 			get_tree().change_scene_to_file("res://Scenes/Yanis/Main.tscn")

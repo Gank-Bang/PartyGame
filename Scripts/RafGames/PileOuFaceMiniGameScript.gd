@@ -6,7 +6,7 @@ extends BaseGame
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 
-const ROUNDS: int = 7
+const ROUNDS: int = 5
 const ROUND_DURATION: float = 5.0
 const COIN_SPIN_SPEED: float = 8.0   # radians/sec pour l'animation de la pièce
 

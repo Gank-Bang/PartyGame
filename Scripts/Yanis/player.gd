@@ -27,11 +27,6 @@ func setup(id: int) -> void:
 
 	$Camera2D.enabled = is_local_player
 
-	print(
-		"peer =", peer_id,
-		" local =", NetworkManager.local_peer_id(),
-		" is_local =", is_local_player
-	)
 
 
 func _ready() -> void:
@@ -85,6 +80,14 @@ func handle_movement() -> void:
 		"ui_up",
 		"ui_down"
 	)
+
+	if Input.is_key_pressed(KEY_Q): direction.x -= 1.0
+	if Input.is_key_pressed(KEY_D): direction.x += 1.0
+	if Input.is_key_pressed(KEY_Z): direction.y -= 1.0
+	if Input.is_key_pressed(KEY_S): direction.y += 1.0
+
+	if direction.length() > 1.0:
+		direction = direction.normalized()
 
 	velocity = direction * speed
 

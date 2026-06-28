@@ -29,6 +29,8 @@ var _my_id: int = 0
 var _time_left: float = 0.0
 var _game_done: bool = false
 var _numpad_disabled: bool = false
+var _input_buffer: String = ""
+var _answer_digits: int = 1
 ## Indice de zone (0-3) → peer_id (-1 = inutilisée)
 var _area_to_pid: Array = [-1, -1, -1, -1]
 ## peer_id → indice de zone (0-3)
@@ -149,6 +151,7 @@ func _display_equation_in_area(idx: int, eq: Dictionary) -> void:
 	var eq_hidden: String = eq.get("hidden", "a")
 	var val_a: String = "?" if eq_hidden == "a" else str(eq["a"])
 	var val_b: String = "?" if eq_hidden == "b" else str(eq["b"])
+	var val_result: String = "?" if eq_hidden == "result" else str(eq["result"])
 	var face: Color = PLAYER_FACE_COLORS[idx]
 	var shad: Color = PLAYER_SHADOW_COLORS[idx]
 	var btn_a := _get_area_node(idx, "Margin/VBox/EqRow/BtnA")
@@ -158,7 +161,7 @@ func _display_equation_in_area(idx: int, eq: Dictionary) -> void:
 	btn_a.set("text", val_a)
 	btn_op.set("text", eq["op"])
 	btn_b.set("text", val_b)
-	btn_result.set("text", str(eq["result"]))
+	btn_result.set("text", val_result)
 	if val_a == "?":
 		btn_a.set("face_color", Color("f4a261"))
 		btn_a.set("shadow_color", Color("b05d1e"))
@@ -171,6 +174,12 @@ func _display_equation_in_area(idx: int, eq: Dictionary) -> void:
 	else:
 		btn_b.set("face_color", face)
 		btn_b.set("shadow_color", shad)
+	if val_result == "?":
+		btn_result.set("face_color", Color("f4a261"))
+		btn_result.set("shadow_color", Color("b05d1e"))
+	else:
+		btn_result.set("face_color", face)
+		btn_result.set("shadow_color", shad)
 
 # ── Génération d'équations ────────────────────────────────────────────────────
 
@@ -185,22 +194,27 @@ func _generate_equation() -> Dictionary:
 
 	match op:
 		"+":
-			a = randi_range(1, 9)
-			b = randi_range(1, 9)
+			a = randi_range(1, 15)
+			b = randi_range(1, 15)
 			result = a + b
 		"-":
-			# b et result sont 1-9, a = b + result
-			b = randi_range(1, 9)
-			result = randi_range(1, 9)
+			# b et result 1-15, a = b + result (max 30)
+			b = randi_range(1, 15)
+			result = randi_range(1, 15)
 			a = b + result
 		"x":
-			# Limiter pour garder le résultat raisonnable (2-25)
-			a = randi_range(2, 5)
-			b = randi_range(2, 5)
+			# résultat max 81 (≤ 99)
+			a = randi_range(2, 9)
+			b = randi_range(2, 9)
 			result = a * b
 
-	var eq_hidden: String = ["a", "b"][randi() % 2]
-	var answer: int = a if eq_hidden == "a" else b
+	# La réponse cachée peut être a, b ou le résultat (jamais > 99)
+	var eq_hidden: String = ["a", "b", "result"][randi() % 3]
+	var answer: int
+	match eq_hidden:
+		"a":    answer = a
+		"b":    answer = b
+		"result": answer = result
 	return {"a": a, "op": op, "b": b, "result": result, "hidden": eq_hidden, "answer": answer}
 
 # ── Gestion des rounds ────────────────────────────────────────────────────────
@@ -234,6 +248,8 @@ func _setup_round(data: Dictionary) -> void:
 	_current_round = int(data.get("round", _current_round))
 	_round_active = true
 	_cooldowns.clear()
+	_input_buffer = ""
+	_answer_digits = str(data.get("answer", 1)).length()
 	_time_left = ROUND_DURATION
 	_set_numpad_disabled(false)
 	if _round_label:
@@ -250,6 +266,25 @@ func _setup_round(data: Dictionary) -> void:
 # ── Input joueur ──────────────────────────────────────────────────────────────
 
 func _on_numpad_pressed(value: int) -> void:
+	if not _round_active or _numpad_disabled:
+		return
+	if _input_buffer.length() >= _answer_digits:
+		return
+	_input_buffer += str(value)
+	if _input_buffer.length() == _answer_digits:
+		_submit_buffered_guess()
+	else:
+		var area_idx: int = _pid_to_area.get(_my_id, -1)
+		if area_idx != -1:
+			_get_feedback_label(area_idx).text = "→ %s" % _input_buffer
+			_get_feedback_label(area_idx).add_theme_color_override("font_color", Color("f5e6c8"))
+
+
+func _submit_buffered_guess() -> void:
+	if _input_buffer.is_empty():
+		return
+	var value: int = int(_input_buffer)
+	_input_buffer = ""
 	if not _round_active or _numpad_disabled:
 		return
 	if NetworkManager.is_host:
@@ -317,6 +352,12 @@ func _on_custom_message(from_id: int, data: Dictionary) -> void:
 
 func _apply_round_result(data: Dictionary) -> void:
 	_round_active = false
+	_input_buffer = ""
+	var local_area: int = _pid_to_area.get(_my_id, -1)
+	if local_area != -1:
+		var fb := _get_feedback_label(local_area)
+		if fb.text.begins_with("→"):
+			fb.text = ""
 	var winner_id: int = int(data.get("winner", -1))
 	var answer: int = int(data.get("answer", 0))
 	var scores_data: Dictionary = data.get("scores", {})
@@ -357,10 +398,13 @@ func _on_wrong_answer(guesser_id: int) -> void:
 
 
 func _reveal_answer_in_areas(answer: int) -> void:
+	var eq_hidden: String = _equation.get("hidden", "a")
+	var subs: Array = ["Margin/VBox/EqRow/BtnResult"] if eq_hidden == "result" \
+		else ["Margin/VBox/EqRow/BtnA", "Margin/VBox/EqRow/BtnB"]
 	for i in range(4):
 		if _area_to_pid[i] == -1:
 			continue
-		for sub in ["Margin/VBox/EqRow/BtnA", "Margin/VBox/EqRow/BtnB"]:
+		for sub in subs:
 			var btn := _get_area_node(i, sub)
 			if btn.get("text") == "?":
 				btn.set("text", str(answer))
