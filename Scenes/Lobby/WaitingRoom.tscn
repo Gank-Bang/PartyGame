@@ -1,6 +1,19 @@
 [gd_scene format=3 uid="uid://waiting_room_scene"]
 
 [ext_resource type="Script" path="res://Scripts/Lobby/WaitingRoomScript.gd" id="1_wrscript"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.15, 0.20, 0.30, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.38, 0.56, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="WaitingRoom" type="Control"]
 layout_mode = 3
@@ -14,7 +27,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.388235, 0.564706, 0.462745, 1)
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.16, 0.24, 1)
 
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -26,54 +41,66 @@ offset_left = -320.0
 offset_top = -300.0
 offset_right = 320.0
 offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 36
 
 [node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.90, 0.78, 1)
+theme_override_font_sizes/font_size = 40
 text = "Salle d'attente"
-theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 
 [node name="CodeLabel" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.86, 0.90, 1)
+theme_override_font_sizes/font_size = 22
 text = "Code : ----"
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 
 [node name="Sep1" type="HSeparator" parent="Panel/Margin/VBox"]
 layout_mode = 2
+modulate = Color(0.4, 0.55, 0.75, 0.5)
 
 [node name="PlayersTitle" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
-text = "Joueurs connectés :"
+theme_override_colors/font_color = Color(0.76, 0.82, 0.95, 1)
 theme_override_font_sizes/font_size = 20
+text = "Joueurs connectés :"
 
 [node name="PlayerList" type="VBoxContainer" parent="Panel/Margin/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10
 
 [node name="Sep2" type="HSeparator" parent="Panel/Margin/VBox"]
 layout_mode = 2
+modulate = Color(0.4, 0.55, 0.75, 0.5)
 
-[node name="StartBtn" type="Button" parent="Panel/Margin/VBox"]
+[node name="StartBtn" parent="Panel/Margin/VBox" instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-text = "Démarrer la partie"
-theme_override_font_sizes/font_size = 22
-custom_minimum_size = Vector2(0, 56)
+size_flags_horizontal = 3
 visible = false
+text = "Démarrer la partie"
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.086, 0.376, 0.341, 1)
 
-[node name="QuitBtn" type="Button" parent="Panel/Margin/VBox"]
+[node name="QuitBtn" parent="Panel/Margin/VBox" instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Quitter le lobby"
-theme_override_font_sizes/font_size = 20
-custom_minimum_size = Vector2(0, 48)
+face_color = Color(0.56, 0.18, 0.20, 1)
+shadow_color = Color(0.35, 0.09, 0.11, 1)

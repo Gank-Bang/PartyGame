@@ -1,6 +1,35 @@
 [gd_scene format=3 uid="uid://lobby_menu_scene"]
 
 [ext_resource type="Script" path="res://Scripts/Lobby/LobbyMenuScript.gd" id="1_lbscript"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.15, 0.20, 0.30, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.38, 0.56, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.10, 0.14, 0.22, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.50, 0.70, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 12
+content_margin_top = 8
+content_margin_right = 12
+content_margin_bottom = 8
 
 [node name="LobbyMenu" type="Control"]
 layout_mode = 3
@@ -14,7 +43,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.388235, 0.564706, 0.462745, 1)
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.16, 0.24, 1)
 
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -26,26 +57,31 @@ offset_left = -320.0
 offset_top = -340.0
 offset_right = 320.0
 offset_bottom = 340.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 36
 
 [node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
 
 [node name="Title" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.90, 0.78, 1)
+theme_override_font_sizes/font_size = 40
 text = "MULTIJOUEUR"
-theme_override_font_sizes/font_size = 36
 horizontal_alignment = 1
 
 [node name="SubTitle" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.82, 0.95, 1)
 text = "Choisissez votre pseudo puis une option"
 horizontal_alignment = 1
 
@@ -53,28 +89,34 @@ horizontal_alignment = 1
 layout_mode = 2
 placeholder_text = "Votre pseudo…"
 theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.96, 0.90, 0.78, 1)
+theme_override_colors/font_placeholder_color = Color(0.50, 0.56, 0.70, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 custom_minimum_size = Vector2(0, 48)
 
 [node name="Sep1" type="HSeparator" parent="Panel/Margin/VBox"]
 layout_mode = 2
+modulate = Color(0.4, 0.55, 0.75, 0.5)
 
 [node name="BtnRow" type="HBoxContainer" parent="Panel/Margin/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="HostBtn" type="Button" parent="Panel/Margin/VBox/BtnRow"]
+[node name="HostBtn" parent="Panel/Margin/VBox/BtnRow" instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Héberger"
-theme_override_font_sizes/font_size = 22
-custom_minimum_size = Vector2(0, 56)
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.086, 0.376, 0.341, 1)
 
-[node name="JoinBtn" type="Button" parent="Panel/Margin/VBox/BtnRow"]
+[node name="JoinBtn" parent="Panel/Margin/VBox/BtnRow" instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Rejoindre"
-theme_override_font_sizes/font_size = 22
-custom_minimum_size = Vector2(0, 56)
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
 
 [node name="JoinPanel" type="VBoxContainer" parent="Panel/Margin/VBox"]
 layout_mode = 2
@@ -83,6 +125,7 @@ visible = false
 
 [node name="CodeLabel" type="Label" parent="Panel/Margin/VBox/JoinPanel"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.82, 0.95, 1)
 text = "Entrez le code du lobby (4 chiffres) :"
 
 [node name="CodeInput" type="LineEdit" parent="Panel/Margin/VBox/JoinPanel"]
@@ -90,19 +133,26 @@ layout_mode = 2
 placeholder_text = "1234"
 max_length = 4
 theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.96, 0.90, 0.78, 1)
+theme_override_colors/font_placeholder_color = Color(0.50, 0.56, 0.70, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 custom_minimum_size = Vector2(0, 48)
 
-[node name="ConfirmBtn" type="Button" parent="Panel/Margin/VBox/JoinPanel"]
+[node name="ConfirmBtn" parent="Panel/Margin/VBox/JoinPanel" instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
+size_flags_horizontal = 3
 text = "Confirmer"
-theme_override_font_sizes/font_size = 20
-custom_minimum_size = Vector2(0, 48)
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
 
 [node name="Sep2" type="HSeparator" parent="Panel/Margin/VBox"]
 layout_mode = 2
+modulate = Color(0.4, 0.55, 0.75, 0.5)
 
 [node name="StatusLabel" type="Label" parent="Panel/Margin/VBox"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.663, 0.855, 0.902, 1)
 text = ""
 horizontal_alignment = 1
 autowrap_mode = 3

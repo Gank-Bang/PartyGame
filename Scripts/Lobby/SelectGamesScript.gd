@@ -5,11 +5,11 @@ extends Node2D
 
 const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.tscn")
 
-@onready var _player_vbox: VBoxContainer = $VBoxContainer
-@onready var _btn_equation: Control    = $FlatButton
-@onready var _btn_pileface: Control    = $FlatButton2
-@onready var _btn_quitter: Control     = $FlatButton3
-@onready var _btn_miami: Control     = $HotlineMiami
+@onready var _player_vbox: VBoxContainer = $CanvasLayer/UI/MainHBox/LeftPanel/Margin/VBox/VBoxContainer
+@onready var _btn_equation: Control    = $CanvasLayer/UI/MainHBox/RightVBox/FlatButton
+@onready var _btn_pileface: Control    = $CanvasLayer/UI/MainHBox/RightVBox/FlatButton2
+@onready var _btn_quitter: Control     = $CanvasLayer/UI/MainHBox/RightVBox/QuitRow/FlatButton3
+@onready var _btn_miami: Control     = $CanvasLayer/UI/MainHBox/RightVBox/HotlineMiami
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
 const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261")}
@@ -86,10 +86,8 @@ func _apply_hover(game: String) -> void:
 # ── Liste des joueurs ─────────────────────────────────────────────────────────
 
 func _refresh_player_list() -> void:
-	# Supprimer les entrées joueurs existantes (conserver le RichTextLabel titre)
 	for child in _player_vbox.get_children():
-		if not (child is RichTextLabel):
-			child.queue_free()
+		child.queue_free()
 	await get_tree().process_frame
 	var is_local := NetworkManager.local_peer_id()
 	for pid in NetworkManager.players:

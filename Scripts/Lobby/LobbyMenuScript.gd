@@ -1,11 +1,11 @@
 extends Control
 
 @onready var name_input:  LineEdit      = $Panel/Margin/VBox/NameInput
-@onready var host_btn:    Button        = $Panel/Margin/VBox/BtnRow/HostBtn
-@onready var join_btn:    Button        = $Panel/Margin/VBox/BtnRow/JoinBtn
+@onready var host_btn:    Control       = $Panel/Margin/VBox/BtnRow/HostBtn
+@onready var join_btn:    Control       = $Panel/Margin/VBox/BtnRow/JoinBtn
 @onready var join_panel:  VBoxContainer = $Panel/Margin/VBox/JoinPanel
 @onready var code_input:  LineEdit      = $Panel/Margin/VBox/JoinPanel/CodeInput
-@onready var confirm_btn: Button        = $Panel/Margin/VBox/JoinPanel/ConfirmBtn
+@onready var confirm_btn: Control       = $Panel/Margin/VBox/JoinPanel/ConfirmBtn
 @onready var status_lbl:  Label         = $Panel/Margin/VBox/StatusLabel
 
 func _ready() -> void:
@@ -64,8 +64,12 @@ func _get_name() -> String:
 	var n := name_input.text.strip_edges()
 	return n if n.length() > 0 else "Joueur"
 
+func _set_btn_disabled(btn: Control, dis: bool) -> void:
+	btn.mouse_filter = Control.MOUSE_FILTER_IGNORE if dis else Control.MOUSE_FILTER_STOP
+	btn.modulate.a = 0.45 if dis else 1.0
+
 func _set_ui_loading(msg: String, loading: bool = true) -> void:
-	host_btn.disabled    = loading
-	join_btn.disabled    = loading
-	confirm_btn.disabled = loading
-	status_lbl.text      = msg
+	_set_btn_disabled(host_btn, loading)
+	_set_btn_disabled(join_btn, loading)
+	_set_btn_disabled(confirm_btn, loading)
+	status_lbl.text = msg

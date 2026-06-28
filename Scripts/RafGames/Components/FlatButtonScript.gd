@@ -43,6 +43,9 @@ signal pressed
 @onready var _face: Panel   = $Face
 @onready var _label: Label  = $Face/Label
 
+var _sfx_hover := AudioStreamPlayer.new()
+var _sfx_press := AudioStreamPlayer.new()
+
 var _tween_press: Tween
 var _tween_hover: Tween
 var _hovered: bool = false
@@ -58,6 +61,13 @@ func _ready() -> void:
 	_face.mouse_filter   = MOUSE_FILTER_IGNORE
 	_shadow.mouse_filter = MOUSE_FILTER_IGNORE
 	_label.mouse_filter  = MOUSE_FILTER_IGNORE
+	# Sons
+	_sfx_hover.stream = load("res://Ressources/Menu/Sounds/select.mp3")
+	_sfx_hover.bus = "Master"
+	add_child(_sfx_hover)
+	_sfx_press.stream = load("res://Ressources/Menu/Sounds/press.mp3")
+	_sfx_press.bus = "Master"
+	add_child(_sfx_press)
 	mouse_entered.connect(_on_hover)
 	mouse_exited.connect(_on_unhover)
 	resized.connect(func(): pivot_offset = size / 2.0)
@@ -83,6 +93,7 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_clicking = true
+			_sfx_press.play()
 			_animate_press()
 		else:
 			_clicking = false
@@ -92,6 +103,7 @@ func _gui_input(event: InputEvent) -> void:
 func _on_hover() -> void:
 	_hovered = true
 	if not _clicking:
+		_sfx_hover.play()
 		_animate_hover()
 
 func _on_unhover() -> void:

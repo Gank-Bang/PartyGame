@@ -2,18 +2,26 @@
 
 [ext_resource type="Script" uid="uid://duhmisqa7npno" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
+[ext_resource type="Texture2D" uid="uid://b4r2ojkxsosx" path="res://Ressources/Menu/Creators.png" id="3_kln2b"]
 
-[node name="Node2D" type="Node2D" unique_id=1989171372]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.15, 0.2, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.38, 0.56, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="Node2D" type="Node2D" unique_id=1711572298]
 script = ExtResource("1_main")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=124639713]
-offset_right = 1916.0
-offset_bottom = 1084.0
-color = Color(0.3882353, 0.5647059, 0.4627451, 1)
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=805698612]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1186504109]
-
-[node name="UI" type="Control" parent="CanvasLayer" unique_id=381671731]
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=595428662]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,29 +29,110 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1823906629]
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=1783756382]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.16, 0.24, 1)
+
+[node name="Panel" type="PanelContainer" parent="CanvasLayer/UI" unique_id=2070273617]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -120.0
-offset_right = 200.0
-offset_bottom = 120.0
+offset_left = -242.0
+offset_top = -485.0
+offset_right = 242.0
+offset_bottom = -45.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 32
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="BtnJouer" parent="CanvasLayer/UI/VBox" unique_id=333452258 instance=ExtResource("2_flat")]
-custom_minimum_size = Vector2(400, 80)
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/Panel" unique_id=598530452]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/Panel/Margin" unique_id=1881075387]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="CanvasLayer/UI/Panel/Margin/VBox" unique_id=1144903686]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 52
+text = "PARTY GAMES"
+horizontal_alignment = 1
+
+[node name="SubTitle" type="Label" parent="CanvasLayer/UI/Panel/Margin/VBox" unique_id=1074811510]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.66, 0.76, 0.9, 1)
+theme_override_font_sizes/font_size = 20
+text = "Le jeu de soirée entre amis"
+horizontal_alignment = 1
+
+[node name="BtnJouer" parent="CanvasLayer/UI/Panel/Margin/VBox" unique_id=654484739 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(400, 72)
 layout_mode = 2
 text = "Jouer"
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.086, 0.376, 0.341, 1)
 
-[node name="BtnQuitter" parent="CanvasLayer/UI/VBox" unique_id=1749992697 instance=ExtResource("2_flat")]
-custom_minimum_size = Vector2(400, 80)
+[node name="BtnQuitter" parent="CanvasLayer/UI/Panel/Margin/VBox" unique_id=540957721 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(400, 72)
 layout_mode = 2
 text = "Quitter"
-face_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
-shadow_color = Color(0.60784316, 0.13333334, 0.14901961, 1)
+face_color = Color(0.56, 0.18, 0.2, 1)
+shadow_color = Color(0.35, 0.09, 0.11, 1)
+
+[node name="By" parent="CanvasLayer/UI" unique_id=1884313135 instance=ExtResource("2_flat")]
+layout_mode = 0
+offset_left = 840.0
+offset_top = 547.0
+offset_right = 1080.0
+offset_bottom = 627.0
+text = "By"
+
+[node name="Creators" type="Sprite2D" parent="CanvasLayer/UI" unique_id=1151465527]
+position = Vector2(970, 801)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("3_kln2b")
+
+[node name="Naf" parent="CanvasLayer/UI" unique_id=1604962029 instance=ExtResource("2_flat")]
+layout_mode = 0
+offset_left = 443.0
+offset_top = 932.0
+offset_right = 683.0
+offset_bottom = 1012.0
+text = "Nef"
+
+[node name="Yans" parent="CanvasLayer/UI" unique_id=1998583780 instance=ExtResource("2_flat")]
+layout_mode = 0
+offset_left = 725.0
+offset_top = 962.0
+offset_right = 965.0
+offset_bottom = 1042.0
+text = "Yans"
+
+[node name="Houc" parent="CanvasLayer/UI" unique_id=170799499 instance=ExtResource("2_flat")]
+layout_mode = 0
+offset_left = 1000.0
+offset_top = 935.0
+offset_right = 1240.0
+offset_bottom = 1015.0
+text = "Houc"
+
+[node name="Raf" parent="CanvasLayer/UI" unique_id=899292200 instance=ExtResource("2_flat")]
+layout_mode = 0
+offset_left = 1254.0
+offset_top = 957.0
+offset_right = 1494.0
+offset_bottom = 1037.0
+text = "Raf"

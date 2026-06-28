@@ -3,79 +3,143 @@
 [ext_resource type="Script" uid="uid://byhv0frtoobar" path="res://Scripts/Lobby/SelectGamesScript.gd" id="1_15w7p"]
 [ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="1_wdffp"]
 
-[node name="SelectGames" type="Node2D" unique_id=454030278]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.15, 0.2, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.26, 0.38, 0.56, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="SelectGames" type="Node2D" unique_id=2098338564]
 script = ExtResource("1_15w7p")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=2015814168]
-offset_right = 1916.0
-offset_bottom = 1084.0
-color = Color(0.3882353, 0.5647059, 0.4627451, 1)
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=74148527]
 
-[node name="FlatButton" parent="." unique_id=1884313135 instance=ExtResource("1_wdffp")]
-offset_left = 717.0
-offset_top = 164.0
-offset_right = 1180.0
-offset_bottom = 244.0
-text = "Equation en pétard"
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=1332254611]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="FlatButton2" parent="." unique_id=183596904 instance=ExtResource("1_wdffp")]
-offset_left = 668.0
-offset_top = 309.0
-offset_right = 1210.0
-offset_bottom = 389.0
-text = "Pile Ou Face Full Random"
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=1372705976]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.16, 0.24, 1)
 
-[node name="HotlineMiami" parent="." unique_id=1662627380 instance=ExtResource("1_wdffp")]
-offset_left = 668.0
-offset_top = 435.0
-offset_right = 1210.0
-offset_bottom = 515.0
-text = "Hotline Miami"
+[node name="MainHBox" type="HBoxContainer" parent="CanvasLayer/UI" unique_id=1405719123]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=238303122]
-offset_left = 136.0
-offset_top = 340.0
-offset_right = 450.0
-offset_bottom = 735.0
+[node name="LeftPanel" type="PanelContainer" parent="CanvasLayer/UI/MainHBox" unique_id=1139356487]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/MainHBox/LeftPanel" unique_id=1407879944]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/MainHBox/LeftPanel/Margin" unique_id=795754413]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PlayersTitle" type="Label" parent="CanvasLayer/UI/MainHBox/LeftPanel/Margin/VBox" unique_id=1267700579]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.82, 0.95, 1)
+theme_override_font_sizes/font_size = 26
+text = "Joueurs :"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/MainHBox/LeftPanel/Margin/VBox" unique_id=841371729]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="RightVBox" type="VBoxContainer" parent="CanvasLayer/UI/MainHBox" unique_id=2015035915]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1540633888]
+[node name="Title" type="Label" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=2019618632]
 layout_mode = 2
-theme_override_font_sizes/normal_font_size = 50
-text = "Joueurs :"
-fit_content = true
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 40
+text = "Choisir un mini-jeu"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="FlatButton" parent="VBoxContainer" unique_id=811151686 instance=ExtResource("1_wdffp")]
+[node name="HostHint" type="Label" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=623139555]
 layout_mode = 2
-text = "Raf"
-face_color = Color(0.12850231, 0.515345, 0.6198599, 1)
-shadow_color = Color(0.05958201, 0.30072558, 0.36705458, 1)
+theme_override_colors/font_color = Color(0.66, 0.76, 0.9, 0.8)
+theme_override_font_sizes/font_size = 18
+text = "L'hôte sélectionne le jeu"
+horizontal_alignment = 1
 
-[node name="FlatButton2" parent="VBoxContainer" unique_id=1704353232 instance=ExtResource("1_wdffp")]
+[node name="Spacer1" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=800898390]
 layout_mode = 2
-text = "Raf"
-face_color = Color(0.12850231, 0.515345, 0.6198599, 1)
-shadow_color = Color(0.05958201, 0.30072558, 0.36705458, 1)
+size_flags_vertical = 3
 
-[node name="FlatButton3" parent="VBoxContainer" unique_id=1972461081 instance=ExtResource("1_wdffp")]
+[node name="FlatButton" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1624574946 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
 layout_mode = 2
-text = "Raf"
-face_color = Color(0.12850231, 0.515345, 0.6198599, 1)
-shadow_color = Color(0.05958201, 0.30072558, 0.36705458, 1)
+size_flags_horizontal = 4
+text = "Équation en pétard"
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
 
-[node name="FlatButton4" parent="VBoxContainer" unique_id=1416089602 instance=ExtResource("1_wdffp")]
+[node name="FlatButton2" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=33596312 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
 layout_mode = 2
-text = "Raf"
-face_color = Color(0.12850231, 0.515345, 0.6198599, 1)
-shadow_color = Color(0.05958201, 0.30072558, 0.36705458, 1)
+size_flags_horizontal = 4
+text = "Pile ou Face"
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.086, 0.376, 0.341, 1)
 
-[node name="FlatButton3" parent="." unique_id=45504168 instance=ExtResource("1_wdffp")]
-offset_left = 1442.0
-offset_top = 854.0
-offset_right = 1771.0
-offset_bottom = 934.0
+[node name="HotlineMiami" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1662627380 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Hotline Miami"
+face_color = Color(0.8, 0.18, 0.1, 1)
+shadow_color = Color(0.45, 0.08, 0.05, 1)
+
+[node name="Spacer2" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1955445689]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="QuitRow" type="HBoxContainer" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=821892752]
+layout_mode = 2
+
+[node name="QuitSpacer" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox/QuitRow" unique_id=2087607028]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FlatButton3" parent="CanvasLayer/UI/MainHBox/RightVBox/QuitRow" unique_id=1110651584 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
 text = "Quitter"
-face_color = Color(0.9019608, 0.22352941, 0.27450982, 1)
-shadow_color = Color(0.60784316, 0.13333334, 0.14901961, 1)
+face_color = Color(0.56, 0.18, 0.2, 1)
+shadow_color = Color(0.35, 0.09, 0.11, 1)

@@ -1,6 +1,433 @@
 [gd_scene format=3 uid="uid://ddjewrny5066"]
 
-[ext_resource type="Script" uid="uid://dxgcqk1wvwsa1" path="res://Scripts/RafGames/PileOuFaceMiniGameScript.gd" id="1_d4klv"]
+[ext_resource type="Script" uid="uid://dxgcqk1wvwsa1" path="res://Scripts/RafGames/PileOuFaceMiniGameScript.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
 
-[node name="PileOuFaceMiniGame" type="Node2D" unique_id=1556599342]
-script = ExtResource("1_d4klv")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_timerfill"]
+bg_color = Color(0.3353065, 0.3983389, 0.59804136, 1)
+
+[sub_resource type="Theme" id="Theme_timer"]
+ProgressBar/constants/outline_size = 2
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_timerfill")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coinshadow"]
+bg_color = Color(0.6, 0.44, 0.04, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coinface"]
+bg_color = Color(0.95, 0.78, 0.15, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[node name="PileOuFaceMiniGame" type="Node2D" unique_id=605672443]
+script = ExtResource("1_script")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=933372445]
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=1158505365]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=1465977588]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.25882354, 0.3647059, 0.4627451, 1)
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=1902907131]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Header" type="Panel" parent="CanvasLayer/UI/MainVBox" unique_id=1983677615]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBox" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/Header" unique_id=973122680]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="RoundLabel" type="Label" parent="CanvasLayer/UI/MainVBox/Header/HBox" unique_id=1449278119]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
+text = "Round 1 / 7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimerBar" type="ProgressBar" parent="CanvasLayer/UI/MainVBox/Header/HBox" unique_id=66505539]
+custom_minimum_size = Vector2(320, 30)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme = SubResource("Theme_timer")
+max_value = 1.0
+value = 1.0
+
+[node name="CoinZone" type="CenterContainer" parent="CanvasLayer/UI/MainVBox" unique_id=1384362629]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CoinNode" type="Control" parent="CanvasLayer/UI/MainVBox/CoinZone" unique_id=1291715923]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+
+[node name="CoinShadow" type="Panel" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode" unique_id=94954706]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_coinshadow")
+
+[node name="CoinFace" type="Panel" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode" unique_id=50976441]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_coinface")
+
+[node name="CoinLabel" type="Label" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace" unique_id=1239219525]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.12, 0.08, 0.02, 1)
+theme_override_font_sizes/font_size = 32
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AreaRows" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox" unique_id=1537543499]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Row1" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows" unique_id=2105005652]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerArea1" type="Control" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1" unique_id=1494387399]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AreaBG" type="ColorRect" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1" unique_id=222755091]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.69411767, 0.24705882, 0.28235295, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1" unique_id=261111948]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin" unique_id=1722573284]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox" unique_id=642190813]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox/NameRow" unique_id=789581153]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.956, 0.651, 0.674, 1)
+theme_override_font_sizes/font_size = 24
+text = "Joueur 1"
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox/NameRow" unique_id=293956734]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "0 pt"
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox" unique_id=731700145]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="ChoiceRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox" unique_id=703109048]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="BtnPile" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox/ChoiceRow" unique_id=311006832 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "PILE"
+face_color = Color(0.902, 0.224, 0.275, 1)
+shadow_color = Color(0.608, 0.133, 0.149, 1)
+
+[node name="BtnFace" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea1/Margin/VBox/ChoiceRow" unique_id=1688595284 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "FACE"
+face_color = Color(0.902, 0.224, 0.275, 1)
+shadow_color = Color(0.608, 0.133, 0.149, 1)
+
+[node name="PlayerArea2" type="Control" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1" unique_id=393194767]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AreaBG" type="ColorRect" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2" unique_id=1203460442]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.23529412, 0.3647059, 0.44705883, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2" unique_id=1708581920]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin" unique_id=806800410]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox" unique_id=1982335279]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox/NameRow" unique_id=1685373077]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.651, 0.82, 0.956, 1)
+theme_override_font_sizes/font_size = 24
+text = "Joueur 2"
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox/NameRow" unique_id=1989444833]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "0 pt"
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox" unique_id=923721796]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="ChoiceRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox" unique_id=498187705]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="BtnPile" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox/ChoiceRow" unique_id=1594517489 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "PILE"
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
+
+[node name="BtnFace" parent="CanvasLayer/UI/MainVBox/AreaRows/Row1/PlayerArea2/Margin/VBox/ChoiceRow" unique_id=1789890753 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "FACE"
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
+
+[node name="Row2" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows" unique_id=2040148275]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PlayerArea3" type="Control" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2" unique_id=1013283656]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AreaBG" type="ColorRect" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3" unique_id=1045025273]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12941177, 0.3529412, 0.32156864, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3" unique_id=444394035]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin" unique_id=172223381]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox" unique_id=1747753323]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox/NameRow" unique_id=303682120]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.651, 0.956, 0.9, 1)
+theme_override_font_sizes/font_size = 24
+text = "Joueur 3"
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox/NameRow" unique_id=571489304]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "0 pt"
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox" unique_id=1744043525]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="ChoiceRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox" unique_id=128267874]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="BtnPile" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox/ChoiceRow" unique_id=335837169 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "PILE"
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.106, 0.416, 0.384, 1)
+
+[node name="BtnFace" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea3/Margin/VBox/ChoiceRow" unique_id=1959729939 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "FACE"
+face_color = Color(0.165, 0.616, 0.561, 1)
+shadow_color = Color(0.106, 0.416, 0.384, 1)
+
+[node name="PlayerArea4" type="Control" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2" unique_id=818376020]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AreaBG" type="ColorRect" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4" unique_id=597863729]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.6509804, 0.5686275, 0.37254903, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4" unique_id=422611487]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin" unique_id=1042938157]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox" unique_id=1400384421]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox/NameRow" unique_id=426537180]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.956, 0.93, 0.651, 1)
+theme_override_font_sizes/font_size = 24
+text = "Joueur 4"
+
+[node name="ScoreLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox/NameRow" unique_id=260775036]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "0 pt"
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox" unique_id=1087330404]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+
+[node name="ChoiceRow" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox" unique_id=1315064233]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="BtnPile" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox/ChoiceRow" unique_id=135604047 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "PILE"
+face_color = Color(0.914, 0.769, 0.408, 1)
+shadow_color = Color(0.71, 0.525, 0.051, 1)
+
+[node name="BtnFace" parent="CanvasLayer/UI/MainVBox/AreaRows/Row2/PlayerArea4/Margin/VBox/ChoiceRow" unique_id=1097011018 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+text = "FACE"
+face_color = Color(0.914, 0.769, 0.408, 1)
+shadow_color = Color(0.71, 0.525, 0.051, 1)
