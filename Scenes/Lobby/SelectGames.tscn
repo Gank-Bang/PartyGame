@@ -74,13 +74,6 @@ theme_override_colors/font_color = Color(0.76, 0.82, 0.95, 1)
 theme_override_font_sizes/font_size = 26
 text = "Joueurs :"
 
-[node name="HotlineMiami" parent="." unique_id=1662627380 instance=ExtResource("1_wdffp")]
-offset_left = 668.0
-offset_top = 435.0
-offset_right = 1210.0
-offset_bottom = 515.0
-text = "Hotline Miami"
-
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/UI/MainHBox/LeftPanel/Margin/VBox" unique_id=841371729]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -124,6 +117,14 @@ size_flags_horizontal = 4
 text = "Pile ou Face"
 face_color = Color(0.165, 0.616, 0.561, 1)
 shadow_color = Color(0.086, 0.376, 0.341, 1)
+
+[node name="HotlineMiami" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1662627380 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Hotline Miami"
+face_color = Color(0.8, 0.18, 0.1, 1)
+shadow_color = Color(0.45, 0.08, 0.05, 1)
 
 [node name="Spacer2" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1955445689]
 layout_mode = 2

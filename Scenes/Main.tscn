@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ywmyd4tgj54"]
 
 [ext_resource type="Script" uid="uid://duhmisqa7npno" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
-[ext_resource type="Script" uid="uid://duhmisqa7npno" path="res://Scripts/Lobby/MainScript.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
 [ext_resource type="Texture2D" uid="uid://b4r2ojkxsosx" path="res://Ressources/Menu/Creators.png" id="3_kln2b"]
 
