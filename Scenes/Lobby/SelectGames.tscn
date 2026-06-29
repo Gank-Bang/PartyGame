@@ -83,20 +83,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="FlatButton4" parent="." unique_id=2019475342 instance=ExtResource("1_wdffp")]
-offset_left = 668.0
-offset_top = 422.0
-offset_right = 1210.0
-offset_bottom = 502.0
-text = "Under Hocem"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=238303122]
-offset_left = 136.0
-offset_top = 340.0
-offset_right = 450.0
-offset_bottom = 735.0
-theme_override_constants/separation = 20
-
 [node name="Title" type="Label" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=2019618632]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
@@ -147,6 +133,14 @@ text = "Runes Mystiques"
 face_color = Color(0.45, 0.15, 0.65, 1)
 shadow_color = Color(0.22, 0.06, 0.35, 1)
 
+[node name="UnderHocem" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1884313135 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Under Hocem"
+face_color = Color(0.20239687, 0.3751704, 0.3126692, 1)
+shadow_color = Color(0.07484346, 0.18755466, 0.13995752, 1)
+
 [node name="Spacer2" type="Control" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1955445689]
 layout_mode = 2
 size_flags_vertical = 3
@@ -164,3 +158,17 @@ layout_mode = 2
 text = "Quitter"
 face_color = Color(0.56, 0.18, 0.2, 1)
 shadow_color = Color(0.35, 0.09, 0.11, 1)
+
+[node name="FlatButton4" parent="." unique_id=2019475342 instance=ExtResource("1_wdffp")]
+offset_left = 668.0
+offset_top = 422.0
+offset_right = 1210.0
+offset_bottom = 502.0
+text = "Under Hocem"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=238303122]
+offset_left = 136.0
+offset_top = 340.0
+offset_right = 450.0
+offset_bottom = 735.0
+theme_override_constants/separation = 20

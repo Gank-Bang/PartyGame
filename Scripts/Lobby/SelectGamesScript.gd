@@ -11,7 +11,7 @@ const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.t
 @onready var _btn_quitter: Control     = $CanvasLayer/UI/MainHBox/RightVBox/QuitRow/FlatButton3
 @onready var _btn_miami: Control     = $CanvasLayer/UI/MainHBox/RightVBox/HotlineMiami
 @onready var _btn_runes: Control     = $CanvasLayer/UI/MainHBox/RightVBox/RunesMiniGame
-@onready var _btn_underhocem: Control    = $FlatButton4
+@onready var _btn_underhocem: Control    = $CanvasLayer/UI/MainHBox/RightVBox/UnderHocem
 
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
