@@ -59,3 +59,7 @@ func take_damage() -> void:
 	var game = get_parent()
 	if game.has_method("damage_player"):
 		game.damage_player(peer_id)
+
+func eliminate() -> void:
+	visible = false
+	$CollisionShape2D.set_deferred("disabled", true)
