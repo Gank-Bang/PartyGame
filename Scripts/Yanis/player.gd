@@ -4,9 +4,11 @@ extends CharacterBody2D
 @export var shoot_cooldown := 2.5
 @export var is_local_player := true
 @export var max_health := 1
-
-# Réseau
 @export var send_rate := 20.0
+
+@onready var muzzle_flash: AnimatedSprite2D = $MuzzleFlash
+@onready var flashlight: PointLight2D = $FlashLight
+@onready var shoot_glow: Sprite2D = $ShootGlow
 
 const BULLET_SCENE = preload("res://Scenes/Yanis/Bullet.tscn")
 
@@ -17,6 +19,7 @@ var game_manager
 var _send_timer := 0.0
 var _remote_target := Vector2.ZERO
 var _lerp_speed := 15.0
+var glow_tween: Tween
 
 signal cooldown_changed(progress: float)
 
@@ -27,11 +30,9 @@ func setup(id: int) -> void:
 
 	$Camera2D.enabled = is_local_player
 
-
-
 func _ready() -> void:
 	health = max_health
-
+	muzzle_flash.visible = false
 
 func _physics_process(delta: float) -> void:
 
@@ -112,6 +113,11 @@ func shoot() -> void:
 
 	var bullet = BULLET_SCENE.instantiate()
 
+	muzzle_flash.visible = true
+	muzzle_flash.play("shoot")
+	
+	flash_shot()
+
 	get_parent().add_child(bullet)
 
 	var direction = get_mouse_direction()
@@ -144,3 +150,32 @@ func set_network_transform(pos: Vector2, rot: float) -> void:
 
 	_remote_target = pos
 	rotation = rot
+
+
+func _on_muzzle_flash_animation_finished() -> void:
+	muzzle_flash.visible = false
+	
+	
+func flash_shot():
+
+	if is_instance_valid(glow_tween):
+		glow_tween.kill()
+
+	shoot_glow.scale = Vector2.ONE
+	shoot_glow.modulate.a = 0.8
+
+	glow_tween = create_tween()
+
+	glow_tween.parallel().tween_property(
+		shoot_glow,
+		"scale",
+		Vector2.ONE * 3.5,
+		0.08
+	)
+
+	glow_tween.parallel().tween_property(
+		shoot_glow,
+		"modulate:a",
+		0.0,
+		0.08
+	)

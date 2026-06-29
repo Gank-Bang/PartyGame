@@ -20,7 +20,7 @@ func _process(_delta: float) -> void:
 		var visible_to_me := can_see_player(owner, player)
 
 		player.get_node("Sprite2D").visible = visible_to_me
-		player.get_node("PointLight2D").visible = visible_to_me
+		player.get_node("FlashLight").visible = visible_to_me
 
 
 func can_see_player(owner: CharacterBody2D, target: CharacterBody2D) -> bool:

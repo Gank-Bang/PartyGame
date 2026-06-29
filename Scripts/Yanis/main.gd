@@ -6,6 +6,12 @@ const PLAYER_SCENE := preload("res://Scenes/Yanis/Player.tscn")
 @onready var spawn_points := $Map/SpawnPoints.get_children()
 @onready var cooldown_bar = $UI/HUD/CooldownBar
 @onready var game_manager = $GameManager
+@onready var canvas_modulate: CanvasModulate = $CanvasModulate
+
+const NORMAL_LIGHT := Color("202020")
+const SHOT_LIGHT := Color("505050")
+
+var flash_tween: Tween
 
 # peer_id -> Player
 var players: Dictionary = {}
