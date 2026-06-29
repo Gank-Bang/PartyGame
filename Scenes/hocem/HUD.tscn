@@ -1,0 +1,115 @@
+[gd_scene format=3 uid="uid://1ugl3jl46stt"]
+
+[ext_resource type="Script" uid="uid://bnt2qovf2be1i" path="res://Scripts/hocem/HUDScript.gd" id="1_ogftp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_23weh"]
+font_size = 30
+
+[node name="HUD" type="CanvasLayer" unique_id=2013693311]
+script = ExtResource("1_ogftp")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1011195415]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -150.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=1289051466]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2" unique_id=1229053678]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2" unique_id=248608198]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=922550979]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=866685721]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=556892008]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1942517717]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=40346460]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1203677997]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1142830641]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=767640515]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=263689664]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="HBoxContainer" unique_id=1191213029]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3" unique_id=7384494]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer3" unique_id=143082347]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer3/HBoxContainer" unique_id=24940734]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer3/HBoxContainer" unique_id=646832532]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer3/HBoxContainer" unique_id=1082519922]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="VBoxContainer4" type="VBoxContainer" parent="HBoxContainer" unique_id=2096310241]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer4" unique_id=1770866711]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer4" unique_id=1169810543]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="HBoxContainer/VBoxContainer4/HBoxContainer" unique_id=757835730]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label2" type="Label" parent="HBoxContainer/VBoxContainer4/HBoxContainer" unique_id=247160977]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer4/HBoxContainer" unique_id=483221777]
+layout_mode = 2
+text = "♥"
+label_settings = SubResource("LabelSettings_23weh")
