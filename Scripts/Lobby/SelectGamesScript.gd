@@ -11,6 +11,8 @@ const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.t
 @onready var _btn_quitter: Control     = $CanvasLayer/UI/MainHBox/RightVBox/QuitRow/FlatButton3
 @onready var _btn_miami: Control     = $CanvasLayer/UI/MainHBox/RightVBox/HotlineMiami
 @onready var _btn_runes: Control     = $CanvasLayer/UI/MainHBox/RightVBox/RunesMiniGame
+@onready var _btn_underhocem: Control    = $FlatButton4
+
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
 const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261")}
@@ -47,6 +49,7 @@ func _ready() -> void:
 		_btn_pileface.connect("pressed", _on_pileface_pressed)
 		_btn_miami.connect("pressed", _on_miami_pressed)
 		_btn_runes.connect("pressed", _on_runes_pressed)
+		_btn_underhocem.connect("pressed", _on_underhocem_pressed)
 		# Diffuser les survols aux clients
 		_btn_equation.connect("mouse_entered", func(): _broadcast_hover("equation"))
 		_btn_equation.connect("mouse_exited",  func(): _broadcast_hover(""))
@@ -124,6 +127,10 @@ func _on_miami_pressed() -> void:
 func _on_runes_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "runes"})
 	_launch("runes")
+func _on_underhocem_pressed() -> void:
+	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "underhocem"})
+	_launch("underhocem")
+
 
 func _on_quit_pressed() -> void:
 	NetworkManager.disconnect_from_lobby()
@@ -149,3 +156,5 @@ func _launch(scene: String) -> void:
 			get_tree().change_scene_to_file("res://Scenes/Yanis/Main.tscn")
 		"runes":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/RunesMiniGame.tscn")
+		"underhocem":
+			get_tree().change_scene_to_file("res://Scenes/hocem/underhocem.tscn")

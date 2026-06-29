@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://couppkm3o2bp1"]
+
+[ext_resource type="PackedScene" path="res://Scenes/Lobby/PlayerCharacter.tscn" id="1_tj2er"]
+[ext_resource type="Script" uid="uid://c2fseybr6x8xg" path="res://Scripts/hocem/UnderHocemPlayerScript.gd" id="2_3prx5"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i4yvw"]
+radius = 80.0
+
+[node name="PlayerCharacter" unique_id=1975783513 instance=ExtResource("1_tj2er")]
+collision_mask = 3
+script = ExtResource("2_3prx5")
+
+[node name="ReflectZone" type="Area2D" parent="." index="3" unique_id=119736842]
+collision_layer = 5
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ReflectZone" index="0" unique_id=2124404686]
+shape = SubResource("CircleShape2D_i4yvw")

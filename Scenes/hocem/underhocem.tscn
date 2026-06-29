@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://52f1spr5tqgk"]
+
+[ext_resource type="PackedScene" path="res://Scenes/lobby/BaseGame.tscn" id="1_sgbt0"]
+[ext_resource type="Script" uid="uid://bj21iqefxcbvc" path="res://Scripts/hocem/UnderHocemScript.gd" id="2_n4map"]
+[ext_resource type="Script" uid="uid://d0d204qdsf3l2" path="res://Scripts/hocem/BossScript.gd" id="3_8xbnr"]
+[ext_resource type="PackedScene" uid="uid://1ugl3jl46stt" path="res://Scenes/hocem/HUD.tscn" id="4_n6boi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i4yvw"]
+size = Vector2(800, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_23weh"]
+size = Vector2(10, 600)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mmnxn"]
+size = Vector2(800, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0yq8s"]
+size = Vector2(10, 600)
+
+[node name="BaseGame" unique_id=634951714 instance=ExtResource("1_sgbt0")]
+script = ExtResource("2_n4map")
+metadata/_edit_vertical_guides_ = [-606.0, -492.0, 960.0, 560.0]
+metadata/_edit_horizontal_guides_ = [540.0, 840.0, 240.0]
+
+[node name="BG" parent="." index="0"]
+layout_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="." index="1" unique_id=210220559]
+offset_left = 560.0
+offset_top = 240.0
+offset_right = 1360.0
+offset_bottom = 840.0
+color = Color(0, 0, 0, 1)
+
+[node name="MurHaut" type="StaticBody2D" parent="." index="2" unique_id=404911376]
+position = Vector2(960, 240)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurHaut" index="0" unique_id=172170282]
+shape = SubResource("RectangleShape2D_i4yvw")
+
+[node name="MurDroite" type="StaticBody2D" parent="." index="3" unique_id=1840442679]
+position = Vector2(1360, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurDroite" index="0" unique_id=1048343745]
+shape = SubResource("RectangleShape2D_23weh")
+
+[node name="MurBas" type="StaticBody2D" parent="." index="4" unique_id=1081405935]
+position = Vector2(960, 840)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurBas" index="0" unique_id=126449330]
+shape = SubResource("RectangleShape2D_mmnxn")
+
+[node name="MurGauche" type="StaticBody2D" parent="." index="5" unique_id=301364296]
+position = Vector2(560, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurGauche" index="0" unique_id=219819047]
+shape = SubResource("RectangleShape2D_0yq8s")
+
+[node name="Boss" type="Node2D" parent="." index="6" unique_id=547120137]
+position = Vector2(960, 270)
+script = ExtResource("3_8xbnr")
+
+[node name="Sprite2D" type="Sprite2D" parent="Boss" index="0" unique_id=335236744]
+
+[node name="ColorRect" type="ColorRect" parent="Boss" index="1" unique_id=1818679379]
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.6902437, 0.16342562, 9.62615e-08, 1)
+
+[node name="HUD" parent="." index="7" unique_id=2013693311 instance=ExtResource("4_n6boi")]

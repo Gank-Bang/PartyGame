@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://1h431vh84uvn"]
+
+[ext_resource type="Script" uid="uid://cscoygawl3tb5" path="res://Scripts/hocem/PlayerBulletScript.gd" id="1_ipphj"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_i4yvw"]
+size = Vector2(15, 15)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i4yvw"]
+radius = 7.0
+
+[node name="PlayerBullet" type="Area2D" unique_id=2056831495]
+script = ExtResource("1_ipphj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1788680025]
+texture = SubResource("PlaceholderTexture2D_i4yvw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=632358231]
+shape = SubResource("CircleShape2D_i4yvw")
