@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://dqdcntigboyn0"]
+
+[ext_resource type="Script" uid="uid://ba8p2e40wyt0o" path="res://Scripts/hocem/ResultScreenScript.gd" id="1_uebxj"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i4yvw"]
+font_size = 40
+
+[node name="ResultScreen" type="CanvasLayer" unique_id=1452127729]
+script = ExtResource("1_uebxj")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1805455717]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=578799631]
+layout_mode = 2
+
+[node name="RESULTATS" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1685419438]
+layout_mode = 2
+text = "RÉSULTATS"
+label_settings = SubResource("LabelSettings_i4yvw")
+horizontal_alignment = 1
+
+[node name="RankingList" type="VBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=102902072]
+layout_mode = 2
+
+[node name="Retour au lobby" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1003655831]
+layout_mode = 2
+text = "Retour au lobby"

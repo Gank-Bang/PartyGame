@@ -8,7 +8,6 @@ var nearby_projectile = null
 const FIRE_KEY = KEY_SPACE
 
 func _ready() -> void:
-	add_to_group("projectile")
 	$ReflectZone.area_entered.connect(_on_reflect_zone_entered)
 	$ReflectZone.area_exited.connect(_on_reflect_zone_exited)
 
@@ -54,10 +53,12 @@ func _reflect() -> void:
 	nearby_projectile = null
 
 func take_damage() -> void:
+	if not is_instance_valid(self):
+		return
 	if not is_local:
 		return
 	var game = get_parent()
-	if game.has_method("damage_player"):
+	if is_instance_valid(game) and game.has_method("damage_player"):
 		game.damage_player(peer_id)
 
 func eliminate() -> void:

@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://bj21iqefxcbvc" path="res://Scripts/hocem/UnderHocemScript.gd" id="2_n4map"]
 [ext_resource type="Script" uid="uid://d0d204qdsf3l2" path="res://Scripts/hocem/BossScript.gd" id="3_8xbnr"]
 [ext_resource type="PackedScene" uid="uid://1ugl3jl46stt" path="res://Scenes/hocem/HUD.tscn" id="4_n6boi"]
+[ext_resource type="PackedScene" uid="uid://dqdcntigboyn0" path="res://Scenes/hocem/ResultScreen.tscn" id="5_famvq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i4yvw"]
 size = Vector2(800, 10)
@@ -70,3 +71,6 @@ offset_bottom = 40.0
 color = Color(0.6902437, 0.16342562, 9.62615e-08, 1)
 
 [node name="HUD" parent="." index="7" unique_id=2013693311 instance=ExtResource("4_n6boi")]
+
+[node name="ResultScreen" parent="." index="8" unique_id=1452127729 instance=ExtResource("5_famvq")]
+visible = false
