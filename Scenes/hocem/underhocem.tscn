@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://52f1spr5tqgk"]
 
-[ext_resource type="PackedScene" path="res://Scenes/lobby/BaseGame.tscn" id="1_sgbt0"]
+[ext_resource type="PackedScene" path="res://Scenes/Lobby/BaseGame.tscn" id="1_sgbt0"]
 [ext_resource type="Script" uid="uid://bj21iqefxcbvc" path="res://Scripts/hocem/UnderHocemScript.gd" id="2_n4map"]
 [ext_resource type="Script" uid="uid://d0d204qdsf3l2" path="res://Scripts/hocem/BossScript.gd" id="3_8xbnr"]
 [ext_resource type="PackedScene" uid="uid://1ugl3jl46stt" path="res://Scenes/hocem/HUD.tscn" id="4_n6boi"]
