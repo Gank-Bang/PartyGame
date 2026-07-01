@@ -93,46 +93,95 @@ face_color = Color(0.56, 0.18, 0.2, 1)
 shadow_color = Color(0.35, 0.09, 0.11, 1)
 
 [node name="By" parent="CanvasLayer/UI" unique_id=1884313135 instance=ExtResource("2_flat")]
-layout_mode = 0
-offset_left = 840.0
-offset_top = 547.0
-offset_right = 1080.0
-offset_bottom = 627.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = -6.0
+offset_right = 135.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "By"
 
-[node name="Creators" type="Sprite2D" parent="CanvasLayer/UI" unique_id=1151465527]
-position = Vector2(970, 801)
+[node name="Creators" type="Control" parent="CanvasLayer/UI" unique_id=435952877]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Creators" type="Sprite2D" parent="CanvasLayer/UI/Creators" unique_id=1151465527]
+position = Vector2(40.000004, 271.00006)
 scale = Vector2(0.8, 0.8)
 texture = ExtResource("3_kln2b")
 
 [node name="Naf" parent="CanvasLayer/UI" unique_id=1604962029 instance=ExtResource("2_flat")]
-layout_mode = 0
-offset_left = 443.0
-offset_top = 932.0
-offset_right = 683.0
-offset_bottom = 1012.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -484.0
+offset_top = 405.0
+offset_right = -244.0
+offset_bottom = 485.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Nef"
 
 [node name="Yans" parent="CanvasLayer/UI" unique_id=1998583780 instance=ExtResource("2_flat")]
-layout_mode = 0
-offset_left = 725.0
-offset_top = 962.0
-offset_right = 965.0
-offset_bottom = 1042.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -223.0
+offset_top = 407.0
+offset_right = 17.0
+offset_bottom = 487.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Yans"
 
 [node name="Houc" parent="CanvasLayer/UI" unique_id=170799499 instance=ExtResource("2_flat")]
-layout_mode = 0
-offset_left = 1000.0
-offset_top = 935.0
-offset_right = 1240.0
-offset_bottom = 1015.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 29.0
+offset_top = 407.0
+offset_right = 269.0
+offset_bottom = 487.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Houc"
 
 [node name="Raf" parent="CanvasLayer/UI" unique_id=899292200 instance=ExtResource("2_flat")]
-layout_mode = 0
-offset_left = 1254.0
-offset_top = 957.0
-offset_right = 1494.0
-offset_bottom = 1037.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 282.0
+offset_top = 408.0
+offset_right = 522.0
+offset_bottom = 488.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Raf"
