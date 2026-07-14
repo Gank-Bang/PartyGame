@@ -89,14 +89,20 @@ players                                             # Dictionary {peer_id: Playe
 ```
 
 ## Ce qui reste à faire (TODO)
-- [ ] Sprites réels (joueurs, boss, projectiles) à la place des placeholders
+
+- [ ] Ajout d'un countdown des tirs des joueurs (1,5 secondes entre chaque tir) ou deflection. Ils partagents le meme compte a rebours.
+- [ ] Il faut faire un autre encadré pour les joueurs et qu'il ne sorte pas de cette autre limite et ne puisse pas atteindre le boss. Et reduire leur taille.
+- [ ] Ajout d'un invincibilité temporaire après un hit (iframes)
+- [ ] Tir joueur : direction des tirs vers la direction du mouvement du joueur au moment du tir et pareil pour le deflection.
 - [ ] Portraits joueurs dans le HUD (3 états : sain / blessé / très blessé) avec AnimatedSprite2D
-- [ ] Effets visuels : flash au hit, particules projectiles
-- [ ] Sons
+- [ ] Effets visuels : flash au hit, particules projectiles, animation lors du chargements du tir
+- [ ] Ajout des tir spéciaux du boss les joueurs doivent rester immobile pour qu'elle les traverse et d'autre ou ils doivent etre en mouvement, comme dans undertale projectile bleu ou orange
+- [ ] Sons (boss, projectiles, réflexion, morts, fin de partie)
 - [ ] Synchronisation réseau des HP (actuellement local seulement)
-- [ ] Invincibilité temporaire après un hit (iframes)
-- [ ] Tir joueur : direction vers le boss plutôt que toujours vers le haut
+- [ ] Sprites réels (joueurs, boss, projectiles) à la place des placeholders
+- [ ] Lors de changements de phase le boss il y a une animation
 
 ## Bugs connus / points d'attention
 - En test local (2 instances sur la même machine), les 2 joueurs partagent le même clavier → normal, en prod chacun a sa machine
 - La réflexion fonctionne uniquement pour le joueur local (pas de sync réseau de la réflexion — le projectile change de trajectoire localement)
+- Le systeme de vie est local et n'est pas synchronisé avec les autres joueurs, il faudrait que le host envoie les données des vies a tous les joueurs.
