@@ -7,6 +7,9 @@ var reflect_window : bool = false
 var nearby_projectile = null
 const FIRE_KEY = KEY_SPACE
 
+const FIRE_COOLDOWN : float = 1.5
+var fire_cooldown_remaining : float = 0.0
+
 func _ready() -> void:
 	$ReflectZone.area_entered.connect(_on_reflect_zone_entered)
 	$ReflectZone.area_exited.connect(_on_reflect_zone_exited)
@@ -25,7 +28,10 @@ func _process(delta: float) -> void:
 	if not is_local:
 		return
 
-	if Input.is_key_pressed(FIRE_KEY):
+	if fire_cooldown_remaining > 0.0:
+		fire_cooldown_remaining -= delta
+
+	if Input.is_key_pressed(FIRE_KEY) and fire_cooldown_remaining <= 0.0:
 		is_charging = true
 
 	if is_charging and not Input.is_key_pressed(FIRE_KEY):
@@ -45,12 +51,14 @@ func _shoot() -> void:
 	bullet.position = global_position
 	bullet.init(Vector2(0, -1))
 	get_parent().add_child(bullet)
+	fire_cooldown_remaining = FIRE_COOLDOWN
 
 func _reflect() -> void:
 	nearby_projectile.velocity = Vector2(0, -1) * nearby_projectile.speed * 1.5
 	nearby_projectile.speed *= 1.5
 	reflect_window = false
 	nearby_projectile = null
+	fire_cooldown_remaining = FIRE_COOLDOWN
 
 func take_damage() -> void:
 	if not is_instance_valid(self):
