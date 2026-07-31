@@ -90,10 +90,10 @@ players                                             # Dictionary {peer_id: Playe
 
 ## Ce qui reste à faire (TODO)
 
-- [ ] Ajout d'un countdown des tirs des joueurs (1,5 secondes entre chaque tir) ou deflection. Ils partagents le meme compte a rebours.
-- [ ] Il faut faire un autre encadré pour les joueurs et qu'il ne sorte pas de cette autre limite et ne puisse pas atteindre le boss. Et reduire leur taille.
+- [ ] Ajout d'un countdown des tirs des joueurs (1,5 secondes entre chaque tir) ou deflection. Chaque joueur a son propre compte.
+- [ ] Il faut faire un autre encadré pour les joueurs et qu'il ne sorte pas de cette autre limite et ne puisse pas atteindre le boss en gros juste faire une barre horizontal au dessus des joueurs en dessous du boss du coup. Et reduire leur taille.
 - [ ] Ajout d'un invincibilité temporaire après un hit (iframes)
-- [ ] Tir joueur : direction des tirs vers la direction du mouvement du joueur au moment du tir et pareil pour le deflection.
+- [ ] Tir joueur : direction des tirs vers la direction de la souris au moment du tir et pareil pour le deflection.
 - [ ] Portraits joueurs dans le HUD (3 états : sain / blessé / très blessé) avec AnimatedSprite2D
 - [ ] Effets visuels : flash au hit, particules projectiles, animation lors du chargements du tir
 - [ ] Ajout des tir spéciaux du boss les joueurs doivent rester immobile pour qu'elle les traverse et d'autre ou ils doivent etre en mouvement, comme dans undertale projectile bleu ou orange
