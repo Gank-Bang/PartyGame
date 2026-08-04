@@ -1,0 +1,13 @@
+services:
+  relay:
+    build: ./server
+    container_name: partygame-relay
+    restart: unless-stopped
+    networks:
+      - media
+    environment:
+      - PORT=8765
+
+networks:
+  media:
+    external: true
