@@ -5,6 +5,13 @@
 [ext_resource type="Script" uid="uid://d0d204qdsf3l2" path="res://Scripts/hocem/BossScript.gd" id="3_8xbnr"]
 [ext_resource type="PackedScene" uid="uid://1ugl3jl46stt" path="res://Scenes/hocem/HUD.tscn" id="4_n6boi"]
 [ext_resource type="PackedScene" uid="uid://dqdcntigboyn0" path="res://Scenes/hocem/ResultScreen.tscn" id="5_famvq"]
+[ext_resource type="AudioStream" path="res://Ressources/hocem/Theme/046. Spear of Justice (UNDERTALE Soundtrack) - Toby Fox.mp3" id="6_music12"]
+[ext_resource type="AudioStream" path="res://Ressources/hocem/Theme/rustyMachiine.mp3" id="7_music3"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_timer"]
+font_size = 44
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i4yvw"]
 size = Vector2(800, 10)
@@ -18,6 +25,15 @@ size = Vector2(800, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0yq8s"]
 size = Vector2(10, 600)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sep01"]
+size = Vector2(800, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_innerV"]
+size = Vector2(10, 320)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_innerH"]
+size = Vector2(620, 10)
+
 [node name="BaseGame" unique_id=634951714 instance=ExtResource("1_sgbt0")]
 script = ExtResource("2_n4map")
 metadata/_edit_vertical_guides_ = [-606.0, -492.0, 960.0, 560.0]
@@ -28,9 +44,9 @@ layout_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="." index="1" unique_id=210220559]
 offset_left = 560.0
-offset_top = 240.0
+offset_top = 241.0
 offset_right = 1360.0
-offset_bottom = 840.0
+offset_bottom = 841.0
 color = Color(0, 0, 0, 1)
 
 [node name="MurHaut" type="StaticBody2D" parent="." index="2" unique_id=404911376]
@@ -57,7 +73,59 @@ position = Vector2(560, 540)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MurGauche" index="0" unique_id=219819047]
 shape = SubResource("RectangleShape2D_0yq8s")
 
-[node name="Boss" type="Node2D" parent="." index="6" unique_id=547120137]
+[node name="MurSeparateur" type="StaticBody2D" parent="." index="6" unique_id=943926434]
+position = Vector2(960, 460)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurSeparateur" index="0" unique_id=1356437598]
+shape = SubResource("RectangleShape2D_sep01")
+
+[node name="ColorRect" type="ColorRect" parent="MurSeparateur" index="1" unique_id=1551086238]
+offset_left = -305.0
+offset_top = -5.0
+offset_right = 305.0
+offset_bottom = 5.0
+color = Color(0.8, 0.8, 0.85, 1)
+
+[node name="MurGaucheInterieur" type="StaticBody2D" parent="." index="7" unique_id=1212291358]
+position = Vector2(660, 620)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurGaucheInterieur" index="0" unique_id=675470757]
+shape = SubResource("RectangleShape2D_innerV")
+
+[node name="ColorRect" type="ColorRect" parent="MurGaucheInterieur" index="1" unique_id=2047464545]
+offset_left = -5.0
+offset_top = -165.0
+offset_right = 5.0
+offset_bottom = 160.0
+color = Color(0.8, 0.8, 0.85, 1)
+
+[node name="MurDroiteInterieur" type="StaticBody2D" parent="." index="8" unique_id=561331233]
+position = Vector2(1260, 620)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurDroiteInterieur" index="0" unique_id=414140636]
+shape = SubResource("RectangleShape2D_innerV")
+
+[node name="ColorRect" type="ColorRect" parent="MurDroiteInterieur" index="1" unique_id=1837067310]
+offset_left = -5.0
+offset_top = -165.0
+offset_right = 5.0
+offset_bottom = 160.0
+color = Color(0.8, 0.8, 0.85, 1)
+
+[node name="MurBasInterieur" type="StaticBody2D" parent="." index="9" unique_id=1251745223]
+position = Vector2(960, 780)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MurBasInterieur" index="0" unique_id=1290918904]
+shape = SubResource("RectangleShape2D_innerH")
+
+[node name="ColorRect" type="ColorRect" parent="MurBasInterieur" index="1" unique_id=1064030945]
+offset_left = -305.0
+offset_top = -5.0
+offset_right = 305.0
+offset_bottom = 5.0
+color = Color(0.8, 0.8, 0.85, 1)
+
+[node name="Boss" type="Node2D" parent="." index="10" unique_id=547120137]
 position = Vector2(960, 270)
 script = ExtResource("3_8xbnr")
 
@@ -70,7 +138,57 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.6902437, 0.16342562, 9.62615e-08, 1)
 
-[node name="HUD" parent="." index="7" unique_id=2013693311 instance=ExtResource("4_n6boi")]
+[node name="MusicPhase12" type="AudioStreamPlayer" parent="Boss"]
+stream = ExtResource("6_music12")
+bus = &"Master"
 
-[node name="ResultScreen" parent="." index="8" unique_id=1452127729 instance=ExtResource("5_famvq")]
+[node name="MusicPhase3" type="AudioStreamPlayer" parent="Boss"]
+stream = ExtResource("7_music3")
+bus = &"Master"
+
+[node name="DialogueParticles" type="CPUParticles2D" parent="Boss"]
+position = Vector2(0, -185)
+emitting = false
+amount = 48
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.9
+lifetime_randomness = 0.3
+local_coords = false
+emission_shape = 3
+emission_rect_extents = Vector2(190, 30)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 120.0
+initial_velocity_max = 280.0
+scale_amount_min = 2.0
+scale_amount_max = 5.0
+color = Color(1, 0.85, 0.3, 1)
+
+[node name="Dialogue" type="RichTextLabel" parent="Boss"]
+offset_left = -450.0
+offset_top = -250.0
+offset_right = 450.0
+offset_bottom = -140.0
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+theme_override_colors/default_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 34
+
+[node name="GameTimer" type="Label" parent="." index="11"]
+offset_left = 760.0
+offset_top = 160.0
+offset_right = 1160.0
+offset_bottom = 215.0
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "00:00"
+label_settings = SubResource("LabelSettings_timer")
+
+[node name="HUD" parent="." index="12" unique_id=2013693311 instance=ExtResource("4_n6boi")]
+
+[node name="ResultScreen" parent="." index="13" unique_id=1452127729 instance=ExtResource("5_famvq")]
 visible = false

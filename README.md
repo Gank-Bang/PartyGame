@@ -103,7 +103,7 @@ Depuis la racine du projet:
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate (windows: .venv\Scripts\Activate.ps1)
 pip install -r server/requirements.txt
 python3 server/main.py
 ```
