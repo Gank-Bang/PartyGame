@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dml6qu7kkovb4"]
+
+[ext_resource type="Script" uid="uid://d2n2ohcdpjxo0" path="res://Scripts/hocem/ProjectileScript.gd" id="1_mc8t4"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_i4yvw"]
+size = Vector2(20, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i4yvw"]
+
+[node name="Projectile" type="Area2D" unique_id=1627156643]
+collision_layer = 2
+script = ExtResource("1_mc8t4")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=213418908]
+texture = SubResource("PlaceholderTexture2D_i4yvw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1208770327]
+shape = SubResource("CircleShape2D_i4yvw")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+show_behind_parent = true
+emitting = true
+amount = 16
+lifetime = 0.35
+local_coords = false
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 30.0
+scale_amount_min = 0.3
+scale_amount_max = 0.6
+color = Color(1, 1, 1, 0.8)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://couppkm3o2bp1"]
+
+[ext_resource type="PackedScene" path="res://Scenes/Lobby/PlayerCharacter.tscn" id="1_tj2er"]
+[ext_resource type="Script" uid="uid://c2fseybr6x8xg" path="res://Scripts/hocem/UnderHocemPlayerScript.gd" id="2_3prx5"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3prx5"]
+radius = 17.575
+height = 35.15
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i4yvw"]
+radius = 52.07
+
+[node name="PlayerCharacter" unique_id=1975783513 instance=ExtResource("1_tj2er")]
+collision_mask = 3
+script = ExtResource("2_3prx5")
+
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(1, 0)
+shape = SubResource("CapsuleShape2D_3prx5")
+
+[node name="ColorRect" parent="." index="1"]
+offset_left = -18.0
+offset_top = -18.0
+offset_right = 18.0
+offset_bottom = 18.0
+
+[node name="ReflectZone" type="Area2D" parent="." index="3" unique_id=119736842]
+collision_layer = 5
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ReflectZone" index="0" unique_id=2124404686]
+shape = SubResource("CircleShape2D_i4yvw")
+
+[node name="CooldownBar" type="ProgressBar" parent="." index="4"]
+offset_left = -18.0
+offset_top = 22.0
+offset_right = 18.0
+offset_bottom = 28.0
+show_percentage = false
+value = 100.0
