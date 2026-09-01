@@ -1,0 +1,574 @@
+[gd_scene format=3 uid="uid://b7m0tusgrid5w"]
+
+[ext_resource type="Script" uid="uid://cm0tus7g5rk2n" path="res://Scripts/RafGames/MotusMiniGameScript.gd" id="1_motus"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
+
+[node name="MotusMiniGame" type="Node2D" unique_id=300000000]
+script = ExtResource("1_motus")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=300000001]
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=300000002]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=300000003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09, 0.11, 0.17, 1)
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/UI" unique_id=300000004]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 32.0
+offset_top = 20.0
+offset_right = -32.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox" unique_id=300000005]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="StatusArea" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/Header" unique_id=300000007]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_constants/separation = 28
+alignment = 2
+
+[node name="GridCenter" type="CenterContainer" parent="CanvasLayer/UI/MainVBox" unique_id=300000008]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Grid" type="GridContainer" parent="CanvasLayer/UI/MainVBox/GridCenter" unique_id=300000009]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 5
+
+[node name="Tile0" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000000 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile1" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000001 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile2" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000002 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile3" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000003 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile4" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000004 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile5" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000005 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile6" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000006 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile7" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000007 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile8" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000008 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile9" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000009 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile10" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000010 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile11" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000011 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile12" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000012 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile13" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000013 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile14" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000014 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile15" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000015 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile16" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000016 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile17" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000017 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile18" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000018 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile19" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000019 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile20" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000020 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile21" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000021 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile22" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000022 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile23" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000023 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile24" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000024 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile25" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000025 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile26" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000026 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile27" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000027 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile28" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000028 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile29" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000029 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile30" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000030 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile31" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000031 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile32" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000032 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile33" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000033 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="Tile34" parent="CanvasLayer/UI/MainVBox/GridCenter/Grid" unique_id=310000034 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(80, 80)
+layout_mode = 2
+mouse_filter = 2
+text = ""
+face_color = Color(0.16862746, 0.22745098, 0.33333334, 1)
+shadow_color = Color(0.09411765, 0.13333334, 0.22745098, 1)
+font_size = 46
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/MainVBox" unique_id=300000010]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KeyboardCenter" type="CenterContainer" parent="CanvasLayer/UI/MainVBox" unique_id=300000011]
+layout_mode = 2
+
+[node name="Keyboard" type="VBoxContainer" parent="CanvasLayer/UI/MainVBox/KeyboardCenter" unique_id=300000012]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Row1" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard" unique_id=300000013]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="KeyA" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000000 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "A"
+font_size = 30
+
+[node name="KeyZ" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000001 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "Z"
+font_size = 30
+
+[node name="KeyE" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000002 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "E"
+font_size = 30
+
+[node name="KeyR" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000003 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "R"
+font_size = 30
+
+[node name="KeyT" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000004 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "T"
+font_size = 30
+
+[node name="KeyY" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000005 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "Y"
+font_size = 30
+
+[node name="KeyU" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000006 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "U"
+font_size = 30
+
+[node name="KeyI" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000007 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "I"
+font_size = 30
+
+[node name="KeyO" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000008 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "O"
+font_size = 30
+
+[node name="KeyP" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1" unique_id=320000009 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "P"
+font_size = 30
+
+[node name="Row2" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard" unique_id=300000014]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="KeyQ" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000010 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "Q"
+font_size = 30
+
+[node name="KeyS" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000011 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "S"
+font_size = 30
+
+[node name="KeyD" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000012 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "D"
+font_size = 30
+
+[node name="KeyF" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000013 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "F"
+font_size = 30
+
+[node name="KeyG" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000014 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "G"
+font_size = 30
+
+[node name="KeyH" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000015 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "H"
+font_size = 30
+
+[node name="KeyJ" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000016 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "J"
+font_size = 30
+
+[node name="KeyK" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000017 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "K"
+font_size = 30
+
+[node name="KeyL" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000018 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "L"
+font_size = 30
+
+[node name="KeyM" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row2" unique_id=320000019 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "M"
+font_size = 30
+
+[node name="Row3" type="HBoxContainer" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard" unique_id=300000015]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="KeyEnter" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000020 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(118, 66)
+layout_mode = 2
+text = "ENTRER"
+font_size = 24
+
+[node name="KeyW" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000021 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "W"
+font_size = 30
+
+[node name="KeyX" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000022 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "X"
+font_size = 30
+
+[node name="KeyC" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000023 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "C"
+font_size = 30
+
+[node name="KeyV" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000024 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "V"
+font_size = 30
+
+[node name="KeyB" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000025 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "B"
+font_size = 30
+
+[node name="KeyN" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000026 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(72, 66)
+layout_mode = 2
+text = "N"
+font_size = 30
+
+[node name="KeyDel" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000027 instance=ExtResource("2_flat")]
+custom_minimum_size = Vector2(118, 66)
+layout_mode = 2
+text = "←"
+font_size = 32

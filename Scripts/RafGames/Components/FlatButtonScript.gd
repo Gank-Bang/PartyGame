@@ -33,6 +33,13 @@ signal pressed
 		if is_node_ready():
 			_label.add_theme_color_override("font_color", v)
 
+## Taille de la police du texte
+@export var font_size: int = 28 :
+	set(v):
+		font_size = v
+		if is_node_ready():
+			_label.add_theme_font_size_override("font_size", v)
+
 ## Profondeur de l'effet 3D (px)
 @export var depth: float = 8.0
 
@@ -57,6 +64,7 @@ func _ready() -> void:
 	_apply_styles()
 	_label.text = text
 	_label.add_theme_color_override("font_color", text_color)
+	_label.add_theme_font_size_override("font_size", font_size)
 	# Les enfants Panel consomment les events par défaut → on les ignore
 	_face.mouse_filter   = MOUSE_FILTER_IGNORE
 	_shadow.mouse_filter = MOUSE_FILTER_IGNORE

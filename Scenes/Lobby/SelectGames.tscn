@@ -133,6 +133,14 @@ text = "Runes Mystiques"
 face_color = Color(0.45, 0.15, 0.65, 1)
 shadow_color = Color(0.22, 0.06, 0.35, 1)
 
+[node name="MotusMiniGame" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1477203651 instance=ExtResource("1_wdffp")]
+custom_minimum_size = Vector2(480, 80)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Mot-Tue-Se"
+face_color = Color(0.85, 0.6, 0.15, 1)
+shadow_color = Color(0.5, 0.33, 0.06, 1)
+
 [node name="UnderHocem" parent="CanvasLayer/UI/MainHBox/RightVBox" unique_id=1884313135 instance=ExtResource("1_wdffp")]
 custom_minimum_size = Vector2(480, 80)
 layout_mode = 2
