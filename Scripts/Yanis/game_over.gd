@@ -59,16 +59,12 @@ func _on_restart_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 
+	if !NetworkManager.is_host:
+		return
+
 	get_tree().paused = false
-
-	if NetworkManager.is_host:
-
-		NetworkManager.send_game_message(0, {
-			"action": "host_left"
-		})
-
-		# Laisse le temps au paquet de partir
-		await get_tree().create_timer(0.2).timeout
-
-	NetworkManager.disconnect_from_lobby()
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	NetworkManager.send_game_message(0, {
+		"action": "return_to_select_games"
+	})
+	await get_tree().create_timer(0.2, true).timeout
+	get_tree().change_scene_to_file("res://Scenes/Lobby/SelectGames.tscn")

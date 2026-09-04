@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://dwdwrlyitisaw"]
+
+[ext_resource type="Script" uid="uid://cc5kb4ncxtu0t" path="res://Scripts/RafGames/PairesRunesMiniGameScript.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.106, 0.141, 0.223, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.341, 0.431, 0.596, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_board"]
+bg_color = Color(0.078, 0.102, 0.161, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29, 0.365, 0.506, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_side"]
+bg_color = Color(0.122, 0.161, 0.251, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.357, 0.451, 0.624, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[node name="PairesRunesMiniGame" type="Node2D" unique_id=1747765531]
+script = ExtResource("1_script")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1055039725]
+
+[node name="UI" type="Control" parent="CanvasLayer" unique_id=68957928]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI" unique_id=1192744054]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.047, 0.063, 0.11, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI" unique_id=2078606160]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin" unique_id=1899552390]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 22
+
+[node name="Header" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox" unique_id=461666948]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="HeaderMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header" unique_id=433514058]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="HeaderVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin" unique_id=1832544196]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TitleRow" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox" unique_id=479846889]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="StateLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox" unique_id=1742134233]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.776, 0.878, 0.973, 1)
+theme_override_font_sizes/font_size = 22
+text = "L'hôte prépare la grille."
+horizontal_alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox" unique_id=493334379]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="BoardPanel" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body" unique_id=1647265142]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_board")
+
+[node name="BoardMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/BoardPanel" unique_id=567590833]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="BoardCenter" type="CenterContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/BoardPanel/BoardMargin" unique_id=65811650]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="RuneGrid" type="GridContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/BoardPanel/BoardMargin/BoardCenter" unique_id=504784062]
+layout_mode = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
+columns = 4
+
+[node name="SidePanel" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body" unique_id=1510048897]
+custom_minimum_size = Vector2(310, 300)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_side")
+
+[node name="SideMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel" unique_id=1965591144]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="SideVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin" unique_id=904972798]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PlayersTitle" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin/SideVBox" unique_id=1390000187]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.965, 0.91, 0.792, 1)
+theme_override_font_sizes/font_size = 28
+text = "Progression"
+
+[node name="PlayersList" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin/SideVBox" unique_id=642383256]
+layout_mode = 2
+theme_override_constants/separation = 12

@@ -16,10 +16,15 @@
 class_name BaseGame
 extends Node2D
 
+const _HostQuitButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.tscn")
 const _PlayerScene := preload("res://Scenes/Lobby/PlayerCharacter.tscn")
+const _SELECT_GAMES_SCENE := "res://Scenes/Lobby/SelectGames.tscn"
+const _QUIT_FACE_COLOR := Color(0.56, 0.18, 0.2, 1)
+const _QUIT_SHADOW_COLOR := Color(0.35, 0.09, 0.11, 1)
 
 ## Référence à chaque nœud PlayerCharacter, indexé par peer_id.
 var players: Dictionary = {}
+var _returning_to_select_games: bool = false
 
 # ── Cycle de vie ──────────────────────────────────────────────────────────────
 
@@ -27,6 +32,7 @@ func _ready() -> void:
 	_spawn_players()
 	NetworkManager.game_message.connect(_on_network_message)
 	NetworkManager.player_list_changed.connect(_on_player_left)
+	_setup_host_quit_button()
 	_on_game_ready()
 
 ## Virtuel — appelé après le spawn de tous les joueurs.
@@ -66,6 +72,9 @@ func _on_network_message(from_id: int, data: Dictionary) -> void:
 				players[pid].apply_remote_state(data)
 		"game_over":
 			_on_game_over(int(data.get("winner", 0)))
+		"return_to_select_games":
+			if _begin_return_to_select_games():
+				_go_to_select_games()
 		_:
 			_on_custom_message(from_id, data)
 
@@ -81,6 +90,62 @@ func _on_player_left() -> void:
 ## Virtuel — surcharger pour gérer les messages réseau propres au mini-jeu.
 func _on_custom_message(_from_id: int, _data: Dictionary) -> void:
 	pass
+
+func _setup_host_quit_button() -> void:
+	if not NetworkManager.is_host:
+		return
+
+	var canvas := CanvasLayer.new()
+	canvas.name = "HostQuitCanvas"
+	canvas.layer = 90
+	canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(canvas)
+
+	var root := Control.new()
+	root.name = "HostQuitRoot"
+	root.process_mode = Node.PROCESS_MODE_ALWAYS
+	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	root.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(root)
+
+	var btn := _HostQuitButtonScene.instantiate() as Control
+	btn.name = "HostQuitButton"
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
+	btn.custom_minimum_size = Vector2(200, 60)
+	btn.anchor_left = 1.0
+	btn.anchor_right = 1.0
+	btn.anchor_top = 1.0
+	btn.anchor_bottom = 1.0
+	btn.offset_left = -220.0
+	btn.offset_top = -80.0
+	btn.offset_right = -20.0
+	btn.offset_bottom = -20.0
+	btn.set("text", "Quitter")
+	btn.set("face_color", _QUIT_FACE_COLOR)
+	btn.set("shadow_color", _QUIT_SHADOW_COLOR)
+	btn.connect("pressed", _on_host_quit_pressed)
+	root.add_child(btn)
+
+func _on_host_quit_pressed() -> void:
+	if not NetworkManager.is_host:
+		return
+	if not _begin_return_to_select_games():
+		return
+	NetworkManager.send_game_message(0, {"action": "return_to_select_games"})
+	await get_tree().create_timer(0.2, true).timeout
+	_go_to_select_games()
+
+func _begin_return_to_select_games() -> bool:
+	if _returning_to_select_games:
+		return false
+	_returning_to_select_games = true
+	get_tree().paused = false
+	return true
+
+func _go_to_select_games() -> void:
+	if get_tree().current_scene != self:
+		return
+	get_tree().change_scene_to_file(_SELECT_GAMES_SCENE)
 
 ## Appeler quand le mini-jeu se termine.
 ## Envoie le résultat à tous les joueurs et déclenche _on_game_over().

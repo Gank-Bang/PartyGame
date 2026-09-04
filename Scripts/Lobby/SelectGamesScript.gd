@@ -11,13 +11,14 @@ const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.t
 @onready var _btn_quitter: Control     = $CanvasLayer/UI/MainHBox/RightVBox/QuitRow/FlatButton3
 @onready var _btn_miami: Control     = $CanvasLayer/UI/MainHBox/RightVBox/HotlineMiami
 @onready var _btn_runes: Control     = $CanvasLayer/UI/MainHBox/RightVBox/RunesMiniGame
+@onready var _btn_paires_runes: Control = $CanvasLayer/UI/MainHBox/RightVBox/PairesRunesMiniGame
 @onready var _btn_motus: Control     = $CanvasLayer/UI/MainHBox/RightVBox/MotusMiniGame
 @onready var _btn_underhocem: Control    = $CanvasLayer/UI/MainHBox/RightVBox/UnderHocem
 
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
-const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "motus": Color("f4a261")}
-const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "motus": Color("b05d1e")}
+const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "pairesrunes": Color("f4a261"), "motus": Color("f4a261")}
+const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "pairesrunes": Color("b05d1e"), "motus": Color("b05d1e")}
 
 ## Couleurs d'origine mémorisées pour la restauration
 var _default_colors: Dictionary = {}
@@ -30,6 +31,7 @@ func _ready() -> void:
 		"pileface": _btn_pileface,
 		"miami":    _btn_miami,
 		"runes":    _btn_runes,
+		"pairesrunes": _btn_paires_runes,
 		"motus":    _btn_motus,
 	}
 	# Mémoriser les couleurs de base des boutons jeu
@@ -46,6 +48,7 @@ func _ready() -> void:
 		_btn_pileface.connect("pressed", _on_pileface_pressed)
 		_btn_miami.connect("pressed", _on_miami_pressed)
 		_btn_runes.connect("pressed", _on_runes_pressed)
+		_btn_paires_runes.connect("pressed", _on_paires_runes_pressed)
 		_btn_motus.connect("pressed", _on_motus_pressed)
 		_btn_underhocem.connect("pressed", _on_underhocem_pressed)
 		# Diffuser les survols aux clients
@@ -115,6 +118,10 @@ func _on_runes_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "runes"})
 	_launch("runes")
 
+func _on_paires_runes_pressed() -> void:
+	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "pairesrunes"})
+	_launch("pairesrunes")
+
 func _on_motus_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "motus"})
 	_launch("motus")
@@ -148,6 +155,8 @@ func _launch(scene: String) -> void:
 			get_tree().change_scene_to_file("res://Scenes/Yanis/Main.tscn")
 		"runes":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/RunesMiniGame.tscn")
+		"pairesrunes":
+			get_tree().change_scene_to_file("res://Scenes/RafGames/PairesRunesMiniGame.tscn")
 		"motus":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/MotusMiniGame.tscn")
 		"underhocem":
