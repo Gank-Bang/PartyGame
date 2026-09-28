@@ -4,6 +4,7 @@
 extends Node2D
 
 const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.tscn")
+const _WAITING_ROOM_SCENE := "res://Scenes/Lobby/WaitingRoom.tscn"
 
 @onready var _player_vbox: VBoxContainer = $CanvasLayer/UI/MainHBox/LeftPanel/Margin/VBox/VBoxContainer
 @onready var _btn_equation: Control    = $CanvasLayer/UI/MainHBox/RightVBox/FlatButton
@@ -13,12 +14,13 @@ const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.t
 @onready var _btn_runes: Control     = $CanvasLayer/UI/MainHBox/RightVBox/RunesMiniGame
 @onready var _btn_paires_runes: Control = $CanvasLayer/UI/MainHBox/RightVBox/PairesRunesMiniGame
 @onready var _btn_motus: Control     = $CanvasLayer/UI/MainHBox/RightVBox/MotusMiniGame
+@onready var _btn_cercle: Control    = $CanvasLayer/UI/MainHBox/RightVBox/CercleInfernalMiniGame
 @onready var _btn_underhocem: Control    = $CanvasLayer/UI/MainHBox/RightVBox/UnderHocem
 
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
-const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "pairesrunes": Color("f4a261"), "motus": Color("f4a261")}
-const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "pairesrunes": Color("b05d1e"), "motus": Color("b05d1e")}
+const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "pairesrunes": Color("f4a261"), "motus": Color("f4a261"), "cercle": Color("f4a261")}
+const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "pairesrunes": Color("b05d1e"), "motus": Color("b05d1e"), "cercle": Color("b05d1e")}
 
 ## Couleurs d'origine mémorisées pour la restauration
 var _default_colors: Dictionary = {}
@@ -33,6 +35,7 @@ func _ready() -> void:
 		"runes":    _btn_runes,
 		"pairesrunes": _btn_paires_runes,
 		"motus":    _btn_motus,
+		"cercle":   _btn_cercle,
 	}
 	# Mémoriser les couleurs de base des boutons jeu
 	for key in _game_buttons:
@@ -50,6 +53,7 @@ func _ready() -> void:
 		_btn_runes.connect("pressed", _on_runes_pressed)
 		_btn_paires_runes.connect("pressed", _on_paires_runes_pressed)
 		_btn_motus.connect("pressed", _on_motus_pressed)
+		_btn_cercle.connect("pressed", _on_cercle_pressed)
 		_btn_underhocem.connect("pressed", _on_underhocem_pressed)
 		# Diffuser les survols aux clients
 		for key in _game_buttons:
@@ -69,6 +73,9 @@ func _ready() -> void:
 	NetworkManager.player_list_changed.connect(_refresh_player_list)
 	NetworkManager.game_message.connect(_on_game_message)
 	_btn_quitter.connect("pressed", _on_quit_pressed)
+	if not NetworkManager.is_host:
+		_btn_quitter.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_btn_quitter.modulate.a = 0.55
 
 # ── Hover réseau ──────────────────────────────────────────────────────────────
 
@@ -126,14 +133,20 @@ func _on_motus_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "motus"})
 	_launch("motus")
 
+func _on_cercle_pressed() -> void:
+	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "cercle"})
+	_launch("cercle")
+
 func _on_underhocem_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "underhocem"})
 	_launch("underhocem")
 
 
 func _on_quit_pressed() -> void:
-	NetworkManager.disconnect_from_lobby()
-	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+	if not NetworkManager.is_host:
+		return
+	NetworkManager.send_game_message(0, {"action": "return_to_waiting_room"})
+	get_tree().change_scene_to_file(_WAITING_ROOM_SCENE)
 
 # ── Réception réseau (clients) ────────────────────────────────────────────────
 
@@ -144,6 +157,8 @@ func _on_game_message(_from_id: int, data: Dictionary) -> void:
 		"game_hover":
 			if not NetworkManager.is_host:
 				_apply_hover(str(data.get("game", "")))
+		"return_to_waiting_room":
+			get_tree().change_scene_to_file(_WAITING_ROOM_SCENE)
 
 func _launch(scene: String) -> void:
 	match scene:
@@ -159,5 +174,7 @@ func _launch(scene: String) -> void:
 			get_tree().change_scene_to_file("res://Scenes/RafGames/PairesRunesMiniGame.tscn")
 		"motus":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/MotusMiniGame.tscn")
+		"cercle":
+			get_tree().change_scene_to_file("res://Scenes/RafGames/CercleInfernalMiniGame.tscn")
 		"underhocem":
 			get_tree().change_scene_to_file("res://Scenes/hocem/underhocem.tscn")

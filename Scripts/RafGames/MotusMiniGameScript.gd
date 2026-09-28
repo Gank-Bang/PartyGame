@@ -34,6 +34,10 @@ const WARN_COLOR:    Color = Color("f4a261")
 const WIN_COLOR:     Color = Color("52b788")
 const LOSE_COLOR:    Color = Color("e63946")
 
+const MOBILE_WEB_MAX_SIDE: float = 950.0
+const MOBILE_WEB_MAX_HEIGHT: float = 760.0
+const MOBILE_WEB_BOTTOM_PAD: float = 74.0
+
 ## Lettres accentuées présentes dans mots.json → équivalent sans accent.
 const ACCENTS: Dictionary = {
 	"à": "a", "â": "a", "ç": "c",
@@ -78,12 +82,18 @@ var _sfx_tada: AudioStreamPlayer
 var _attempts: Dictionary = {}
 var _solved: Array = []
 var _out: Array = []
+var _responsive_game_area: HBoxContainer
 
 # ── Nœuds ─────────────────────────────────────────────────────────────────────
 
 @onready var _status_area:  HBoxContainer = $CanvasLayer/UI/MainVBox/Header/StatusArea
+@onready var _main_vbox:    VBoxContainer = $CanvasLayer/UI/MainVBox
+@onready var _header:       HBoxContainer = $CanvasLayer/UI/MainVBox/Header
+@onready var _grid_center:  CenterContainer = $CanvasLayer/UI/MainVBox/GridCenter
 @onready var _grid:         GridContainer = $CanvasLayer/UI/MainVBox/GridCenter/Grid
 @onready var _feedback_lbl: Label         = $CanvasLayer/UI/MainVBox/FeedbackLabel
+@onready var _keyboard_center: CenterContainer = $CanvasLayer/UI/MainVBox/KeyboardCenter
+@onready var _keyboard:     VBoxContainer = $CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard
 @onready var _canvas_layer: CanvasLayer   = $CanvasLayer
 @onready var _kb_rows: Array = [
 	$CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row1,
@@ -105,6 +115,9 @@ func _on_game_ready() -> void:
 	_load_words()
 	_build_status_area()
 	_set_feedback("En attente du mot...", NEUTRAL_COLOR)
+	if not get_viewport().size_changed.is_connected(_apply_responsive_layout):
+		get_viewport().size_changed.connect(_apply_responsive_layout)
+	_apply_responsive_layout()
 	if NetworkManager.is_host:
 		_start_game_host()
 
@@ -181,6 +194,133 @@ func _connect_keyboard() -> void:
 			_key_buttons[key] = child
 			child.pressed.connect(_on_key_pressed.bind(key))
 	_set_input_locked(true)
+
+func _apply_responsive_layout() -> void:
+	var viewport: Vector2 = get_viewport_rect().size
+	var compact: bool = _use_compact_web_layout(viewport)
+	var split: bool = compact and viewport.x > viewport.y
+	var side_margin: float = 14.0 if compact else 32.0
+	_main_vbox.offset_left = side_margin
+	_main_vbox.offset_top = 12.0 if compact else 20.0
+	_main_vbox.offset_right = -side_margin
+	_main_vbox.offset_bottom = -MOBILE_WEB_BOTTOM_PAD if compact else -20.0
+	_main_vbox.add_theme_constant_override("separation", 8 if compact else 12)
+	_header.custom_minimum_size.y = 48.0 if compact else 60.0
+	_status_area.add_theme_constant_override("separation", 16 if compact else 28)
+	_feedback_lbl.add_theme_font_size_override("font_size", 20 if compact else 24)
+	for child in _status_area.get_children():
+		if child is Label:
+			(child as Label).add_theme_font_size_override("font_size", 18 if compact else 22)
+
+	_set_keyboard_layout(split)
+
+	var grid_sep: int = 6 if compact else 10
+	_grid.add_theme_constant_override("h_separation", grid_sep)
+	_grid.add_theme_constant_override("v_separation", grid_sep)
+
+	if split:
+		_apply_split_sizes(viewport, side_margin, grid_sep)
+	else:
+		_apply_stacked_sizes(viewport, side_margin, grid_sep, compact)
+
+func _use_compact_web_layout(viewport: Vector2) -> bool:
+	return OS.has_feature("web") and (
+		minf(viewport.x, viewport.y) <= MOBILE_WEB_MAX_SIDE or viewport.y <= MOBILE_WEB_MAX_HEIGHT
+	)
+
+func _set_keyboard_layout(split: bool) -> void:
+	if split:
+		if _responsive_game_area == null:
+			_responsive_game_area = HBoxContainer.new()
+			_responsive_game_area.name = "ResponsiveGameArea"
+			_responsive_game_area.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			_responsive_game_area.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			_responsive_game_area.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_responsive_game_area.alignment = BoxContainer.ALIGNMENT_CENTER
+		_responsive_game_area.add_theme_constant_override("separation", 18)
+		if _responsive_game_area.get_parent() == null:
+			_main_vbox.add_child(_responsive_game_area)
+		_reparent_control(_grid_center, _responsive_game_area)
+		_reparent_control(_keyboard_center, _responsive_game_area)
+		_responsive_game_area.move_child(_grid_center, 0)
+		_responsive_game_area.move_child(_keyboard_center, 1)
+		_main_vbox.move_child(_feedback_lbl, 1)
+		_main_vbox.move_child(_responsive_game_area, 2)
+		_grid_center.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		_grid_center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		_keyboard_center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		_keyboard_center.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		return
+
+	if _responsive_game_area != null and _responsive_game_area.get_parent() == _main_vbox:
+		_reparent_control(_grid_center, _main_vbox)
+		_reparent_control(_keyboard_center, _main_vbox)
+		_main_vbox.move_child(_grid_center, 1)
+		_main_vbox.move_child(_feedback_lbl, 2)
+		_main_vbox.move_child(_keyboard_center, 3)
+		_main_vbox.remove_child(_responsive_game_area)
+	_grid_center.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_grid_center.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_keyboard_center.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	_keyboard_center.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+
+func _reparent_control(node: Control, new_parent: Node) -> void:
+	if node.get_parent() == new_parent:
+		return
+	var old_parent: Node = node.get_parent()
+	if old_parent != null:
+		old_parent.remove_child(node)
+	new_parent.add_child(node)
+
+func _apply_split_sizes(viewport: Vector2, side_margin: float, grid_sep: int) -> void:
+	var grid_width_budget: float = clampf(viewport.x * 0.32, 220.0, 380.0)
+	var tile_size: float = clampf(minf(
+		(grid_width_budget - grid_sep * float(_word_length - 1)) / float(_word_length),
+		(viewport.y - 110.0 - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
+	), 40.0, 72.0)
+	var keyboard_width: float = maxf(320.0, viewport.x - side_margin * 2.0 - grid_width_budget - 18.0)
+	var key_sep: int = 6
+	var letter_w: float = clampf((keyboard_width - key_sep * 9.0) / 10.0, 44.0, 82.0)
+	var key_h: float = clampf(minf(viewport.y * 0.15, letter_w * 1.12), 54.0, 82.0)
+	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
+	_apply_keyboard_sizes(letter_w, key_h, key_sep)
+
+func _apply_stacked_sizes(viewport: Vector2, side_margin: float, grid_sep: int, compact: bool) -> void:
+	var tile_size: float = clampf(minf(
+		(viewport.x - side_margin * 2.0 - grid_sep * float(_word_length - 1)) / float(_word_length),
+		(viewport.y * (0.42 if compact else 0.54) - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
+	), 40.0, 80.0)
+	var key_sep: int = 4 if compact else 8
+	var letter_w: float = clampf(
+		(viewport.x - side_margin * 2.0 - key_sep * 9.0) / 10.0,
+		36.0 if compact else 72.0,
+		72.0,
+	)
+	var key_h: float = clampf(
+		minf(viewport.y * (0.095 if compact else 0.11), letter_w * 1.05),
+		42.0 if compact else 66.0,
+		72.0,
+	)
+	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
+	_apply_keyboard_sizes(letter_w, key_h, key_sep)
+
+func _apply_tile_sizes(tile_size: float, font_size: int) -> void:
+	for tile in _tiles:
+		tile.custom_minimum_size = Vector2(tile_size, tile_size)
+		tile.set("font_size", font_size)
+
+func _apply_keyboard_sizes(letter_w: float, key_h: float, separation: int) -> void:
+	_keyboard.add_theme_constant_override("separation", separation)
+	for row in _kb_rows:
+		row.add_theme_constant_override("separation", separation)
+	for key in _key_buttons:
+		var btn = _key_buttons[key]
+		var special: bool = key in ["ENTER", "DEL"]
+		btn.custom_minimum_size = Vector2(
+			letter_w * (1.55 if special else 1.0),
+			key_h,
+		)
+		btn.set("font_size", int(round(key_h * (0.34 if special else 0.48))))
 
 func _build_status_area() -> void:
 	for pid in NetworkManager.players.keys():

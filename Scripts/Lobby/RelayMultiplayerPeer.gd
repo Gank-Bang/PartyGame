@@ -32,7 +32,11 @@ func join_lobby(url: String, code: String) -> void:
 
 ## Envoie un message JSON au(x) pair(s). target_id = 0 pour broadcast.
 func send_to(target_id: int, data: Dictionary) -> void:
+	if _ws.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		return
 	_ws.send_text(JSON.stringify({"type": "game", "to": target_id, "data": data}))
+	# Sans ce poll, le paquet dort dans le tampon jusqu'à la frame suivante (~16 ms).
+	_ws.poll()
 
 func close() -> void:
 	_ws.close()
@@ -58,7 +62,6 @@ func _process(_delta: float) -> void:
 				my_id = 0
 
 func _route(msg: Dictionary) -> void:
-	print(msg)
 	match msg.get("type", ""):
 		"id":
 			my_id = int(msg["id"])
