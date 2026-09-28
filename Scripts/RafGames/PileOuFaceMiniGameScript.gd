@@ -9,6 +9,12 @@ extends BaseGame
 const ROUNDS: int = 5
 const ROUND_DURATION: float = 5.0
 const COIN_SPIN_SPEED: float = 8.0   # radians/sec pour l'animation de la pièce
+const COIN_MIN_WIDTH: float = 0.16
+const COIN_FACE_STRETCH: float = 0.22
+const COIN_LIFT_HEIGHT: float = 18.0
+const COIN_WOBBLE_ANGLE: float = 0.12
+const COIN_REVEAL_HALF_TURNS: int = 7
+const COIN_REVEAL_DURATION: float = 0.9
 
 const PLAYER_FACE_COLORS: Array = [
 	Color("e63946"), Color("457b9d"),
@@ -31,6 +37,11 @@ var _time_left: float = 0.0
 var _game_done: bool = false
 var _my_choice: int = -1         # -1 = pas encore choisi ce round
 var _spin_time: float = 0.0
+var _coin_result_tween: Tween
+var _coin_face_base_pos: Vector2 = Vector2.ZERO
+var _coin_shadow_base_pos: Vector2 = Vector2.ZERO
+var _coin_glow_base_pos: Vector2 = Vector2.ZERO
+var _coin_shine_base_pos: Vector2 = Vector2.ZERO
 ## Indice de zone (0-3) → peer_id (-1 = inutilisée)
 var _area_to_pid: Array = [-1, -1, -1, -1]
 ## peer_id → indice de zone (0-3)
@@ -41,6 +52,10 @@ var _pid_to_area: Dictionary = {}
 @onready var _round_label: Label      = $CanvasLayer/UI/MainVBox/Header/HBox/RoundLabel
 @onready var _timer_bar: ProgressBar  = $CanvasLayer/UI/MainVBox/Header/HBox/TimerBar
 @onready var _coin_node: Control      = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode
+@onready var _coin_glow: Panel        = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinGlow
+@onready var _coin_shadow: Panel      = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinShadow
+@onready var _coin_face: Panel        = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace
+@onready var _coin_shine: Panel       = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace/CoinShine
 @onready var _coin_label: Label       = $CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace/CoinLabel
 
 # ── Surcharge BaseGame ────────────────────────────────────────────────────────
@@ -52,6 +67,7 @@ func _on_game_ready() -> void:
 	_my_id = NetworkManager.local_peer_id()
 	_assign_players_to_areas()
 	_configure_areas()
+	_setup_coin_visuals()
 	if NetworkManager.is_host:
 		_start_next_round()
 
@@ -65,11 +81,7 @@ func _process(delta: float) -> void:
 	# Animation de la pièce (s'arrête quand _round_active = false)
 	if _coin_node:
 		_spin_time += delta
-		var angle: float = _spin_time * COIN_SPIN_SPEED
-		_coin_node.scale.x = abs(cos(angle))
-		if _coin_label:
-			var side: int = int(angle / PI) % 2
-			_coin_label.text = "PILE" if side == 0 else "FACE"
+		_render_coin_flip(_spin_time * COIN_SPIN_SPEED)
 
 	_time_left -= delta
 	if _timer_bar:
@@ -146,6 +158,89 @@ func _set_btn_colors(idx: int, face: Color, shad: Color) -> void:
 		btn.set("face_color", face)
 		btn.set("shadow_color", shad)
 
+# ── Animation pièce ──────────────────────────────────────────────────────────
+
+func _setup_coin_visuals() -> void:
+	_coin_node.pivot_offset = _size_or_min(_coin_node) * 0.5
+	_coin_face.pivot_offset = _size_or_min(_coin_face) * 0.5
+	_coin_shadow.pivot_offset = _size_or_min(_coin_shadow) * 0.5
+	_coin_glow.pivot_offset = _size_or_min(_coin_glow) * 0.5
+	_coin_shine.pivot_offset = _size_or_min(_coin_shine) * 0.5
+	_coin_face_base_pos = _coin_face.position
+	_coin_shadow_base_pos = _coin_shadow.position
+	_coin_glow_base_pos = _coin_glow.position
+	_coin_shine_base_pos = _coin_shine.position
+	_render_coin_rest(0)
+
+func _size_or_min(node: Control) -> Vector2:
+	return node.size if node.size != Vector2.ZERO else node.custom_minimum_size
+
+func _stop_coin_tween() -> void:
+	if _coin_result_tween:
+		_coin_result_tween.kill()
+		_coin_result_tween = null
+
+func _render_coin_flip(angle: float) -> void:
+	var width_factor: float = maxf(COIN_MIN_WIDTH, abs(cos(angle)))
+	var face_alpha: float = clampf(
+		(width_factor - COIN_MIN_WIDTH) / maxf(0.001, 1.0 - COIN_MIN_WIDTH), 0.0, 1.0
+	)
+	var lift: float = (sin(angle * 0.68 - 0.55) * 0.5 + 0.5) * COIN_LIFT_HEIGHT
+	var side: int = posmod(int(floor(angle / PI)), 2)
+	var glow_alpha: float = 0.14 + (1.0 - width_factor) * 0.22
+
+	_coin_node.rotation = sin(angle * 0.44) * COIN_WOBBLE_ANGLE
+	_coin_face.position = _coin_face_base_pos + Vector2(0.0, -lift)
+	_coin_face.scale = Vector2(width_factor, 1.0 + (1.0 - width_factor) * COIN_FACE_STRETCH)
+	_coin_shadow.position = _coin_shadow_base_pos + Vector2(0.0, lift * 0.34)
+	_coin_shadow.scale = Vector2(0.82 + width_factor * 0.22, 0.72 + width_factor * 0.12)
+	_coin_shadow.modulate = Color(1, 1, 1, 0.34 + (1.0 - lift / COIN_LIFT_HEIGHT) * 0.25)
+	_coin_glow.position = _coin_glow_base_pos + Vector2(0.0, -lift * 0.8)
+	_coin_glow.scale = Vector2.ONE * (1.04 + (1.0 - width_factor) * 0.18)
+	_coin_glow.modulate = Color(1, 1, 1, glow_alpha)
+	_coin_shine.position = _coin_shine_base_pos + Vector2(-8.0 + sin(angle * 0.72) * 4.0, -lift * 0.12)
+	_coin_shine.scale = Vector2(0.88 + face_alpha * 0.22, 1.0)
+	_coin_shine.modulate = Color(1, 1, 1, 0.08 + face_alpha * 0.18)
+	_coin_label.text = "PILE" if side == 0 else "FACE"
+	_coin_label.scale = Vector2.ONE * (0.9 + face_alpha * 0.12)
+	_coin_label.modulate = Color(1, 1, 1, face_alpha)
+
+func _render_coin_rest(side: int) -> void:
+	_coin_node.rotation = 0.0
+	_coin_face.position = _coin_face_base_pos
+	_coin_face.scale = Vector2.ONE
+	_coin_shadow.position = _coin_shadow_base_pos + Vector2(0.0, 4.0)
+	_coin_shadow.scale = Vector2(0.98, 0.86)
+	_coin_shadow.modulate = Color(1, 1, 1, 0.52)
+	_coin_glow.position = _coin_glow_base_pos + Vector2(0.0, -4.0)
+	_coin_glow.scale = Vector2.ONE * 1.08
+	_coin_glow.modulate = Color(1, 1, 1, 0.22)
+	_coin_shine.position = _coin_shine_base_pos
+	_coin_shine.scale = Vector2.ONE
+	_coin_shine.modulate = Color(1, 1, 1, 0.22)
+	_coin_label.text = "PILE" if side == 0 else "FACE"
+	_coin_label.scale = Vector2.ONE * 1.04
+	_coin_label.modulate = Color.WHITE
+
+func _play_coin_reveal(side: int) -> void:
+	_stop_coin_tween()
+	var start_angle: float = _spin_time * COIN_SPIN_SPEED
+	var target_half_turn: int = int(floor(start_angle / PI)) + COIN_REVEAL_HALF_TURNS
+	while posmod(target_half_turn, 2) != side:
+		target_half_turn += 1
+	var target_angle: float = float(target_half_turn) * PI
+	_coin_result_tween = create_tween()
+	_coin_result_tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_coin_result_tween.tween_method(_render_coin_flip, start_angle, target_angle, COIN_REVEAL_DURATION)
+	_coin_result_tween.finished.connect(_on_coin_reveal_finished.bind(side), CONNECT_ONE_SHOT)
+
+func _on_coin_reveal_finished(side: int) -> void:
+	_render_coin_rest(side)
+	var settle := create_tween()
+	settle.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	settle.tween_property(_coin_face, "scale", Vector2(1.12, 1.12), 0.09)
+	settle.tween_property(_coin_face, "scale", Vector2.ONE, 0.18)
+
 # ── Gestion des rounds ────────────────────────────────────────────────────────
 
 func _start_next_round() -> void:
@@ -168,6 +263,8 @@ func _setup_round(data: Dictionary) -> void:
 	_my_choice = -1
 	_time_left = ROUND_DURATION
 	_spin_time = 0.0
+	_stop_coin_tween()
+	_render_coin_flip(0.0)
 	if _round_label:
 		_round_label.text = "Round %d / %d" % [_current_round, ROUNDS]
 	if _timer_bar:
@@ -261,10 +358,8 @@ func _apply_round_result(data: Dictionary) -> void:
 		_scores[int(key)] = int(scores_data[key])
 
 	# La pièce se stabilise sur le résultat
-	if _coin_label:
-		_coin_label.text = "PILE" if correct == 0 else "FACE"
 	if _coin_node:
-		_coin_node.scale.x = 1.0
+		_play_coin_reveal(correct)
 
 	# Feedback par zone joueur
 	for i in range(4):

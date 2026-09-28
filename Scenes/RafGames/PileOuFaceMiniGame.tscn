@@ -24,6 +24,20 @@ corner_radius_top_right = 60
 corner_radius_bottom_right = 60
 corner_radius_bottom_left = 60
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coinglow"]
+bg_color = Color(1, 0.8784314, 0.35686275, 0.24)
+corner_radius_top_left = 78
+corner_radius_top_right = 78
+corner_radius_bottom_right = 78
+corner_radius_bottom_left = 78
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_coinshine"]
+bg_color = Color(1, 1, 1, 0.2)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
 [node name="PileOuFaceMiniGame" type="Node2D" unique_id=605672443]
 script = ExtResource("1_script")
 
@@ -97,6 +111,20 @@ size_flags_horizontal = 3
 custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 
+[node name="CoinGlow" type="Panel" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode" unique_id=1103719221]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_coinglow")
+
 [node name="CoinShadow" type="Panel" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode" unique_id=94954706]
 layout_mode = 1
 anchors_preset = 15
@@ -114,7 +142,17 @@ anchor_bottom = 1.0
 offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+clip_contents = true
 theme_override_styles/panel = SubResource("StyleBoxFlat_coinface")
+
+[node name="CoinShine" type="Panel" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace" unique_id=626806611]
+layout_mode = 1
+offset_left = 18.0
+offset_top = 12.0
+offset_right = 102.0
+offset_bottom = 42.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_coinshine")
 
 [node name="CoinLabel" type="Label" parent="CanvasLayer/UI/MainVBox/CoinZone/CoinNode/CoinFace" unique_id=1239219525]
 layout_mode = 1

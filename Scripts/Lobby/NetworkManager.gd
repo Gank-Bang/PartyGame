@@ -24,6 +24,14 @@ var lobby_code: String = ""
 var players: Dictionary = {}
 ## Nom du joueur local
 var local_player_name: String = "Joueur"
+## Aller-retour mesuré vers l'hôte, en secondes (0.0 chez l'hôte)
+var rtt: float = 0.0
+
+## L'hôte est toujours le pair 1 (attribué par le relais à la création du lobby).
+const HOST_ID: int = 1
+const _PING_INTERVAL: float = 1.0
+
+var _ping_timer: float = 0.0
 
 # ── Signaux ───────────────────────────────────────────────────────────────────
 
@@ -39,7 +47,19 @@ signal game_message(from_id: int, data: Dictionary)
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	
+
+func _process(delta: float) -> void:
+	if _relay == null or is_host or local_peer_id() == 0:
+		return
+	_ping_timer -= delta
+	if _ping_timer <= 0.0:
+		_ping_timer = _PING_INTERVAL
+		_relay.send_to(HOST_ID, {"action": "__ping", "t": _now()})
+
+## Latence aller simple estimée vers l'hôte, en secondes.
+func latency_seconds() -> float:
+	return rtt * 0.5
+
 ## ID du pair local (0 si non connecté)
 func local_peer_id() -> int:
 	if _relay == null:
@@ -51,6 +71,12 @@ func send_game_message(target_id: int, data: Dictionary) -> void:
 	if _relay == null:
 		return
 	_relay.send_to(target_id, data)
+
+## Envoie un message au seul hôte : évite au relais de recopier vers les autres clients.
+func send_to_host(data: Dictionary) -> void:
+	if _relay == null:
+		return
+	_relay.send_to(HOST_ID, data)
 
 func host_game(player_name: String) -> void:
 	local_player_name = player_name
@@ -80,6 +106,7 @@ func disconnect_from_lobby() -> void:
 	players.clear()
 	lobby_code = ""
 	is_host = false
+	rtt = 0.0
 
 # ── Interne ───────────────────────────────────────────────────────────────────
 
@@ -88,6 +115,8 @@ func _setup_relay() -> void:
 		_relay.close()
 		_relay.queue_free()
 	players.clear()
+	rtt = 0.0
+	_ping_timer = 0.0
 	_relay = _RelayClientClass.new()
 	add_child(_relay)
 	_relay.got_id.connect(_on_got_id)
@@ -117,6 +146,11 @@ func _on_peer_left(peer_id: int) -> void:
 
 func _on_relay_message(from_id: int, data: Dictionary) -> void:
 	match data.get("action", ""):
+		"__ping":
+			_relay.send_to(from_id, {"action": "__pong", "t": data.get("t", 0.0)})
+		"__pong":
+			var sample: float = maxf(0.0, _now() - float(data.get("t", 0.0)))
+			rtt = sample if rtt == 0.0 else lerpf(rtt, sample, 0.3)
 		"register":
 			players[from_id] = {"name": str(data.get("name", "Joueur"))}
 			player_list_changed.emit()
@@ -144,3 +178,6 @@ func _serialise_players() -> Dictionary:
 
 func _generate_code() -> String:
 	return str(randi_range(1000, 9999))
+
+func _now() -> float:
+	return Time.get_ticks_msec() / 1000.0

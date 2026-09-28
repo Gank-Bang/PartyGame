@@ -38,6 +38,28 @@ lobbies: dict = {}
 MAX_PLAYERS = 4
 
 
+async def fanout(clients: dict, payload, sender_id, exclude=None) -> None:
+    """Diffuse en parallele : un client lent ne retarde plus les autres."""
+    targets = [
+        cws for pid, cws in clients.items()
+        if pid != sender_id and pid != exclude
+    ]
+    if targets:
+        await asyncio.gather(
+            *(cws.send(payload) for cws in targets), return_exceptions=True
+        )
+
+
+async def send_one(clients: dict, target_id, payload) -> None:
+    cws = clients.get(target_id)
+    if cws is None:
+        return
+    try:
+        await cws.send(payload)
+    except Exception:
+        pass
+
+
 async def handler(ws: WebSocketServerProtocol) -> None:
     lobby_code: str | None = None
     peer_id: int | None = None
@@ -100,50 +122,28 @@ async def handler(ws: WebSocketServerProtocol) -> None:
                         msg["from"] = peer_id
                         payload = json.dumps(msg)
                         if target_id == 0:
-                            for pid, cws in list(clients.items()):
-                                if pid != peer_id:
-                                    try:
-                                        await cws.send(payload)
-                                    except Exception:
-                                        pass
-                        elif target_id in clients:
-                            try:
-                                await clients[target_id].send(payload)
-                            except Exception:
-                                pass
+                            await fanout(clients, payload, peer_id)
+                        else:
+                            await send_one(clients, target_id, payload)
                 except Exception:
                     pass
                 continue
 
-            # — Paquets binaires (données de jeu futures) —            if not isinstance(message, bytes) or len(message) < 4:
+            # — Paquets binaires (données de jeu futures) —
+            if not isinstance(message, bytes) or len(message) < 4:
                 continue
 
             target_id = struct.unpack(">i", message[:4])[0]
             payload = struct.pack(">i", peer_id) + message[4:]
 
-            clients = lobby["clients"]
             if target_id == 0:
                 # Broadcast : envoyer à tous sauf l'expéditeur
-                for pid, cws in list(clients.items()):
-                    if pid != peer_id:
-                        try:
-                            await cws.send(payload)
-                        except Exception:
-                            pass
+                await fanout(clients, payload, peer_id)
             elif target_id < 0:
                 # Broadcast excluant abs(target_id)
-                exclude = abs(target_id)
-                for pid, cws in list(clients.items()):
-                    if pid != peer_id and pid != exclude:
-                        try:
-                            await cws.send(payload)
-                        except Exception:
-                            pass
-            elif target_id in clients:
-                try:
-                    await clients[target_id].send(payload)
-                except Exception:
-                    pass
+                await fanout(clients, payload, peer_id, exclude=abs(target_id))
+            else:
+                await send_one(clients, target_id, payload)
 
     except (asyncio.TimeoutError, json.JSONDecodeError):
         pass
@@ -179,7 +179,10 @@ async def handler(ws: WebSocketServerProtocol) -> None:
 
 async def main() -> None:
     port = int(os.environ.get("PORT", 8765))
-    async with websockets.serve(handler, "0.0.0.0", port):
+    # compression=None : le deflate coûte plus cher qu'il ne rapporte sur ces petits JSON.
+    async with websockets.serve(
+        handler, "0.0.0.0", port, compression=None, ping_interval=20, ping_timeout=20
+    ):
         print(f"[relais] Serveur démarré sur le port {port}")
         await asyncio.Future()  # tourne indéfiniment
 

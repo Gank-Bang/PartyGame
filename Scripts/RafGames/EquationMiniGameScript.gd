@@ -8,6 +8,8 @@ extends BaseGame
 const ROUNDS: int = 5
 const ROUND_DURATION: float = 8.0
 const GUESS_COOLDOWN: float = 1.5
+const MOBILE_WEB_MAX_SIDE: float = 950.0
+const MOBILE_WEB_MAX_HEIGHT: float = 760.0
 
 const PLAYER_FACE_COLORS: Array = [
 	Color("e63946"), Color("457b9d"),
@@ -38,6 +40,7 @@ var _pid_to_area: Dictionary = {}
 
 # ── Nœuds header ─────────────────────────────────────────────────────────────
 
+@onready var _area_rows: VBoxContainer = $CanvasLayer/UI/MainVBox/AreaRows
 @onready var _round_label: Label = $CanvasLayer/UI/MainVBox/Header/HBox/RoundLabel
 @onready var _timer_bar: ProgressBar = $CanvasLayer/UI/MainVBox/Header/HBox/TimerBar
 
@@ -51,6 +54,9 @@ func _on_game_ready() -> void:
 	_my_id = NetworkManager.local_peer_id()
 	_assign_players_to_areas()
 	_configure_areas()
+	if not get_viewport().size_changed.is_connected(_apply_responsive_layout):
+		get_viewport().size_changed.connect(_apply_responsive_layout)
+	_apply_responsive_layout()
 	if NetworkManager.is_host:
 		_start_next_round()
 
@@ -138,6 +144,56 @@ func _connect_numpad(area_idx: int) -> void:
 		var btn := numpad.get_node_or_null("Btn%d" % n)
 		if btn:
 			btn.pressed.connect(_on_numpad_pressed.bind(n))
+
+func _apply_responsive_layout() -> void:
+	var viewport: Vector2 = get_viewport_rect().size
+	var compact: bool = _use_compact_web_layout(viewport)
+	_round_label.add_theme_font_size_override("font_size", 24 if compact else 30)
+	_timer_bar.custom_minimum_size = Vector2(260, 24) if compact else Vector2(320, 30)
+	_area_rows.add_theme_constant_override("separation", 12 if compact else 0)
+	for i in range(4):
+		if _area_to_pid[i] == -1:
+			continue
+		_style_area_for_viewport(i, viewport, compact)
+
+func _use_compact_web_layout(viewport: Vector2) -> bool:
+	return OS.has_feature("web") and (
+		minf(viewport.x, viewport.y) <= MOBILE_WEB_MAX_SIDE or viewport.y <= MOBILE_WEB_MAX_HEIGHT
+	)
+
+func _style_area_for_viewport(idx: int, viewport: Vector2, compact: bool) -> void:
+	var margin := _get_area_node(idx, "Margin") as MarginContainer
+	var eq_row := _get_area_node(idx, "Margin/VBox/EqRow") as HBoxContainer
+	var feedback := _get_feedback_label(idx)
+	var name_label := _get_name_label(idx)
+	var score_label := _get_score_label(idx)
+	var inset: int = 10 if compact else 16
+	margin.add_theme_constant_override("margin_left", inset)
+	margin.add_theme_constant_override("margin_top", inset)
+	margin.add_theme_constant_override("margin_right", inset)
+	margin.add_theme_constant_override("margin_bottom", inset)
+	eq_row.add_theme_constant_override("separation", 6 if compact else 8)
+	feedback.add_theme_font_size_override("font_size", 18 if compact else 20)
+	name_label.add_theme_font_size_override("font_size", 20 if compact else 24)
+	score_label.add_theme_font_size_override("font_size", 20 if compact else 24)
+
+	var eq_btn_size := Vector2(64, 54) if compact else Vector2(80, 60)
+	for btn_name in ["BtnA", "BtnOp", "BtnB", "BtnEq", "BtnResult"]:
+		var btn = _get_area_node(idx, "Margin/VBox/EqRow/%s" % btn_name)
+		btn.custom_minimum_size = eq_btn_size
+		btn.set("font_size", 24 if compact else 28)
+
+	var numpad := _get_numpad(idx)
+	numpad.add_theme_constant_override("h_separation", 10 if compact else 8)
+	numpad.add_theme_constant_override("v_separation", 10 if compact else 8)
+	if _area_to_pid[idx] != _my_id:
+		return
+	var numpad_width: float = viewport.x * (0.4 if NetworkManager.players.size() > 1 else 0.62)
+	var btn_w: float = clampf((numpad_width - 20.0) / 3.0, 82.0, 132.0)
+	var btn_h: float = clampf(viewport.y * (0.085 if compact else 0.075), 64.0, 88.0)
+	for btn in numpad.get_children():
+		btn.custom_minimum_size = Vector2(btn_w, btn_h)
+		btn.set("font_size", 28 if compact else 24)
 
 # ── Couleurs et affichage des boutons équation ────────────────────────────────
 
