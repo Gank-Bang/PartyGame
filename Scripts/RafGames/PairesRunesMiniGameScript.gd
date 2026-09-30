@@ -88,25 +88,19 @@ func _setup_sfx() -> void:
 
 func _load_rune_textures() -> void:
 	_rune_textures.clear()
-	var dir := DirAccess.open("res://Ressources/RafGames/Runes")
-	if dir == null:
-		push_error("PairesRunesMiniGame: dossier res://Ressources/RafGames/Runes introuvable")
-		return
+	var rune_paths: Array[String] = [
+		"res://Ressources/RafGames/Runes/rune.png",
+		"res://Ressources/RafGames/Runes/rune copie.png",
+	]
+	for i in range(2, 20):
+		rune_paths.append("res://Ressources/RafGames/Runes/rune copie %d.png" % i)
 
-	var file_names: Array[String] = []
-	dir.list_dir_begin()
-	var file_name: String = dir.get_next()
-	while file_name != "":
-		if not dir.current_is_dir() and file_name.ends_with(".png"):
-			file_names.append(file_name)
-		file_name = dir.get_next()
-	dir.list_dir_end()
-	file_names.sort()
-
-	for rune_file in file_names:
-		var texture := load("res://Ressources/RafGames/Runes/%s" % rune_file) as Texture2D
+	for rune_path in rune_paths:
+		var texture := load(rune_path) as Texture2D
 		if texture != null:
 			_rune_textures.append(texture)
+		else:
+			push_warning("PairesRunesMiniGame: rune introuvable: %s" % rune_path)
 
 func _start_new_board() -> void:
 	var msg := {
