@@ -24,18 +24,124 @@ Protocole :
   Paquets de jeu (binaire) :
     [4 octets big-endian int32 : peer_id cible (0 = broadcast)] [payload]
     Le relais préfixe chaque paquet reçu avec [4 octets : peer_id source].
+
+Routes HTTP (GET, blind test) :
+  /blindtest/tracks?count=N  → {"tracks": [{id, title, artist, preview}]}
+  /blindtest/search?q=...    → {"results": [{id, title, artist}]}
 """
 
 import asyncio
 import json
 import os
+import random
+import re
 import struct
+import unicodedata
+import urllib.parse
+import urllib.request
+from http import HTTPStatus
+
 import websockets
-from websockets.server import WebSocketServerProtocol
+from websockets.asyncio.server import ServerConnection
+from websockets.datastructures import Headers
+from websockets.http11 import Request, Response
 
 # code -> {"clients": {peer_id: ws}, "next_id": int}
 lobbies: dict = {}
 MAX_PLAYERS = 4
+
+# ── Blind test : proxy vers l'API Deezer ──────────────────────────────────────
+# L'API Deezer n'envoie pas d'en-tête CORS, la version web du jeu passe donc par
+# ici. Les extraits MP3 (cdnt-preview.dzcdn.net) autorisent le CORS : les joueurs
+# les téléchargent directement.
+
+DEEZER_API = "https://api.deezer.com"
+# Playlists publiques où l'hôte pioche : Top France + deux blind tests « tubes ».
+BLINDTEST_PLAYLISTS = (1109890291, 7089916404, 9431716902)
+BLINDTEST_MAX_TRACKS = 20
+BLINDTEST_SEARCH_RESULTS = 8
+
+
+def deezer_get(path: str, params: dict) -> dict:
+    url = f"{DEEZER_API}{path}?{urllib.parse.urlencode(params)}"
+    with urllib.request.urlopen(url, timeout=6) as resp:
+        data = json.loads(resp.read())
+    if "error" in data:
+        raise RuntimeError(f"{path} : {data['error']}")
+    return data
+
+
+def track_summary(track: dict) -> dict:
+    return {
+        "id": track.get("id"),
+        "title": track.get("title_short") or track.get("title", ""),
+        "artist": track.get("artist", {}).get("name", "").replace(";", ", "),
+    }
+
+
+def title_key(title: str) -> str:
+    """Clé de dédoublonnage : sans accents, versions « (...) » / « - Remastered » ni ponctuation."""
+    short = re.sub(r"[(\[].*?[)\]]", "", title.split(" - ")[0])
+    ascii_title = unicodedata.normalize("NFKD", short).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]", "", ascii_title.lower()) or title.lower()
+
+
+def pick_blindtest_tracks(count: int) -> list:
+    pool = {}
+    for playlist_id in BLINDTEST_PLAYLISTS:
+        try:
+            tracks = deezer_get(f"/playlist/{playlist_id}/tracks", {"limit": 500}).get("data", [])
+        except Exception as exc:
+            print(f"[blindtest] Playlist {playlist_id} ignorée : {exc}")
+            continue
+        for track in tracks:
+            if track.get("readable") and track.get("preview"):
+                summary = track_summary(track)
+                pool.setdefault(title_key(summary["title"]), {**summary, "preview": track["preview"]})
+    if not pool:
+        raise RuntimeError("aucun extrait disponible")
+    return random.sample(list(pool.values()), min(count, len(pool)))
+
+
+def search_tracks(query: str) -> list:
+    results = {}
+    for track in deezer_get("/search/track", {"q": query, "limit": 25}).get("data", []):
+        summary = track_summary(track)
+        results.setdefault((title_key(summary["title"]), summary["artist"].lower()), summary)
+    return list(results.values())[:BLINDTEST_SEARCH_RESULTS]
+
+
+def json_response(status: HTTPStatus, payload: dict) -> Response:
+    body = json.dumps(payload).encode()
+    headers = Headers()
+    headers["Content-Type"] = "application/json; charset=utf-8"
+    headers["Content-Length"] = str(len(body))
+    headers["Access-Control-Allow-Origin"] = "*"
+    headers["Cache-Control"] = "no-store"
+    return Response(status.value, status.phrase, headers, body)
+
+
+async def handle_http(connection: ServerConnection, request: Request):
+    """Répond aux routes /blindtest/ ; renvoie None pour laisser passer le handshake WebSocket."""
+    url = urllib.parse.urlsplit(request.path)
+    if not url.path.startswith("/blindtest/"):
+        return None
+    params = urllib.parse.parse_qs(url.query)
+    try:
+        if url.path == "/blindtest/tracks":
+            raw_count = params.get("count", ["10"])[0]
+            count = int(raw_count) if raw_count.isdecimal() else 10
+            count = min(max(count, 1), BLINDTEST_MAX_TRACKS)
+            tracks = await asyncio.to_thread(pick_blindtest_tracks, count)
+            return json_response(HTTPStatus.OK, {"tracks": tracks})
+        if url.path == "/blindtest/search":
+            query = params.get("q", [""])[0].strip()[:80]
+            results = await asyncio.to_thread(search_tracks, query) if len(query) >= 2 else []
+            return json_response(HTTPStatus.OK, {"results": results})
+    except Exception as exc:
+        print(f"[blindtest] Deezer indisponible : {exc}")
+        return json_response(HTTPStatus.BAD_GATEWAY, {"error": "deezer_unavailable"})
+    return json_response(HTTPStatus.NOT_FOUND, {"error": "not_found"})
 
 
 async def fanout(clients: dict, payload, sender_id, exclude=None) -> None:
@@ -60,7 +166,7 @@ async def send_one(clients: dict, target_id, payload) -> None:
         pass
 
 
-async def handler(ws: WebSocketServerProtocol) -> None:
+async def handler(ws: ServerConnection) -> None:
     lobby_code: str | None = None
     peer_id: int | None = None
 
@@ -181,7 +287,8 @@ async def main() -> None:
     port = int(os.environ.get("PORT", 8765))
     # compression=None : le deflate coûte plus cher qu'il ne rapporte sur ces petits JSON.
     async with websockets.serve(
-        handler, "0.0.0.0", port, compression=None, ping_interval=20, ping_timeout=20
+        handler, "0.0.0.0", port, compression=None, ping_interval=20, ping_timeout=20,
+        process_request=handle_http,
     ):
         print(f"[relais] Serveur démarré sur le port {port}")
         await asyncio.Future()  # tourne indéfiniment
