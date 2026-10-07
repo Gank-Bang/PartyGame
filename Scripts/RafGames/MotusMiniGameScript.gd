@@ -36,7 +36,8 @@ const LOSE_COLOR:    Color = Color("e63946")
 
 const MOBILE_WEB_MAX_SIDE: float = 950.0
 const MOBILE_WEB_MAX_HEIGHT: float = 760.0
-const MOBILE_WEB_BOTTOM_PAD: float = 74.0
+## Hauteur du bouton Quitter de l'hôte + sa marge (voir BaseGame).
+const HOST_QUIT_RESERVED: float = 80.0
 
 ## Lettres accentuées présentes dans mots.json → équivalent sans accent.
 const ACCENTS: Dictionary = {
@@ -200,17 +201,25 @@ func _apply_responsive_layout() -> void:
 	var compact: bool = _use_compact_web_layout(viewport)
 	var split: bool = compact and viewport.x > viewport.y
 	var side_margin: float = 14.0 if compact else 32.0
+	var bottom_pad: float = ResponsiveDisplay.bottom_margin() if compact else 20.0
+	if compact and NetworkManager.is_host:
+		bottom_pad = maxf(bottom_pad, HOST_QUIT_RESERVED)
 	_main_vbox.offset_left = side_margin
 	_main_vbox.offset_top = 12.0 if compact else 20.0
 	_main_vbox.offset_right = -side_margin
-	_main_vbox.offset_bottom = -MOBILE_WEB_BOTTOM_PAD if compact else -20.0
+	_main_vbox.offset_bottom = -bottom_pad
 	_main_vbox.add_theme_constant_override("separation", 8 if compact else 12)
 	_header.custom_minimum_size.y = 48.0 if compact else 60.0
 	_status_area.add_theme_constant_override("separation", 16 if compact else 28)
 	_feedback_lbl.add_theme_font_size_override("font_size", 20 if compact else 24)
 	for child in _status_area.get_children():
 		if child is Label:
-			(child as Label).add_theme_font_size_override("font_size", 18 if compact else 22)
+			var status_lbl := child as Label
+			status_lbl.add_theme_font_size_override("font_size", 18 if compact else 22)
+			status_lbl.clip_text = compact
+			status_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if compact else TextServer.OVERRUN_NO_TRIMMING
+			status_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_FILL
+			status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if compact else HORIZONTAL_ALIGNMENT_LEFT
 
 	_set_keyboard_layout(split)
 
@@ -218,10 +227,11 @@ func _apply_responsive_layout() -> void:
 	_grid.add_theme_constant_override("h_separation", grid_sep)
 	_grid.add_theme_constant_override("v_separation", grid_sep)
 
+	var avail := Vector2(viewport.x - side_margin * 2.0, viewport.y - _main_vbox.offset_top - bottom_pad)
 	if split:
-		_apply_split_sizes(viewport, side_margin, grid_sep)
+		_apply_split_sizes(avail, grid_sep)
 	else:
-		_apply_stacked_sizes(viewport, side_margin, grid_sep, compact)
+		_apply_stacked_sizes(avail, grid_sep, compact)
 
 func _use_compact_web_layout(viewport: Vector2) -> bool:
 	return OS.has_feature("web") and (
@@ -272,35 +282,28 @@ func _reparent_control(node: Control, new_parent: Node) -> void:
 		old_parent.remove_child(node)
 	new_parent.add_child(node)
 
-func _apply_split_sizes(viewport: Vector2, side_margin: float, grid_sep: int) -> void:
-	var grid_width_budget: float = clampf(viewport.x * 0.32, 220.0, 380.0)
-	var tile_size: float = clampf(minf(
-		(grid_width_budget - grid_sep * float(_word_length - 1)) / float(_word_length),
-		(viewport.y - 110.0 - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
-	), 40.0, 72.0)
-	var keyboard_width: float = maxf(320.0, viewport.x - side_margin * 2.0 - grid_width_budget - 18.0)
+func _apply_split_sizes(avail: Vector2, grid_sep: int) -> void:
 	var key_sep: int = 6
-	var letter_w: float = clampf((keyboard_width - key_sep * 9.0) / 10.0, 44.0, 82.0)
-	var key_h: float = clampf(minf(viewport.y * 0.15, letter_w * 1.12), 54.0, 82.0)
+	var sep: float = _main_vbox.get_theme_constant("separation")
+	var free_h: float = avail.y - _header.custom_minimum_size.y - _feedback_lbl.get_combined_minimum_size().y - sep * 2.0
+	var tile_size: float = floorf(clampf((free_h - grid_sep * float(_max_attempts - 1)) / float(_max_attempts), 24.0, 72.0))
+	var grid_w: float = tile_size * _word_length + grid_sep * float(_word_length - 1)
+	var letter_w: float = floorf(clampf((avail.x - grid_w - 18.0 - key_sep * 9.0) / 10.0, 20.0, 82.0))
+	var key_h: float = floorf(clampf(minf(letter_w * 1.12, (free_h - key_sep * 2.0) / 3.0), 32.0, 82.0))
 	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
 	_apply_keyboard_sizes(letter_w, key_h, key_sep)
 
-func _apply_stacked_sizes(viewport: Vector2, side_margin: float, grid_sep: int, compact: bool) -> void:
-	var tile_size: float = clampf(minf(
-		(viewport.x - side_margin * 2.0 - grid_sep * float(_word_length - 1)) / float(_word_length),
-		(viewport.y * (0.42 if compact else 0.54) - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
-	), 40.0, 80.0)
+func _apply_stacked_sizes(avail: Vector2, grid_sep: int, compact: bool) -> void:
 	var key_sep: int = 4 if compact else 8
-	var letter_w: float = clampf(
-		(viewport.x - side_margin * 2.0 - key_sep * 9.0) / 10.0,
-		36.0 if compact else 72.0,
-		72.0,
-	)
-	var key_h: float = clampf(
-		minf(viewport.y * (0.095 if compact else 0.11), letter_w * 1.05),
-		42.0 if compact else 66.0,
-		72.0,
-	)
+	var sep: float = _main_vbox.get_theme_constant("separation")
+	var free_h: float = avail.y - _header.custom_minimum_size.y - _feedback_lbl.get_combined_minimum_size().y - sep * 3.0
+	var letter_w: float = floorf(clampf((avail.x - key_sep * 9.0) / 10.0, 20.0, 72.0))
+	var key_h: float = floorf(clampf(minf(letter_w * 1.45, free_h * 0.22), 36.0, 72.0))
+	var keyboard_h: float = key_h * 3.0 + key_sep * 2.0
+	var tile_size: float = floorf(clampf(minf(
+		(avail.x - grid_sep * float(_word_length - 1)) / float(_word_length),
+		(free_h - keyboard_h - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
+	), 24.0, 80.0))
 	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
 	_apply_keyboard_sizes(letter_w, key_h, key_sep)
 

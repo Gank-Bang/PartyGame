@@ -1,20 +1,32 @@
 extends Node2D
 
-@onready var _title: Label = $CanvasLayer/UI/Title
-@onready var _subtitle: Label = $CanvasLayer/UI/Subtitle
-@onready var _creators: Sprite2D = $CanvasLayer/UI/Creators
+const STAGE_SIZE: Vector2 = Vector2(1920.0, 1080.0)
+
+@onready var _ui: Control = $CanvasLayer/UI
+@onready var _stage: Control = $CanvasLayer/UI/Stage
+@onready var _title: Label = $CanvasLayer/UI/Stage/Title
+@onready var _subtitle: Label = $CanvasLayer/UI/Stage/Subtitle
+@onready var _creators: Sprite2D = $CanvasLayer/UI/Stage/Creators
 @onready var _creator_buttons: Array[Control] = [
-	$CanvasLayer/UI/NameRow/Nef as Control,
-	$CanvasLayer/UI/NameRow/Yans as Control,
-	$CanvasLayer/UI/NameRow/Houc as Control,
-	$CanvasLayer/UI/NameRow/Raf as Control,
+	$CanvasLayer/UI/Stage/NameRow/Nef as Control,
+	$CanvasLayer/UI/Stage/NameRow/Yans as Control,
+	$CanvasLayer/UI/Stage/NameRow/Houc as Control,
+	$CanvasLayer/UI/Stage/NameRow/Raf as Control,
 ]
 
 func _ready() -> void:
+	_ui.resized.connect(_fit_stage)
+	_fit_stage()
 	await get_tree().process_frame
 	_play_intro()
 	await get_tree().create_timer(3.2).timeout
 	get_tree().change_scene_to_file("res://Scenes/Main.tscn")
+
+func _fit_stage() -> void:
+	if _ui.size.x <= 0.0 or _ui.size.y <= 0.0:
+		return
+	_stage.pivot_offset = STAGE_SIZE * 0.5
+	_stage.scale = Vector2.ONE * minf(_ui.size.x / STAGE_SIZE.x, _ui.size.y / STAGE_SIZE.y)
 
 func _play_intro() -> void:
 	var title_target_y := _title.position.y
