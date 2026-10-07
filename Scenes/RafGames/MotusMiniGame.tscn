@@ -525,10 +525,10 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="KeyEnter" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000020 instance=ExtResource("2_flat")]
+[node name="KeyDel" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000027 instance=ExtResource("2_flat")]
 custom_minimum_size = Vector2(118, 66)
 layout_mode = 2
-text = "ENTRER"
+text = "SUPPR"
 font_size = 24
 
 [node name="KeyW" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000021 instance=ExtResource("2_flat")]
@@ -567,8 +567,8 @@ layout_mode = 2
 text = "N"
 font_size = 30
 
-[node name="KeyDel" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000027 instance=ExtResource("2_flat")]
+[node name="KeyEnter" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000020 instance=ExtResource("2_flat")]
 custom_minimum_size = Vector2(118, 66)
 layout_mode = 2
-text = "SUPPR"
+text = "ENTRER"
 font_size = 24
