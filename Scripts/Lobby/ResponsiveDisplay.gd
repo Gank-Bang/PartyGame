@@ -8,7 +8,7 @@ const SCENE_MIN_SIZE: Dictionary = {
 	"res://Scenes/Lobby/LobbyMenu.tscn": Vector2(700, 740),
 	"res://Scenes/Lobby/WaitingRoom.tscn": Vector2(700, 640),
 	"res://Scenes/Lobby/SelectGames.tscn": Vector2(1260, 960),
-	"res://Scenes/RafGames/MotusMiniGame.tscn": Vector2(340, 520),
+	"res://Scenes/RafGames/MotusMiniGame.tscn": Vector2(320, 440),
 	"res://Scenes/RafGames/EquationMiniGame.tscn": Vector2(780, 720),
 	"res://Scenes/RafGames/PileOuFaceMiniGame.tscn": Vector2(580, 480),
 	"res://Scenes/RafGames/RunesMiniGame.tscn": Vector2(760, 780),

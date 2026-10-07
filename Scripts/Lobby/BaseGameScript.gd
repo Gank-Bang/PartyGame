@@ -21,10 +21,12 @@ const _PlayerScene := preload("res://Scenes/Lobby/PlayerCharacter.tscn")
 const _SELECT_GAMES_SCENE := "res://Scenes/Lobby/SelectGames.tscn"
 const _QUIT_FACE_COLOR := Color(0.56, 0.18, 0.2, 1)
 const _QUIT_SHADOW_COLOR := Color(0.35, 0.09, 0.11, 1)
+const HOST_QUIT_COMPACT_SIZE := Vector2(96, 34)
 
 ## Référence à chaque nœud PlayerCharacter, indexé par peer_id.
 var players: Dictionary = {}
 var _returning_to_select_games: bool = false
+var _host_quit_button: Control
 
 # ── Cycle de vie ──────────────────────────────────────────────────────────────
 
@@ -125,6 +127,21 @@ func _setup_host_quit_button() -> void:
 	btn.set("shadow_color", _QUIT_SHADOW_COLOR)
 	btn.connect("pressed", _on_host_quit_pressed)
 	root.add_child(btn)
+	_host_quit_button = btn
+
+## Petit écran : bouton réduit en haut à droite (à l'appelant de lui réserver la place) ; sinon 200×60 en bas à droite.
+func _set_host_quit_compact(compact: bool, top: float, right: float) -> void:
+	if _host_quit_button == null:
+		return
+	var btn_size: Vector2 = HOST_QUIT_COMPACT_SIZE if compact else Vector2(200, 60)
+	_host_quit_button.custom_minimum_size = btn_size
+	_host_quit_button.anchor_top = 0.0 if compact else 1.0
+	_host_quit_button.anchor_bottom = 0.0 if compact else 1.0
+	_host_quit_button.offset_right = -right if compact else -20.0
+	_host_quit_button.offset_left = _host_quit_button.offset_right - btn_size.x
+	_host_quit_button.offset_top = top if compact else -80.0
+	_host_quit_button.offset_bottom = _host_quit_button.offset_top + btn_size.y
+	_host_quit_button.set("font_size", 16 if compact else 28)
 
 func _on_host_quit_pressed() -> void:
 	if not NetworkManager.is_host:

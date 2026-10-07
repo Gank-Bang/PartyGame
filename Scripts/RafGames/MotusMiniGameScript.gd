@@ -36,8 +36,6 @@ const LOSE_COLOR:    Color = Color("e63946")
 
 const MOBILE_WEB_MAX_SIDE: float = 950.0
 const MOBILE_WEB_MAX_HEIGHT: float = 760.0
-## Hauteur du bouton Quitter de l'hôte + sa marge (voir BaseGame).
-const HOST_QUIT_RESERVED: float = 80.0
 
 ## Lettres accentuées présentes dans mots.json → équivalent sans accent.
 const ACCENTS: Dictionary = {
@@ -84,6 +82,9 @@ var _attempts: Dictionary = {}
 var _solved: Array = []
 var _out: Array = []
 var _responsive_game_area: HBoxContainer
+var _quit_spacer: Control
+var _status_avail_w: float = 0.0
+var _status_compact: bool = false
 
 # ── Nœuds ─────────────────────────────────────────────────────────────────────
 
@@ -200,30 +201,30 @@ func _apply_responsive_layout() -> void:
 	var viewport: Vector2 = get_viewport_rect().size
 	var compact: bool = _use_compact_web_layout(viewport)
 	var split: bool = compact and viewport.x > viewport.y
-	var side_margin: float = 14.0 if compact else 32.0
+	var side_margin: float = 6.0 if compact else 32.0
+	var top_margin: float = 6.0 if compact else 20.0
 	var bottom_pad: float = ResponsiveDisplay.bottom_margin() if compact else 20.0
-	if compact and NetworkManager.is_host:
-		bottom_pad = maxf(bottom_pad, HOST_QUIT_RESERVED)
 	_main_vbox.offset_left = side_margin
-	_main_vbox.offset_top = 12.0 if compact else 20.0
+	_main_vbox.offset_top = top_margin
 	_main_vbox.offset_right = -side_margin
 	_main_vbox.offset_bottom = -bottom_pad
-	_main_vbox.add_theme_constant_override("separation", 8 if compact else 12)
-	_header.custom_minimum_size.y = 48.0 if compact else 60.0
-	_status_area.add_theme_constant_override("separation", 16 if compact else 28)
-	_feedback_lbl.add_theme_font_size_override("font_size", 20 if compact else 24)
-	for child in _status_area.get_children():
-		if child is Label:
-			var status_lbl := child as Label
-			status_lbl.add_theme_font_size_override("font_size", 18 if compact else 22)
-			status_lbl.clip_text = compact
-			status_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if compact else TextServer.OVERRUN_NO_TRIMMING
-			status_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL if compact else Control.SIZE_FILL
-			status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if compact else HORIZONTAL_ALIGNMENT_LEFT
+	_main_vbox.add_theme_constant_override("separation", 6 if compact else 12)
+	_header.custom_minimum_size.y = HOST_QUIT_COMPACT_SIZE.y if compact else 60.0
+	_header.add_theme_constant_override("separation", 8 if compact else 24)
+	_status_area.add_theme_constant_override("separation", 8 if compact else 28)
+	_feedback_lbl.custom_minimum_size.y = 26.0 if compact else 36.0
+	_feedback_lbl.add_theme_font_size_override("font_size", 18 if compact else 24)
+	_set_host_quit_compact(compact, top_margin, side_margin)
+	_reserve_quit_space(compact and NetworkManager.is_host)
+	_status_compact = compact
+	_status_avail_w = viewport.x - side_margin * 2.0
+	if compact and NetworkManager.is_host:
+		_status_avail_w -= HOST_QUIT_COMPACT_SIZE.x + 8.0
+	_fit_status_labels()
 
 	_set_keyboard_layout(split)
 
-	var grid_sep: int = 6 if compact else 10
+	var grid_sep: int = 5 if compact else 10
 	_grid.add_theme_constant_override("h_separation", grid_sep)
 	_grid.add_theme_constant_override("v_separation", grid_sep)
 
@@ -237,6 +238,17 @@ func _use_compact_web_layout(viewport: Vector2) -> bool:
 	return OS.has_feature("web") and (
 		minf(viewport.x, viewport.y) <= MOBILE_WEB_MAX_SIDE or viewport.y <= MOBILE_WEB_MAX_HEIGHT
 	)
+
+## Laisse sous le bouton Quitter de l'hôte la place qu'il occupe dans l'en-tête.
+func _reserve_quit_space(reserve: bool) -> void:
+	if _quit_spacer == null:
+		if not reserve:
+			return
+		_quit_spacer = Control.new()
+		_quit_spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_quit_spacer.custom_minimum_size.x = HOST_QUIT_COMPACT_SIZE.x
+		_header.add_child(_quit_spacer)
+	_quit_spacer.visible = reserve
 
 func _set_keyboard_layout(split: bool) -> void:
 	if split:
@@ -291,39 +303,48 @@ func _apply_split_sizes(avail: Vector2, grid_sep: int) -> void:
 	var letter_w: float = floorf(clampf((avail.x - grid_w - 18.0 - key_sep * 9.0) / 10.0, 20.0, 82.0))
 	var key_h: float = floorf(clampf(minf(letter_w * 1.12, (free_h - key_sep * 2.0) / 3.0), 32.0, 82.0))
 	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
-	_apply_keyboard_sizes(letter_w, key_h, key_sep)
+	_apply_keyboard_sizes(letter_w, key_h, key_sep, true)
 
 func _apply_stacked_sizes(avail: Vector2, grid_sep: int, compact: bool) -> void:
 	var key_sep: int = 4 if compact else 8
 	var sep: float = _main_vbox.get_theme_constant("separation")
 	var free_h: float = avail.y - _header.custom_minimum_size.y - _feedback_lbl.get_combined_minimum_size().y - sep * 3.0
 	var letter_w: float = floorf(clampf((avail.x - key_sep * 9.0) / 10.0, 20.0, 72.0))
-	var key_h: float = floorf(clampf(minf(letter_w * 1.45, free_h * 0.22), 36.0, 72.0))
+	var key_h: float = floorf(clampf(minf(letter_w * 1.5, free_h * 0.26), 38.0, 72.0))
 	var keyboard_h: float = key_h * 3.0 + key_sep * 2.0
 	var tile_size: float = floorf(clampf(minf(
 		(avail.x - grid_sep * float(_word_length - 1)) / float(_word_length),
 		(free_h - keyboard_h - grid_sep * float(_max_attempts - 1)) / float(_max_attempts)
 	), 24.0, 80.0))
 	_apply_tile_sizes(tile_size, int(round(tile_size * 0.58)))
-	_apply_keyboard_sizes(letter_w, key_h, key_sep)
+	_apply_keyboard_sizes(letter_w, key_h, key_sep, compact)
 
 func _apply_tile_sizes(tile_size: float, font_size: int) -> void:
 	for tile in _tiles:
 		tile.custom_minimum_size = Vector2(tile_size, tile_size)
 		tile.set("font_size", font_size)
 
-func _apply_keyboard_sizes(letter_w: float, key_h: float, separation: int) -> void:
+## Compact : ENTRER et SUPPR couvrent deux colonnes, la rangée du bas a la largeur des autres.
+func _apply_keyboard_sizes(letter_w: float, key_h: float, separation: int, compact: bool) -> void:
 	_keyboard.add_theme_constant_override("separation", separation)
 	for row in _kb_rows:
 		row.add_theme_constant_override("separation", separation)
+	var special_w: float = letter_w * 2.0 + separation if compact else letter_w * 1.55
 	for key in _key_buttons:
 		var btn = _key_buttons[key]
 		var special: bool = key in ["ENTER", "DEL"]
-		btn.custom_minimum_size = Vector2(
-			letter_w * (1.55 if special else 1.0),
-			key_h,
-		)
-		btn.set("font_size", int(round(key_h * (0.34 if special else 0.48))))
+		btn.custom_minimum_size = Vector2(special_w if special else letter_w, key_h)
+		var font_size: int = int(round(key_h * (0.34 if special else 0.48)))
+		if special:
+			font_size = _fit_font_size(btn, str(btn.get("text")), font_size, special_w - 10.0)
+		btn.set("font_size", font_size)
+
+func _fit_font_size(control: Control, text: String, max_size: int, max_width: float) -> int:
+	var font: Font = control.get_theme_default_font()
+	var font_size: int = max_size
+	while font_size > 8 and font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > max_width:
+		font_size -= 1
+	return font_size
 
 func _build_status_area() -> void:
 	for pid in NetworkManager.players.keys():
@@ -345,14 +366,43 @@ func _update_status(pid: int) -> void:
 	var suffix := ""
 	if pid in _solved:
 		col = WIN_COLOR
-		suffix = " ✓"
+		suffix = " OK"
 	elif pid in _out:
 		col = LOSE_COLOR
-		suffix = " ✗"
+		suffix = " KO"
 	lbl.text = "%s%s  %d/%d%s" % [
-		"★ " if pid == _my_id else "", pname, _attempts.get(pid, 0), _max_attempts, suffix
+		"• " if pid == _my_id else "", pname, _attempts.get(pid, 0), _max_attempts, suffix
 	]
 	lbl.add_theme_color_override("font_color", col)
+	_fit_status_labels()
+
+## Compact : la police diminue jusqu'à ce que tous les joueurs tiennent dans l'en-tête ; chaque case a une largeur proportionnelle à son texte.
+func _fit_status_labels() -> void:
+	var labels: Array = []
+	for child in _status_area.get_children():
+		if child is Label:
+			labels.append(child)
+	if labels.is_empty() or _status_avail_w <= 0.0:
+		return
+	var font: Font = (labels[0] as Label).get_theme_default_font()
+	var gaps: float = _status_area.get_theme_constant("separation") * (labels.size() - 1)
+	var font_size: int = 18 if _status_compact else 22
+	while _status_compact and font_size > 12 and _status_text_width(labels, font, font_size) + gaps > _status_avail_w:
+		font_size -= 1
+	for child in labels:
+		var status_lbl := child as Label
+		status_lbl.add_theme_font_size_override("font_size", font_size)
+		status_lbl.clip_text = _status_compact
+		status_lbl.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS if _status_compact else TextServer.OVERRUN_NO_TRIMMING
+		status_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL if _status_compact else Control.SIZE_FILL
+		status_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER if _status_compact else HORIZONTAL_ALIGNMENT_LEFT
+		status_lbl.size_flags_stretch_ratio = maxf(font.get_string_size(status_lbl.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x, 1.0)
+
+func _status_text_width(labels: Array, font: Font, font_size: int) -> float:
+	var total: float = 0.0
+	for child in labels:
+		total += font.get_string_size((child as Label).text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	return total
 
 # ── Démarrage de la partie ────────────────────────────────────────────────────
 
@@ -607,6 +657,8 @@ func _set_input_locked(locked: bool) -> void:
 func _on_game_over(winner_peer_id: int) -> void:
 	_game_done = true
 	_set_input_locked(true)
+	var viewport: Vector2 = get_viewport_rect().size
+	var narrow: bool = _use_compact_web_layout(viewport) and viewport.x < 700.0
 
 	var canvas := CanvasLayer.new()
 	canvas.layer = 10
@@ -626,6 +678,11 @@ func _on_game_over(winner_peer_id: int) -> void:
 	panel.anchor_top    = 0.5;    panel.anchor_bottom = 0.5
 	panel.offset_left   = -320.0; panel.offset_right  = 320.0
 	panel.offset_top    = -180.0; panel.offset_bottom = 180.0
+	if narrow:
+		panel.anchor_left = 0.0;  panel.anchor_right = 1.0
+		panel.offset_left = 12.0; panel.offset_right = -12.0
+		panel.offset_top  = 0.0;  panel.offset_bottom = 0.0
+		panel.grow_vertical = Control.GROW_DIRECTION_BOTH
 	center.add_child(panel)
 
 	var vbox := VBoxContainer.new()
@@ -635,9 +692,10 @@ func _on_game_over(winner_peer_id: int) -> void:
 
 	var title := Label.new()
 	title.text = "Fin de partie !"
-	title.add_theme_font_size_override("font_size", 46)
+	title.add_theme_font_size_override("font_size", 32 if narrow else 46)
 	title.add_theme_color_override("font_color", NEUTRAL_COLOR)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(title)
 
 	var winner_lbl := Label.new()
@@ -645,21 +703,23 @@ func _on_game_over(winner_peer_id: int) -> void:
 		winner_lbl.text = "Personne n'a trouvé !"
 	else:
 		var winner_name: String = NetworkManager.players.get(winner_peer_id, {}).get("name", "?")
-		winner_lbl.text = "🏆 %s a trouvé en %d essai%s !" % [
+		winner_lbl.text = "%s a trouvé en %d essai%s !" % [
 			winner_name,
 			_attempts.get(winner_peer_id, 0),
 			"s" if _attempts.get(winner_peer_id, 0) > 1 else "",
 		]
-	winner_lbl.add_theme_font_size_override("font_size", 30)
+	winner_lbl.add_theme_font_size_override("font_size", 22 if narrow else 30)
 	winner_lbl.add_theme_color_override("font_color", WARN_COLOR)
 	winner_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	winner_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(winner_lbl)
 
 	var word_lbl := Label.new()
 	word_lbl.text = "Le mot était : %s" % _target
-	word_lbl.add_theme_font_size_override("font_size", 26)
+	word_lbl.add_theme_font_size_override("font_size", 20 if narrow else 26)
 	word_lbl.add_theme_color_override("font_color", WIN_COLOR)
 	word_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	word_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(word_lbl)
 
 	await get_tree().create_timer(5.0).timeout

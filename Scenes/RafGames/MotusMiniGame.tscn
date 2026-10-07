@@ -570,5 +570,5 @@ font_size = 30
 [node name="KeyDel" parent="CanvasLayer/UI/MainVBox/KeyboardCenter/Keyboard/Row3" unique_id=320000027 instance=ExtResource("2_flat")]
 custom_minimum_size = Vector2(118, 66)
 layout_mode = 2
-text = "←"
-font_size = 32
+text = "SUPPR"
+font_size = 24
