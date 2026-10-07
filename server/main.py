@@ -28,6 +28,7 @@ Protocole :
 Routes HTTP (GET, blind test) :
   /blindtest/tracks?count=N  → {"tracks": [{id, title, artist, preview}]}
   /blindtest/search?q=...    → {"results": [{id, title, artist}]}
+    /blindtest/anime/tracks?count=N → {"tracks": [...], "answers": [...]}
 """
 
 import asyncio
@@ -58,9 +59,118 @@ MAX_PLAYERS = 4
 DEEZER_API = "https://api.deezer.com"
 # Playlists publiques où l'hôte pioche : Top France + deux blind tests « tubes ».
 BLINDTEST_PLAYLISTS = (1109890291, 7089916404, 9431716902)
+BLINDTEST_ANIME_PLAYLIST = 15606487923
 BLINDTEST_MAX_TRACKS = 20
 BLINDTEST_SEARCH_RESULTS = 8
 
+ANIME_TRACKS: dict[str, tuple[str, ...]] = {
+    "My Hero Academia": (
+        "The Day", "Peace Sign", "Odd future", "Make My Story", "Polaris",
+        "Merry-Go-Round", "No.1", "Bokurano",
+    ),
+    "Fairy Tail": (
+        "Breakthrough", "Snow Fairy", "MASAYUME CHASING", "STRIKE BACK",
+        "power of the dream", "NO-LIMIT", "DOWN BY LAW", "MORE THAN LiKE",
+        "NEVER-END TALE", "Ft.", "Fairy Tail ~Yakusoku No Hi~", "Fiesta",
+    ),
+    "One Piece": (
+        "Brand New World", "Fight Together", "ココロのちず", "Hope", "OVER THE TOP",
+        "DREAMIN' ON", "PAINT", "The Peak", "あーーっす！",
+    ),
+    "Tokyo Ghoul": ("Unravel",),
+    "Attack on Titan": (
+        "Shinzo wo Sasageyo!", "Jiyuu No Tsubasa", "Red Swan", "The Rumbling",
+    ),
+    "Sword Art Online": ("Crossing Field",),
+    "Naruto": ("GO!!! 15th Anniversary version", "Seishun Kyousoukyoku"),
+    "Naruto Shippuden": (
+        "Hero's Come Back!!", "Distance", "Blue Bird", "Closer", "Hotarunohikari",
+        "Sign", "Toumeidatta Sekai", "Lovers", "Newsong", "Tsukino Ookisa",
+        "Silhouette", "Blood Circulator", "Karano Kokoro",
+    ),
+    "The Seven Deadly Sins": (
+        "Seven Deadly Sins", "Howling", "Amegafurukara Nijigaderu",
+    ),
+    "Fullmetal Alchemist": ("Melissa",),
+    "Fullmetal Alchemist: Brotherhood": ("Again",),
+    "Demon Slayer": ("Gurenge", "Akeboshi", "Zankyosanka", "Kizuna No Kiseki"),
+    "Death Note": ("the WORLD",),
+    "The Promised Neverland": ("Touch off",),
+    "Code Geass": ("Colors", "O2", "World End"),
+    "Food Wars!": ("Symbol", "Chronos", "Last Chapter"),
+    "Hunter x Hunter": ("departure!",),
+    "Dr. Stone": (
+        "Good Morning World!", "Primary Colors", "Paradise", "Wasuregataki", "Haruka",
+    ),
+    "One-Punch Man": (
+        "Uncrowned Greatest Hero", "THE HERO !!: Ikareru Kobushi ni Hi o Tsukero",
+    ),
+    "Haikyu!!": (
+        "Imagination", "Ah Yeah!!", "FLY HIGH!!", "Hikariare", "Toppako", "PHOENIX",
+    ),
+    "Black Clover": ("Black Catcher", "Black Rover", "JUSTadICE"),
+    "Jujutsu Kaisen": ("Kaikai Kitan", "VIVID VICE"),
+    "Fire Force": ("Inferno",),
+    "Parasyte -the maxim-": ("Let Me Hear",),
+    "JoJo's Bizarre Adventure": (
+        "Jojo Sono Chino Sadame", "Bloody Stream", "Stand Proud", "chase",
+        "Great Days", "Fighting Gold", "HEAVEN'S FALLING DOWN",
+        "Steel Ball Run OP: Holy Steel",
+    ),
+    "Your Lie in April": ("Hikarunara",),
+    "Bleach": (
+        "*Asterisk", "D-tecnoLife", "Rolling Star", "Alones", "After Dark",
+        "Velonica", "Shoujyo S", "Change", "Ranbu No Melody", "Scar", "STARS",
+    ),
+    "Neon Genesis Evangelion": ("The Cruel Angel's Thesis",),
+    "Ranking of Kings": ("Hadaka No Yusha",),
+    "Chainsaw Man": ("KICK BACK",),
+    "Urusei Yatsura": ("aiue",),
+    "SPY x FAMILY": ("Mixed Nuts", "SOUVENIR", "Kura Kura"),
+    "Made in Abyss": ("THE SHAPE OF",),
+    "Oshi no Ko": ("アイドル",),
+    "Overlord": ("HOLLOW HUNGER",),
+    "Mashle: Magic and Muscles": ("Bling-Bang-Bang-Born",),
+    "Gintama": ("Pray", "Tooi Nioi"),
+    "Zom 100: Bucket List of the Dead": ("Song of the Dead",),
+}
+
+ANIME_ALIASES: dict[str, tuple[str, ...]] = {
+    "My Hero Academia": ("Boku no Hero Academia", "Boku no Hero", "MHA", "BNHA"),
+    "Attack on Titan": ("Shingeki no Kyojin", "AOT", "SNK"),
+    "Sword Art Online": ("SAO",),
+    "Naruto Shippuden": ("Shippuden",),
+    "The Seven Deadly Sins": ("Nanatsu no Taizai",),
+    "Fullmetal Alchemist": ("Fullmetal Alchemist 2003", "FMA 2003"),
+    "Fullmetal Alchemist: Brotherhood": (
+        "Fullmetal Alchemist Brotherhood", "FMA Brotherhood", "FMAB",
+    ),
+    "The Promised Neverland": ("Yakusoku no Neverland",),
+    "Code Geass": ("Code Geass: Lelouch of the Rebellion", "Code Geass R2"),
+    "Food Wars!": ("Food Wars Shokugeki no Soma", "Shokugeki no Soma", "Food Wars"),
+    "Hunter x Hunter": ("Hunter × Hunter", "HxH"),
+    "One-Punch Man": ("One Punch Man", "OPM"),
+    "Haikyu!!": ("Haikyuu", "Haikyuu!!"),
+    "Jujutsu Kaisen": ("JJK",),
+    "Fire Force": ("Enen no Shouboutai",),
+    "Parasyte -the maxim-": ("Parasyte", "Kiseijuu"),
+    "JoJo's Bizarre Adventure": (
+        "JoJo", "JoJo's Bizarre Adventure: Phantom Blood",
+        "JoJo's Bizarre Adventure: Diamond Is Unbreakable",
+        "JoJo's Bizarre Adventure: Golden Wind",
+        "JoJo's Bizarre Adventure: Stone Ocean",
+        "JoJo's Bizarre Adventure: Steel Ball Run",
+    ),
+    "Your Lie in April": ("Shigatsu wa Kimi no Uso",),
+    "Bleach": ("Bleach Thousand-Year Blood War", "Bleach TYBW"),
+    "Neon Genesis Evangelion": ("Evangelion", "NGE"),
+    "Ranking of Kings": ("Ousama Ranking",),
+    "Urusei Yatsura": ("Lum",),
+    "SPY x FAMILY": ("Spy Family",),
+    "Made in Abyss": ("Made in Abyss: The Golden City of the Scorching Sun",),
+    "Mashle: Magic and Muscles": ("Mashle",),
+    "Zom 100: Bucket List of the Dead": ("Zom 100",),
+}
 
 def deezer_get(path: str, params: dict) -> dict:
     url = f"{DEEZER_API}{path}?{urllib.parse.urlencode(params)}"
@@ -86,6 +196,13 @@ def title_key(title: str) -> str:
     return re.sub(r"[^a-z0-9]", "", ascii_title.lower()) or title.lower()
 
 
+ANIME_TRACK_TO_SHOW = {
+    title_key(song_title): anime
+    for anime, song_titles in ANIME_TRACKS.items()
+    for song_title in song_titles
+}
+
+
 def pick_blindtest_tracks(count: int) -> list:
     pool = {}
     for playlist_id in BLINDTEST_PLAYLISTS:
@@ -101,6 +218,53 @@ def pick_blindtest_tracks(count: int) -> list:
     if not pool:
         raise RuntimeError("aucun extrait disponible")
     return random.sample(list(pool.values()), min(count, len(pool)))
+
+
+def anime_for_track(track: dict) -> str | None:
+    summary = track_summary(track)
+    title = summary["title"]
+    anime = ANIME_TRACK_TO_SHOW.get(title_key(title))
+    if anime is not None:
+        return anime
+    for delimiter in (" (", " ["):
+        anime = ANIME_TRACK_TO_SHOW.get(title_key(title.split(delimiter, 1)[0].strip()))
+        if anime is not None:
+            return anime
+    return None
+
+
+def pick_blindtest_anime_tracks(count: int) -> dict:
+    tracks = deezer_get(
+        f"/playlist/{BLINDTEST_ANIME_PLAYLIST}/tracks", {"limit": 500}
+    ).get("data", [])
+    pool = {}
+    for track in tracks:
+        if not track.get("readable") or not track.get("preview"):
+            continue
+        summary = track_summary(track)
+        anime = anime_for_track(track)
+        if anime is None:
+            continue
+        key = (title_key(summary["title"]), summary["artist"].lower())
+        pool.setdefault(key, {
+            **summary,
+            "preview": track["preview"],
+            "anime": anime,
+            "anime_aliases": [anime, *ANIME_ALIASES.get(anime, ())],
+        })
+    if not pool:
+        raise RuntimeError("aucun extrait anime disponible")
+
+    selected = random.sample(list(pool.values()), min(count, len(pool)))
+    show_names = {track["anime"] for track in pool.values()}
+    answers = [
+        {
+            "title": anime,
+            "aliases": [anime, *ANIME_ALIASES.get(anime, ())],
+        }
+        for anime in sorted(show_names)
+    ]
+    return {"tracks": selected, "answers": answers}
 
 
 def search_tracks(query: str) -> list:
@@ -134,6 +298,12 @@ async def handle_http(connection: ServerConnection, request: Request):
             count = min(max(count, 1), BLINDTEST_MAX_TRACKS)
             tracks = await asyncio.to_thread(pick_blindtest_tracks, count)
             return json_response(HTTPStatus.OK, {"tracks": tracks})
+        if url.path == "/blindtest/anime/tracks":
+            raw_count = params.get("count", ["10"])[0]
+            count = int(raw_count) if raw_count.isdecimal() else 10
+            count = min(max(count, 1), BLINDTEST_MAX_TRACKS)
+            payload = await asyncio.to_thread(pick_blindtest_anime_tracks, count)
+            return json_response(HTTPStatus.OK, payload)
         if url.path == "/blindtest/search":
             query = params.get("q", [""])[0].strip()[:80]
             results = await asyncio.to_thread(search_tracks, query) if len(query) >= 2 else []
