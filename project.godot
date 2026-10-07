@@ -11,8 +11,11 @@ config_version=5
 [application]
 
 config/name="PartyGame"
-run/main_scene="res://Scenes/Main.tscn"
+run/main_scene="res://Scenes/SplashScreen.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.12, 0.16, 0.24, 1)
+boot_splash/show_image=false
+boot_splash/image="uid://b4r2ojkxsosx"
 config/icon="res://icon.svg"
 
 [autoload]
@@ -24,6 +27,7 @@ NetworkManager="*res://Scripts/Lobby/NetworkManager.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/resizable=false
+window/stretch/mode="canvas_items"
 
 [input]
 

@@ -1,0 +1,341 @@
+[gd_scene format=3 uid="uid://ce7owpawjifpx"]
+
+[ext_resource type="Script" uid="uid://sjs2wsx451a2" path="res://Scripts/RafGames/BlindTestMiniGameScript.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dpolumee7tq7e" path="res://Scenes/RafGames/Components/FlatButton.tscn" id="2_flat"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_header"]
+bg_color = Color(0.106, 0.141, 0.223, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.341, 0.431, 0.596, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_board"]
+bg_color = Color(0.078, 0.102, 0.161, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.29, 0.365, 0.506, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_side"]
+bg_color = Color(0.122, 0.161, 0.251, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.357, 0.451, 0.624, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.16, 0.2, 0.3, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_fill"]
+bg_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.09, 0.12, 0.19, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.33, 0.45, 0.63, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.82, 0.4, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_read_only"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.07, 0.09, 0.14, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.26, 0.36, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_suggestions"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.09, 0.12, 0.19, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.33, 0.45, 0.63, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="BlindTestMiniGame" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="UI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="ColorRect" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.047, 0.063, 0.11, 1)
+
+[node name="Margin" type="MarginContainer" parent="CanvasLayer/UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="MainVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Header" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_header")
+
+[node name="HeaderMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 14
+
+[node name="HeaderVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="TitleRow" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.965, 0.91, 0.792, 1)
+theme_override_font_sizes/font_size = 34
+text = "Blind Test"
+
+[node name="RoundLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox/TitleRow"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 28
+text = "Titre -/-"
+
+[node name="StateLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Header/HeaderMargin/HeaderVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.776, 0.878, 0.973, 1)
+theme_override_font_sizes/font_size = 22
+text = "L'hôte prépare la playlist..."
+horizontal_alignment = 1
+
+[node name="Body" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="GamePanel" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_board")
+
+[node name="GameMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="GameVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin"]
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="TimerLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 64
+text = "25"
+horizontal_alignment = 1
+
+[node name="TimerBar" type="ProgressBar" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_bar_fill")
+max_value = 25.0
+step = 0.0
+value = 25.0
+show_percentage = false
+
+[node name="ControlsRow" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="ReplayButton" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/ControlsRow" instance=ExtResource("2_flat")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 68)
+layout_mode = 2
+text = "Rejouer"
+face_color = Color(0.271, 0.482, 0.616, 1)
+shadow_color = Color(0.114, 0.208, 0.333, 1)
+font_size = 26
+
+[node name="PauseButton" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/ControlsRow" instance=ExtResource("2_flat")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 68)
+layout_mode = 2
+text = "Pause"
+face_color = Color(0.45, 0.15, 0.65, 1)
+shadow_color = Color(0.22, 0.06, 0.35, 1)
+font_size = 26
+
+[node name="FeedbackLabel" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_font_sizes/font_size = 26
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="AnswerRow" type="HBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="AnswerEdit" type="LineEdit" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/AnswerRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.9, 0.78, 1)
+theme_override_colors/font_placeholder_color = Color(0.66, 0.76, 0.9, 0.55)
+theme_override_colors/caret_color = Color(1, 0.82, 0.4, 1)
+theme_override_constants/caret_width = 2
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_input_read_only")
+placeholder_text = "Tape le titre de la musique..."
+max_length = 80
+keep_editing_on_text_submit = true
+caret_blink = true
+
+[node name="ValidateButton" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/AnswerRow" instance=ExtResource("2_flat")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+text = "Valider"
+face_color = Color(0.322, 0.718, 0.533, 1)
+shadow_color = Color(0.106, 0.369, 0.125, 1)
+font_size = 28
+
+[node name="SuggestionsScroll" type="ScrollContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SuggestionsPanel" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/SuggestionsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_suggestions")
+
+[node name="SuggestionsList" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/GamePanel/GameMargin/GameVBox/SuggestionsScroll/SuggestionsPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SidePanel" type="PanelContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body"]
+custom_minimum_size = Vector2(310, 300)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_side")
+
+[node name="SideMargin" type="MarginContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="SideVBox" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ScoresTitle" type="Label" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin/SideVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.965, 0.91, 0.792, 1)
+theme_override_font_sizes/font_size = 28
+text = "Scores"
+
+[node name="ScoresList" type="VBoxContainer" parent="CanvasLayer/UI/Margin/MainVBox/Body/SidePanel/SideMargin/SideVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12

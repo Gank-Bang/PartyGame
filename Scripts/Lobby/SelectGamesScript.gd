@@ -15,12 +15,14 @@ const _WAITING_ROOM_SCENE := "res://Scenes/Lobby/WaitingRoom.tscn"
 @onready var _btn_paires_runes: Control = $CanvasLayer/UI/MainHBox/RightVBox/PairesRunesMiniGame
 @onready var _btn_motus: Control     = $CanvasLayer/UI/MainHBox/RightVBox/MotusMiniGame
 @onready var _btn_cercle: Control    = $CanvasLayer/UI/MainHBox/RightVBox/CercleInfernalMiniGame
+@onready var _btn_blindtest: Control = $CanvasLayer/UI/MainHBox/RightVBox/BlindTestRow/BlindTestMiniGame
+@onready var _btn_blindtest_anime: Control = $CanvasLayer/UI/MainHBox/RightVBox/BlindTestRow/BlindTestAnime
 @onready var _btn_underhocem: Control    = $CanvasLayer/UI/MainHBox/RightVBox/UnderHocem
 
 
 ## Couleurs de survol "hôte" pour les clients (key = scene id)
-const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "pairesrunes": Color("f4a261"), "motus": Color("f4a261"), "cercle": Color("f4a261")}
-const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "pairesrunes": Color("b05d1e"), "motus": Color("b05d1e"), "cercle": Color("b05d1e")}
+const _HOVER_FACE:   Dictionary = {"equation": Color("f4a261"), "pileface": Color("f4a261"), "miami": Color("f4a261"), "runes": Color("f4a261"), "pairesrunes": Color("f4a261"), "motus": Color("f4a261"), "cercle": Color("f4a261"), "blindtest": Color("f4a261"), "blindtest_anime": Color("f4a261")}
+const _HOVER_SHADOW: Dictionary = {"equation": Color("b05d1e"), "pileface": Color("b05d1e"), "miami": Color("b05d1e"), "runes": Color("b05d1e"), "pairesrunes": Color("b05d1e"), "motus": Color("b05d1e"), "cercle": Color("b05d1e"), "blindtest": Color("b05d1e"), "blindtest_anime": Color("b05d1e")}
 
 ## Couleurs d'origine mémorisées pour la restauration
 var _default_colors: Dictionary = {}
@@ -36,6 +38,8 @@ func _ready() -> void:
 		"pairesrunes": _btn_paires_runes,
 		"motus":    _btn_motus,
 		"cercle":   _btn_cercle,
+		"blindtest": _btn_blindtest,
+		"blindtest_anime": _btn_blindtest_anime,
 	}
 	# Mémoriser les couleurs de base des boutons jeu
 	for key in _game_buttons:
@@ -54,6 +58,8 @@ func _ready() -> void:
 		_btn_paires_runes.connect("pressed", _on_paires_runes_pressed)
 		_btn_motus.connect("pressed", _on_motus_pressed)
 		_btn_cercle.connect("pressed", _on_cercle_pressed)
+		_btn_blindtest.connect("pressed", _on_blindtest_pressed)
+		_btn_blindtest_anime.connect("pressed", _on_blindtest_anime_pressed)
 		_btn_underhocem.connect("pressed", _on_underhocem_pressed)
 		# Diffuser les survols aux clients
 		for key in _game_buttons:
@@ -137,6 +143,14 @@ func _on_cercle_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "cercle"})
 	_launch("cercle")
 
+func _on_blindtest_pressed() -> void:
+	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "blindtest"})
+	_launch("blindtest")
+
+func _on_blindtest_anime_pressed() -> void:
+	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "blindtest_anime"})
+	_launch("blindtest_anime")
+
 func _on_underhocem_pressed() -> void:
 	NetworkManager.send_game_message(0, {"action": "launch_game", "scene": "underhocem"})
 	_launch("underhocem")
@@ -176,5 +190,9 @@ func _launch(scene: String) -> void:
 			get_tree().change_scene_to_file("res://Scenes/RafGames/MotusMiniGame.tscn")
 		"cercle":
 			get_tree().change_scene_to_file("res://Scenes/RafGames/CercleInfernalMiniGame.tscn")
+		"blindtest":
+			get_tree().change_scene_to_file("res://Scenes/RafGames/BlindTestMiniGame.tscn")
+		"blindtest_anime":
+			get_tree().change_scene_to_file("res://Scenes/RafGames/BlindTestAnimeMiniGame.tscn")
 		"underhocem":
 			get_tree().change_scene_to_file("res://Scenes/hocem/underhocem.tscn")
