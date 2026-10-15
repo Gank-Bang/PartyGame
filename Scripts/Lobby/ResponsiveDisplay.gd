@@ -14,7 +14,6 @@ const SCENE_MIN_SIZE: Dictionary = {
 	"res://Scenes/RafGames/RunesMiniGame.tscn": Vector2(760, 780),
 	"res://Scenes/RafGames/PairesRunesMiniGame.tscn": Vector2(1080, 840),
 	"res://Scenes/RafGames/BlindTestMiniGame.tscn": Vector2(1180, 660),
-	"res://Scenes/RafGames/BlindTestAnimeMiniGame.tscn": Vector2(1180, 660),
 	"res://Scenes/RafGames/CercleInfernalMiniGame.tscn": Vector2(1200, 1080),
 }
 const BOTTOM_MARGIN_CSS: float = 28.0

@@ -1,12 +1,11 @@
 ## Mini-jeu : Blind Test
-## L'hôte pioche des extraits Deezer via le relais (routes /blindtest/ de server/main.py).
+## L'hôte choisit une catégorie, puis pioche des extraits Deezer via le relais (routes /blindtest/ de server/main.py).
 ## Chaque joueur a 25 s pour retrouver le titre : il tape, clique une proposition
 ## puis valide. Le premier qui trouve marque 1 point et tout le monde passe au titre
 ## suivant ; si personne ne trouve, le titre s'affiche pendant que l'extrait continue.
 ## L'hôte arbitre les réponses : les titres ne sont diffusés qu'à la révélation.
+## Catégorie Anime : on retrouve le nom de l'anime (propositions fournies par le relais) au lieu du titre.
 extends BaseGame
-
-@export var anime_mode: bool = false
 
 enum Phase { SETUP, WAITING, PLAYING, REVEAL, DONE }
 
@@ -22,6 +21,27 @@ const DOWNLOAD_ATTEMPTS: int = 2
 const SEARCH_DEBOUNCE: float = 0.3
 const SEARCH_MIN_CHARS: int = 2
 const END_SCREEN_DURATION: float = 6.0
+const CATEGORY_COLUMNS: int = 3
+const CATEGORY_BUTTON_SIZE: Vector2 = Vector2(270, 64)
+
+## id = clé de BLINDTEST_CATEGORIES dans server/main.py ; « anime » a sa propre route et se joue sur le nom de l'anime.
+const CATEGORIES: Array = [
+	{"id": "mix", "label": "Mix de tubes"},
+	{"id": "annees_70", "label": "Années 70"},
+	{"id": "annees_80", "label": "Années 80"},
+	{"id": "annees_90", "label": "Années 90"},
+	{"id": "annees_2000", "label": "Années 2000"},
+	{"id": "annees_2010", "label": "Années 2010"},
+	{"id": "rap_fr", "label": "Rap français"},
+	{"id": "variete_fr", "label": "Variété française"},
+	{"id": "rock", "label": "Rock"},
+	{"id": "rnb", "label": "RnB"},
+	{"id": "disney", "label": "Disney"},
+	{"id": "generiques", "label": "Génériques TV"},
+	{"id": "anime", "label": "Anime", "anime": true},
+]
+
+const _FlatButtonScene := preload("res://Scenes/RafGames/Components/FlatButton.tscn")
 
 const NEUTRAL_COLOR: Color = Color("f5e6c8")
 const INFO_COLOR: Color = Color("c6e0f8")
@@ -31,6 +51,8 @@ const LOSE_COLOR: Color = Color("e63946")
 const REVEAL_COLOR: Color = Color("ffd166")
 const SUGGESTION_FACE: Color = Color("24324a")
 const SUGGESTION_HOVER: Color = Color("35507a")
+const CATEGORY_FACE: Color = Color(0.36, 0.33, 0.9)
+const CATEGORY_SHADOW: Color = Color(0.17, 0.14, 0.52)
 
 const ACCENTS: Dictionary = {
 	"à": "a", "á": "a", "â": "a", "ä": "a", "ã": "a", "å": "a", "æ": "ae",
@@ -52,6 +74,11 @@ var _shown_seconds: int = -1
 var _guess_pending: bool = false
 ## peer_id → nombre de titres trouvés
 var _scores: Dictionary = {}
+## Libellé de la catégorie choisie par l'hôte (vide tant qu'elle n'est pas choisie)
+var _category_label: String = ""
+## Vrai pour la catégorie Anime : la réponse est le nom de l'anime, pas le titre
+var anime_mode: bool = false
+var _category_canvas: CanvasLayer
 
 ## Hôte : pistes {id, title, artist, preview}. Seules les URLs d'extraits sont diffusées.
 var _tracks: Array = []
@@ -99,8 +126,6 @@ func _spawn_players() -> void:
 
 func _on_game_ready() -> void:
 	_my_id = NetworkManager.local_peer_id()
-	_title_label.text = "Blind Test Anime" if anime_mode else "Blind Test"
-	_answer_edit.placeholder_text = "Tape le nom de l'anime..." if anime_mode else "Tape le titre de la musique..."
 	for pid in NetworkManager.players.keys():
 		_scores[pid] = 0
 	_setup_nodes()
@@ -108,10 +133,7 @@ func _on_game_ready() -> void:
 	_refresh_timer()
 	_refresh_controls()
 	if NetworkManager.is_host:
-		_set_state("Sélection des animes sur Deezer..." if anime_mode else "Sélection des musiques sur Deezer...", INFO_COLOR)
-		var endpoint: String = "/blindtest/anime/tracks" if anime_mode else "/blindtest/tracks"
-		if _tracks_request.request("%s%s?count=%d" % [_api_base, endpoint, ROUND_COUNT]) != OK:
-			_on_tracks_loaded(HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray())
+		_show_category_picker()
 	else:
 		_set_state("L'hôte prépare la playlist...", INFO_COLOR)
 		# Rattrape un bt_setup diffusé avant que cette scène soit chargée.
@@ -198,6 +220,52 @@ func _on_custom_message(from_id: int, data: Dictionary) -> void:
 
 # ── Hôte : déroulé de la partie ───────────────────────────────────────────────
 
+func _show_category_picker(error: String = "") -> void:
+	_set_category("", false)
+	_set_state("Choisis la catégorie des musiques.", INFO_COLOR)
+	_category_canvas = CanvasLayer.new()
+	_category_canvas.layer = 10
+	add_child(_category_canvas)
+	var vbox := _make_overlay_panel(_category_canvas, 0.0)
+	vbox.add_child(_make_label("Choisis une catégorie", 40, NEUTRAL_COLOR, HORIZONTAL_ALIGNMENT_CENTER))
+	if not error.is_empty():
+		vbox.add_child(_make_label(error, 22, LOSE_COLOR, HORIZONTAL_ALIGNMENT_CENTER))
+	var rows := VBoxContainer.new()
+	rows.add_theme_constant_override("separation", 14)
+	vbox.add_child(rows)
+	var row: HBoxContainer
+	for i in CATEGORIES.size():
+		if i % CATEGORY_COLUMNS == 0:
+			row = HBoxContainer.new()
+			row.alignment = BoxContainer.ALIGNMENT_CENTER
+			row.add_theme_constant_override("separation", 16)
+			rows.add_child(row)
+		var category: Dictionary = CATEGORIES[i]
+		var btn: Control = _FlatButtonScene.instantiate()
+		btn.custom_minimum_size = CATEGORY_BUTTON_SIZE
+		btn.text = str(category["label"])
+		btn.face_color = CATEGORY_FACE
+		btn.shadow_color = CATEGORY_SHADOW
+		btn.font_size = 26
+		btn.pressed.connect(_on_category_picked.bind(category))
+		row.add_child(btn)
+
+func _on_category_picked(category: Dictionary) -> void:
+	if _category_canvas == null:
+		return
+	_category_canvas.queue_free()
+	_category_canvas = null
+	_set_category(str(category["label"]), bool(category.get("anime", false)))
+	if anime_mode:
+		_request_tracks("/blindtest/anime/tracks?count=%d" % ROUND_COUNT)
+	else:
+		_request_tracks("/blindtest/tracks?count=%d&category=%s" % [ROUND_COUNT, str(category["id"])])
+
+func _request_tracks(route: String) -> void:
+	_set_state("Sélection des animes sur Deezer..." if anime_mode else "Sélection des musiques sur Deezer...", INFO_COLOR)
+	if _tracks_request.request(_api_base + route) != OK:
+		_on_tracks_loaded(HTTPRequest.RESULT_CANT_CONNECT, 0, PackedStringArray(), PackedByteArray())
+
 func _on_tracks_loaded(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray) -> void:
 	var tracks: Array = []
 	var answer_options: Variant = []
@@ -210,14 +278,14 @@ func _on_tracks_loaded(result: int, response_code: int, _headers: PackedStringAr
 					tracks.append(track)
 	if tracks.is_empty():
 		var item_name: String = "animes" if anime_mode else "musiques"
-		_set_state("Impossible de récupérer des %s sur Deezer (code %d). Quitte et réessaie." % [item_name, response_code], LOSE_COLOR)
+		_show_category_picker("Impossible de récupérer des %s sur Deezer (code %d). Choisis une autre catégorie." % [item_name, response_code])
 		return
 
 	_tracks = tracks
 	var previews: Array = []
 	for track in tracks:
 		previews.append(str(track["preview"]))
-	_setup_msg = {"action": "bt_setup", "previews": previews}
+	_setup_msg = {"action": "bt_setup", "previews": previews, "category": _category_label, "anime": anime_mode}
 	if anime_mode and answer_options is Array:
 		_setup_msg["answers"] = answer_options
 	NetworkManager.send_game_message(0, _setup_msg)
@@ -307,6 +375,7 @@ func _apply_setup(data: Dictionary) -> void:
 		return
 	_previews = data.get("previews", [])
 	_round_count = _previews.size()
+	_set_category(str(data.get("category", "")), bool(data.get("anime", false)))
 	_round_label.text = "%d extraits" % _round_count if anime_mode else "%d titres" % _round_count
 	var answer_options: Variant = data.get("answers", [])
 	if anime_mode and answer_options is Array:
@@ -629,6 +698,15 @@ func _ranked_player_ids() -> Array:
 func _player_name(pid: int) -> String:
 	return str(NetworkManager.players.get(pid, {}).get("name", "Joueur"))
 
+func _set_category(label: String, anime: bool) -> void:
+	_category_label = label
+	anime_mode = anime
+	if label.is_empty():
+		_title_label.text = "Blind Test"
+	else:
+		_title_label.text = "Blind Test — %s" % label
+	_answer_edit.placeholder_text = "Tape le nom de l'anime..." if anime else "Tape le titre de la musique..."
+
 func _set_state(message: String, color: Color) -> void:
 	_state_label.text = message
 	_state_label.add_theme_color_override("font_color", color)
@@ -646,6 +724,33 @@ func _make_label(text: String, font_size: int, color: Color, alignment: Horizont
 	label.add_theme_color_override("font_color", color)
 	return label
 
+## Voile sombre plein écran et panneau centré dans `canvas` ; renvoie la boîte verticale du panneau.
+func _make_overlay_panel(canvas: CanvasLayer, width: float) -> VBoxContainer:
+	var overlay := ColorRect.new()
+	overlay.color = Color(0.02, 0.03, 0.07, 0.82)
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(overlay)
+
+	var center := CenterContainer.new()
+	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	canvas.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(width, 0)
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.11, 0.15, 0.23, 0.98)
+	style.set_corner_radius_all(20)
+	style.set_border_width_all(2)
+	style.border_color = Color(0.41, 0.57, 0.77, 1)
+	style.set_content_margin_all(28)
+	panel.add_theme_stylebox_override("panel", style)
+	center.add_child(panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 14)
+	panel.add_child(vbox)
+	return vbox
+
 func _now() -> float:
 	return Time.get_ticks_msec() / 1000.0
 
@@ -662,30 +767,7 @@ func _on_game_over(winner_peer_id: int) -> void:
 	var canvas := CanvasLayer.new()
 	canvas.layer = 10
 	add_child(canvas)
-
-	var overlay := ColorRect.new()
-	overlay.color = Color(0.02, 0.03, 0.07, 0.82)
-	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	canvas.add_child(overlay)
-
-	var center := CenterContainer.new()
-	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	canvas.add_child(center)
-
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(620, 0)
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.11, 0.15, 0.23, 0.98)
-	style.set_corner_radius_all(20)
-	style.set_border_width_all(2)
-	style.border_color = Color(0.41, 0.57, 0.77, 1)
-	style.set_content_margin_all(28)
-	panel.add_theme_stylebox_override("panel", style)
-	center.add_child(panel)
-
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 14)
-	panel.add_child(vbox)
+	var vbox := _make_overlay_panel(canvas, 620.0)
 
 	var end_title: String = "Fin du Blind Test Anime !" if anime_mode else "Fin du Blind Test !"
 	vbox.add_child(_make_label(end_title, 44, NEUTRAL_COLOR, HORIZONTAL_ALIGNMENT_CENTER))

@@ -26,7 +26,7 @@ Protocole :
     Le relais préfixe chaque paquet reçu avec [4 octets : peer_id source].
 
 Routes HTTP (GET, blind test) :
-  /blindtest/tracks?count=N  → {"tracks": [{id, title, artist, preview}]}
+  /blindtest/tracks?count=N&category=ID → {"tracks": [{id, title, artist, preview}]}
   /blindtest/search?q=...    → {"results": [{id, title, artist}]}
     /blindtest/anime/tracks?count=N → {"tracks": [...], "answers": [...]}
 """
@@ -57,8 +57,24 @@ MAX_PLAYERS = 4
 # les téléchargent directement.
 
 DEEZER_API = "https://api.deezer.com"
-# Playlists publiques où l'hôte pioche : Top France + deux blind tests « tubes ».
-BLINDTEST_PLAYLISTS = (1109890291, 7089916404, 9431716902)
+# Catégories du blind test : id choisi par l'hôte (cf. CATEGORIES dans BlindTestMiniGameScript.gd)
+# → playlists publiques Deezer où piocher. « mix » (Top France + deux blind tests « tubes ») sert de défaut.
+# La catégorie « anime » n'est pas ici : elle passe par /blindtest/anime/tracks.
+BLINDTEST_CATEGORIES: dict[str, tuple[int, ...]] = {
+    "mix": (1109890291, 7089916404, 9431716902),
+    "annees_70": (6294946564,),
+    "annees_80": (6294938124,),
+    "annees_90": (6294920704,),
+    "annees_2000": (6294888224,),
+    "annees_2010": (6294884764,),
+    "rap_fr": (7708037842, 8088416462),
+    "variete_fr": (7559081442, 6985188764, 6647148884, 6985222544),
+    "rock": (7752152762, 8082104062),
+    "rnb": (6299303284,),
+    "disney": (613860315, 7548451242, 14511914743),
+    "generiques": (55329999,),
+}
+BLINDTEST_DEFAULT_CATEGORY = "mix"
 BLINDTEST_ANIME_PLAYLIST = 15606487923
 BLINDTEST_MAX_TRACKS = 20
 BLINDTEST_SEARCH_RESULTS = 8
@@ -203,9 +219,9 @@ ANIME_TRACK_TO_SHOW = {
 }
 
 
-def pick_blindtest_tracks(count: int) -> list:
+def pick_blindtest_tracks(count: int, category: str) -> list:
     pool = {}
-    for playlist_id in BLINDTEST_PLAYLISTS:
+    for playlist_id in BLINDTEST_CATEGORIES[category]:
         try:
             tracks = deezer_get(f"/playlist/{playlist_id}/tracks", {"limit": 500}).get("data", [])
         except Exception as exc:
@@ -293,10 +309,13 @@ async def handle_http(connection: ServerConnection, request: Request):
     params = urllib.parse.parse_qs(url.query)
     try:
         if url.path == "/blindtest/tracks":
+            category = params.get("category", [BLINDTEST_DEFAULT_CATEGORY])[0]
+            if category not in BLINDTEST_CATEGORIES:
+                return json_response(HTTPStatus.BAD_REQUEST, {"error": "unknown_category"})
             raw_count = params.get("count", ["10"])[0]
             count = int(raw_count) if raw_count.isdecimal() else 10
             count = min(max(count, 1), BLINDTEST_MAX_TRACKS)
-            tracks = await asyncio.to_thread(pick_blindtest_tracks, count)
+            tracks = await asyncio.to_thread(pick_blindtest_tracks, count, category)
             return json_response(HTTPStatus.OK, {"tracks": tracks})
         if url.path == "/blindtest/anime/tracks":
             raw_count = params.get("count", ["10"])[0]
